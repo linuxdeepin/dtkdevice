@@ -2,9 +2,9 @@
 //
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
-#define DDEMO_NAMESPACE Dtk::Demo
+#define DDEVICE_NAMESPACE Dtk::Device
 
-#define DDEMO_USE_NAMESPACE using namespace DDEMO_NAMESPACE;
+#define DDEVICE_USE_NAMESPACE using namespace DDEVICE_NAMESPACE;
 
-#define DDEMO_BEGIN_NAMESPACE namespace Dtk { namespace Demo {
-#define DDEMO_END_NAMESPACE }}
+#define DDEVICE_BEGIN_NAMESPACE namespace Dtk { namespace Device {
+#define DDEVICE_END_NAMESPACE }}
