@@ -33,3 +33,8 @@ Files: tests/3rdparty/cpp-stub/*
 Copyright: None
 License: MIT
 
+# dtklsdevice
+Files: dtklsdevice/*
+Copyright: UnionTech Software Technology Co., Ltd.
+License: LGPL-3.0-or-later
+
