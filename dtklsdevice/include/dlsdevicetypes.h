@@ -11,8 +11,10 @@
 DLSDEVICE_BEGIN_NAMESPACE
 typedef enum
   {
-    d_system,    d_bridge,    d_memory,    d_processor,    d_address,    d_storage,    d_disk,    d_tape,    d_bus,    d_network,
-    d_display,    d_input,    d_printer,    d_multimedia,    d_communication,    d_power,    d_volume,    d_generic
+    d_system,    d_bridge,    d_memory,    d_processor,    d_address,    
+    d_storage,    d_disk,    d_tape,    d_bus,    d_network,
+    d_display,    d_input,    d_printer,    d_multimedia,    
+    d_communication,    d_power,    d_volume,    d_generic
   } devClass;
 
 struct device_info

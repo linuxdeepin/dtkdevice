@@ -1,11 +1,3 @@
-// #include "hw.h"
-#include "dprint.h"
-#include "scan.h"
-#include "version.h"
-#include "options.h"
-#include "osutils.h"
-#include "config.h"
-
 #include <unistd.h>
 #include <stdio.h>
 #include <string.h>
@@ -32,26 +24,11 @@ DLSDEVICE_USE_NAMESPACE
 int main(int argc,char **argv)
 {
 
-#ifndef NONLS
-  setlocale (LC_ALL, "");
-  bindtextdomain (PACKAGE, LOCALEDIR);
-  bind_textdomain_codeset (PACKAGE, "UTF-8");
-  textdomain (PACKAGE);
-#endif
-
-  if (!parse_options(argc, argv))
-  {
-    // usage(argv[0]);
-    fprintf(stderr, _("\tsudo dlsdevice -c CLASS     '\n"));
-
-    exit(1);
-  }
-
   DlsDevice *computer = new DlsDevice();
 
   computer->init_system();
 //  computer->show();
-   QList< device_info >  tmp = computer -> getAllDevicesInfos();
+   QList< device_info >  tmp = computer -> dAllDevicesInfos();
 
   for (auto it = tmp.begin(); it != tmp.end(); ++it) {
       qInfo() << "设备 --------- " << it->id;
@@ -68,7 +45,7 @@ int main(int argc,char **argv)
   }
 
 devClass lsclass = d_memory;
- tmp = computer -> getDevicesInfoByClass(lsclass);
+ tmp = computer -> dDevicesInfoByClass(lsclass);
  for (auto it = tmp.begin(); it != tmp.end(); ++it) {
      qInfo() << "设备设备枚举值 --------- " << it->deviceclass;  //设备枚举值
      qInfo() << "hwclass: " << it->id;

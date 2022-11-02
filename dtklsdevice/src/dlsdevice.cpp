@@ -4,7 +4,7 @@
 #include "../3rdparty/options.h"
 #include "../3rdparty/osutils.h"
 #include "../3rdparty/config.h"
-#include "dprint.h"
+#include "daddInfo.h"
 
 #include <unistd.h>
 #include <stdio.h>
@@ -16,6 +16,21 @@
 #include <locale.h>
 #endif
 DLSDEVICE_BEGIN_NAMESPACE
+
+
+QList< device_info > m_ListDeviceMouse;
+QList< device_info > m_ListDeviceCPU;
+QList< device_info > m_ListDeviceStorage;
+QList< device_info > m_ListDeviceGPU;
+QList< device_info > m_ListDeviceMemory;
+QList< device_info > m_ListDeviceBios;
+QList< device_info > m_ListDeviceBluetooth;
+QList< device_info > m_ListDeviceAudio;
+QList< device_info > m_ListDeviceNetwork;
+QList< device_info > m_ListDeviceImage;
+QList< device_info > m_ListDeviceKeyboard;
+QList< device_info > m_ListDeviceComputer;
+QList< device_info > m_ListDeviceOthers;
 
 DlsDevice::DlsDevice()
     : m_hwNode("computer", hw::sys_tem)
@@ -42,17 +57,12 @@ void DlsDevice::init_system()
 }
 
 
-void DlsDevice::show()
-{
-    // print(m_hwNode, 0);
-}
-
-QList<device_info> DlsDevice::getAllDevicesInfos()
+QList<device_info> DlsDevice::dAllDevicesInfos()
 {
     return m_ListDeviceInfo;
 }
 
-QList<device_info> DlsDevice::getDevicesInfoByClass(devClass etype)
+QList<device_info> DlsDevice::dDevicesInfoByClass(devClass etype)
 {
     QList< device_info >  tmp;
 
@@ -64,7 +74,7 @@ QList<device_info> DlsDevice::getDevicesInfoByClass(devClass etype)
 }
 
 
-unsigned int DlsDevice::devicesCount() const
+unsigned int DlsDevice::ddevicesCount() const
 {
     return  m_hwNode.countChildren();
 }
