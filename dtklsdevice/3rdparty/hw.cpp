@@ -716,9 +716,9 @@ void hwNode::setClock(unsigned long long clock)
 }
 
 
-unsigned int hwNode::countChildren(hw::hwClass c) const
+int hwNode::countChildren(hw::hwClass c) const
 {
-  unsigned int count = 0;
+   int count = 0;
 
   if (!This)
     return 0;
@@ -726,7 +726,7 @@ unsigned int hwNode::countChildren(hw::hwClass c) const
   if (c == hw::generic)
     return This->children.size();
 
-  for (unsigned int i = 0; i < This->children.size(); i++)
+  for (int i = 0; i < This->children.size(); i++)
     if (This->children[i].getClass() == c)
       count++;
 

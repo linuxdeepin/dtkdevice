@@ -161,7 +161,7 @@ class  hwNode
     string getModalias() const;                  //获取设备  Modalias  即硬件ID号
     void setModalias(const string & modalias);
 
-    unsigned int countChildren(hw::hwClass c = hw::generic) const;
+    int countChildren(hw::hwClass c = hw::generic) const;
     hwNode * getChild(unsigned int);
     hwNode * getChildByPhysId(long);
     hwNode * getChildByPhysId(const string &);

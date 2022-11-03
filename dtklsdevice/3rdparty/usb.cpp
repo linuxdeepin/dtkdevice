@@ -494,6 +494,8 @@ bool scan_usb(hwNode & n)
             {
               describeUSB(device, vendor, prodid);
               device.setConfig("vid:pid", to4hex(vendor)+" : "+ to4hex(prodid));
+              device.setConfig("Vendor_ID", to4hex(vendor));
+              device.setConfig("Product_ID", to4hex(prodid));
               device.setVersion(hw::strip(rev));
             }
             break;

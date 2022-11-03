@@ -18,7 +18,6 @@
 #include <unistd.h>
 #include <stdint.h>
 
-//  __ID("@(#) $Id$");
 
 ssize_t readlogicalblocks(source & s,
 void * buffer,

@@ -24,46 +24,44 @@ DLSDEVICE_USE_NAMESPACE
 int main(int argc,char **argv)
 {
 
-  DlsDevice *computer = new DlsDevice();
+    DlsDevice *computer = new DlsDevice();
 
-  computer->init_system();
-//  computer->show();
-   QList< device_info >  tmp = computer -> dAllDevicesInfos();
+    QStringList  tmpStringList1 =  computer -> deviceAttris(d_memory);
+    qInfo() << "memory Attris:";
+    for (auto value: tmpStringList1){
+      qInfo() << value;
 
-  for (auto it = tmp.begin(); it != tmp.end(); ++it) {
-      qInfo() << "设备 --------- " << it->id;
-      qInfo() << "hwclass: " << it->deviceclass;   //设备枚举值
 
-      qInfo() << "businfo: " << it->businfo;
-      qInfo() << "description: " << it->description;
-      qInfo() << "product_name: " << it->product_name;
-      qInfo() << "vendor_name: " << it->vendor_name;
-      qInfo() << "class_name: " << it->class_name;
-      qInfo() << "vid_pid: " << it->vid_pid;
-      qInfo() << "modalias: " << it->modalias;    //获取设备  Modalias  即硬件ID号
+    }
+      
+  
+   QList< device_info >  tmpLst1 = computer -> devicesInfosAll();
+   for (auto value:tmpLst1) {
 
-  }
+       qInfo() << "设备 --------- " << value.deviceInfoLstMap["sysID"];
+        qInfo() << "businfo: " <<  value.deviceInfoLstMap["sysID"];
+        qInfo() << "description: " << value.deviceInfoLstMap["Description"];
+        qInfo() << "product_name: " <<  value.deviceInfoLstMap["Name"];
+        qInfo() << "vendor_name: " <<  value.deviceInfoLstMap["Vendor"];
+        qInfo() << "class_name: " <<  value.deviceInfoLstMap["ClassName"];
+        qInfo() << "vid_pid: " <<  value.deviceInfoLstMap["vid:pid"];
+        qInfo() << "modalias: " <<  value.deviceInfoLstMap["Modalias"];
+   }
 
-devClass lsclass = d_memory;
- tmp = computer -> dDevicesInfoByClass(lsclass);
- for (auto it = tmp.begin(); it != tmp.end(); ++it) {
-     qInfo() << "设备设备枚举值 --------- " << it->deviceclass;  //设备枚举值
-     qInfo() << "hwclass: " << it->id;
-     qInfo() << "businfo: " << it->businfo;
-     qInfo() << "description: " << it->description;
-     qInfo() << "product_name: " << it->product_name;
-     qInfo() << "vendor_name: " << it->vendor_name;
-     qInfo() << "class_name: " << it->class_name;
-     qInfo() << "vid_pid: " << it->vid_pid;
-     qInfo() << "modalias: " << it->modalias;    //获取设备  Modalias  即硬件ID号
- }
 
- delete computer;
+    QStringList  tmpStringList2 =  computer -> deviceAttris(d_memory);
+    QList< device_info >  tmpLst2 = computer ->deviceInfo(d_memory);
+    qInfo() << "memory Attris:";
+    for (auto value2:tmpLst2){
+      qInfo() << "---memory Attris---:";
+      for (auto value1: tmpStringList2){
+          qInfo() << value1 << value2.deviceInfoLstMap[value1];  
+      }      
+    }
 
-  // main_getjobinfo(argc, argv);
-  // main_ddesysinfo(argc, argv);
+    delete computer;
 
-  return 0;
+    return 0;
 }
 
 

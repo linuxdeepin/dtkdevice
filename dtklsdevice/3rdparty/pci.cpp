@@ -833,7 +833,9 @@ static hwNode *scan_pci_dev(struct pci_dev &d, hwNode & n)
         host.setVendor(get_device_description(d.vendor_id)+" ["+to4hex(d.vendor_id)+"]");
         host.setProduct(get_device_description(d.vendor_id, d.device_id)+" ["+to4hex(d.vendor_id)+":"+to4hex(d.device_id)+"]");
         host.setConfig("vid:pid", to4hex(d.vendor_id)+" : "+ to4hex(d.device_id));
-        
+        host.setConfig("Vendor_ID", to4hex(d.vendor_id));
+        host.setConfig("Product_ID", to4hex(d.device_id));
+
         if (subsys_v != 0 || subsys_d != 0)
         {
           host.setSubVendor(get_device_description(subsys_v)+(enabled("output:numeric")?" ["+to4hex(subsys_v)+"]":""));
@@ -1002,6 +1004,8 @@ static hwNode *scan_pci_dev(struct pci_dev &d, hwNode & n)
           device->setVersion(revision);
         
           device->setConfig("vid:pid", to4hex(d.vendor_id)+" : "+ to4hex(d.device_id));
+          device->setConfig("Vendor_ID", to4hex(d.vendor_id));
+          device->setConfig("Product_ID", to4hex(d.device_id));
           device->setVendor(get_device_description(d.vendor_id)+" ["+to4hex(d.vendor_id)+"]");
           device->setProduct(get_device_description(d.vendor_id, d.device_id)+" ["+to4hex(d.vendor_id)+":"+to4hex(d.device_id)+"]");
 
