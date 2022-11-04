@@ -4,17 +4,17 @@ Upstream-Contact: guoyao <guoyao@uniontech.com>
 Source: https://github.com/Groveer/dframework
 
 # Config files
-Files: .clang-format misc/*.in config.sh
+Files: .clang-format misc/*.in config.sh *.in
 Copyright: None
 License: CC0-1.0
 
 # Readme
-Files: README*.md
-Copyright: None
-License: CC0-1.0
+Files: README*.md   */*.md
+Copyright: UnionTech Software Technology Co., Ltd.
+License: CC-BY-4.0
 
 # docs
-Files: docs/*.md
+Files: dtklsdevice/docs/*.md
 Copyright: None
 License: CC0-1.0
 
@@ -29,7 +29,11 @@ Copyright: None
 License: CC0-1.0
 
 # cpp-stub
-Files: tests/3rdparty/cpp-stub/*
+Files: dtklsdevice/tests/3rdparty/cpp-stub/*
 Copyright: None
 License: MIT
 
+# dtklsdevice
+Files: dtklsdevice/3rdparty/* 
+Copyright: None
+License: GPL-2.0-or-later
