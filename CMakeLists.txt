@@ -16,6 +16,7 @@ project(${BIN_NAME}
     VERSION ${VERSION}
 )
 
+
 # specify install dir
 include(GNUInstallDirs)
 set(CMAKE_CXX_STANDARD 17)
