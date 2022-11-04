@@ -5,6 +5,8 @@ Maintainer: Packages Builder <packages@deepin.com>
 Build-Depends:
  debhelper-compat (= 12),
  cmake,
+ doxygen,
+ qhelpgenerator-qt5 | qttools5-dev-tools,
  librsvg2-dev,
  qtbase5-dev
 Standards-Version: 4.5.0
@@ -19,7 +21,7 @@ Description: Deepin Tool Kit template library
 
 Package: libdtkdevice-dev
 Architecture: any
-Depends:${misc:Depends}, libdtktemplate( =${binary:Version})
+Depends: ${shlibs:Depends}, ${misc:Depends}
 Description: Deepin Tool Kit template devel library
  libdtkdevice-dev is base devel library of Deepin Qt/C++ applications.
  .
