@@ -15,6 +15,10 @@ public:
     explicit DInputDevicePrivate(DInputDevice *q);
 
 private:
+    quint32 m_id;
+    QString m_name;
+    DeviceType m_type;
+    bool m_enabled;
     DInputDevice *q_ptr;
     Q_DECLARE_PUBLIC(DInputDevice)
 };

@@ -4,9 +4,11 @@
 
 #include "dinputdevice.h"
 #include "dinputdevice_p.h"
+#include "dinputdevicetypes.h"
 
 DINPUTDEVICES_BEGIN_NAMESPACE
-
+using DCORE_NAMESPACE::DError;
+using DCORE_NAMESPACE::DUnexpected;
 DInputDevicePrivate::DInputDevicePrivate(DInputDevice *q)
     : q_ptr(q)
 {
@@ -22,32 +24,31 @@ DInputDevice::~DInputDevice() {}
 
 quint32 DInputDevice::id() const
 {
-    // TODO Implement this
-    return 10;
+    Q_D(const DInputDevice);
+    return d->m_id;
 }
 
 QString DInputDevice::name() const
 {
-    // TODO Implement this
-    return "test";
+    Q_D(const DInputDevice);
+    return d->m_name;
 }
 
 DeviceType DInputDevice::type() const
 {
-    // TODO Implement this
-    return DeviceType::Generic;
+    Q_D(const DInputDevice);
+    return d->m_type;
 }
 
 bool DInputDevice::enabled() const
 {
-    // TODO Implement this
-    return true;
+    Q_D(const DInputDevice);
+    return d->m_enabled;
 }
 
 DExpected<void> DInputDevice::reset()
 {
-    // TODO Implement this
-    return {};
+    return DUnexpected{DError{ErrorCode::InvalidCall, "Generic device does not have a reset method!"}};
 }
 
 DINPUTDEVICES_END_NAMESPACE
