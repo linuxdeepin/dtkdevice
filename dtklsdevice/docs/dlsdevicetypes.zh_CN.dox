@@ -7,4 +7,125 @@
 @file dlsdevicetypes.h
 
 
+
+@enum Dtk::dlsDevice::devClass::PartitionTableType
+    @brief 设备类型分类
+    @var Dtk::dlsDevice::devClass::DtkUnkown
+        未知类型
+    @var Dtk::dlsDevice::devClass::DtkBridge
+        DtkBridge 类型
+    @var Dtk::dlsDevice::devClass::DtkController
+        DtkController 类型
+    @var Dtk::dlsDevice::devClass::DtkHub
+        DtkHub 类型
+    @var Dtk::dlsDevice::devClass::DtkBios
+        DtkBios 类型
+    @var Dtk::dlsDevice::devClass::DtkBus
+        DtkBus 类型
+    @var Dtk::dlsDevice::devClass::DtkAddress
+        DtkAddress 类型
+    @var Dtk::dlsDevice::devClass::DtkVolume
+        DtkVolume 类型
+    @var Dtk::dlsDevice::devClass::DtkVirtual
+        DtkVirtual 类型
+    @var Dtk::dlsDevice::devClass::DtkProductSystem
+        DtkProductSystem 类型
+    @var Dtk::dlsDevice::devClass::DtkMainboard
+        DtkMainboard 类型
+    @var Dtk::dlsDevice::devClass::DtkCpu
+        DtkCpu 类型
+    @var Dtk::dlsDevice::devClass::DtkMemory
+        DtkMemory 类型
+    @var Dtk::dlsDevice::devClass::DtkStorage
+        DtkStorage 类型
+    @var Dtk::dlsDevice::devClass::DtkDisk
+        DtkDisk 类型
+    @var Dtk::dlsDevice::devClass::DtkDvd
+        DtkDvd 类型
+    @var Dtk::dlsDevice::devClass::DtkTape
+        DtkTape 类型
+    @var Dtk::dlsDevice::devClass::DtkNetwork
+        DtkNetwork 类型
+    @var Dtk::dlsDevice::devClass::Dtkwlan
+        Dtkwlan 类型
+    @var Dtk::dlsDevice::devClass::DtkCommunication
+        DtkCommunication 类型
+    @var Dtk::dlsDevice::devClass::DtkDisplayGPU
+        DtkDisplayGPU 类型
+    @var Dtk::dlsDevice::devClass::DtkMonitor
+        DtkMonitor 类型
+    @var Dtk::dlsDevice::devClass::DtkInput
+        DtkInput 类型
+    @var Dtk::dlsDevice::devClass::DtkMouse
+        DtkMouse 类型
+    @var Dtk::dlsDevice::devClass::DtkKeyboard
+        DtkKeyboard 类型
+    @var Dtk::dlsDevice::devClass::DtkFingerprint
+        DtkFingerprint 类型
+    @var Dtk::dlsDevice::devClass::DtkCamera
+        DtkCamera 类型
+    @var Dtk::dlsDevice::devClass::DtkSoundAudio
+        DtkSoundAudio 类型
+    @var Dtk::dlsDevice::devClass::DtkTouchscreen
+        DtkTouchscreen 类型
+    @var Dtk::dlsDevice::devClass::DtkTouchpad
+        DtkTouchpad 类型
+    @var Dtk::dlsDevice::devClass::DtkBluetooth
+        DtkBluetooth 类型
+    @var Dtk::dlsDevice::devClass::DtkPrinter
+        DtkPrinter 类型
+    @var Dtk::dlsDevice::devClass::DtkPower
+        DtkPower 类型
+    @var Dtk::dlsDevice::devClass::DtkBattery
+        DtkBattery 类型
+    @var Dtk::dlsDevice::devClass::DtkSensor
+        DtkSensor 类型
+    @var Dtk::dlsDevice::devClass::DtkLed
+        DtkLed 类型
+    @var Dtk::dlsDevice::devClass::DtkSwitchbuttion
+        DtkSwitchbuttion 类型
+    @var Dtk::dlsDevice::devClass::DtkScanner
+        DtkScanner 类型
+    @var Dtk::dlsDevice::devClass::DtkChipcard
+        DtkChipcard 类型
+    @var Dtk::dlsDevice::devClass::DtkOther
+        DtkOther 类型
+    @var Dtk::dlsDevice::devClass::DtkRevers1
+        预留类型
+    @var Dtk::dlsDevice::devClass::DtkRevers2
+        预留类型
+    @var Dtk::dlsDevice::devClass::DtkMax
+        取大类型
+
+
+@struct Dtk::dlsDevice::device_info
+@brief 存储设备相关信息
+@var Dtk::dlsDevice::device_info device_info::deviceInfoLstMap
+存储单个所有设备信息，以key作关键字存储检索字，后跟信息值
+@var Dtk::dlsDevice::device_info device_info::VendorName
+存储设备的信息，供应或生产商名
+@var Dtk::dlsDevice::device_info device_info::ProductName
+存储设备的信息，产品名或模组名
+@var Dtk::dlsDevice::device_info device_info::Modalias
+存储设备的信息，Modalias值
+@var Dtk::dlsDevice::device_info device_info::Vendor_ID
+存储设备的信息，供应或生产商编号
+@var Dtk::dlsDevice::device_info device_info::Product_ID
+存储设备的信息，产品或模组编号
+@var Dtk::dlsDevice::device_info device_info::SysFs_PATH
+存储设备的信息，系统内核sys路径 
+@var Dtk::dlsDevice::device_info device_info::baseClassName
+存储设备的信息，基本大类名称
+@var Dtk::dlsDevice::device_info device_info::subClassName
+存储设备的信息，子类名称
+@var Dtk::dlsDevice::device_info device_info::deviceBaseAttrisLst
+存储设备的基本信息
+@var Dtk::dlsDevice::device_info device_info::deviceOtherAttrisLst
+存储设备的其它信息
+@var Dtk::dlsDevice::device_info device_info::eDevClass
+存储设备的基本大类值
+
+
+
+
 */
