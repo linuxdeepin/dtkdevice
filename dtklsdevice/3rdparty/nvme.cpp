@@ -45,7 +45,7 @@ bool scan_nvme(hwNode & n)
     {
       const sysfs::entry & n = *i;
 
-      hwNode ns("namespace", hw::disk);
+      hwNode ns("nvme", hw::disk);
       ns.claim();
       ns.setBusInfo(guessBusInfo(n.name()));
       ns.setPhysId(n.string_attr("nsid"));

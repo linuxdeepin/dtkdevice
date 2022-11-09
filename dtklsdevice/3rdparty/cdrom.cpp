@@ -90,7 +90,7 @@ bool scan_cdrom(hwNode & n)
       n.setConfig("status", "nodisc");
       break;
     case CDS_TRAY_OPEN:
-      n.setConfig("", "open");
+      n.setConfig("status", "open");
       break;
     case CDS_DRIVE_NOT_READY:
       n.setConfig("status", "busy");

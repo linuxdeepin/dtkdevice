@@ -13,8 +13,9 @@ using namespace std;
 {
   typedef enum
   {
-    sys_tem,    bridge,    memory,    processor,    address,    storage,    disk,    tape,    bus,    network,
-    display,    input,    printer,    multimedia,    communication,    power,    volume,    generic
+    sys_tem,    bridge,    memory,    processor,    address,    storage,    disk,    
+    tape,    bus,    network,    display,    input,    printer,    
+    multimedia,    communication,    power,    volume,    generic
   } hwClass;
 
   typedef enum { none, iomem, ioport, mem, irq, dma }  hwResourceType;
@@ -101,7 +102,10 @@ class  hwNode
 
     hw::hwClass getClass() const;  //获取设备类别
     const char * getClassName() const; //获取设备类别名
-    void setClass(hw::hwClass c);       
+    void setClass(hw::hwClass c); 
+
+    string getsubClassName() const;             //获取设备子类别名
+    void setsubClassName(const string & classname); 
 
     string getDescription() const;         //获取设备相关描述
     void setDescription(const string & description);

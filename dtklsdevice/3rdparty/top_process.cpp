@@ -29,13 +29,14 @@ bool scan_top_process(hwNode & pid)
       {
         pidpath = string(namelist[i]->d_name);
         value = get_string(pidpath+"/stat");
-        if(!value.empty())
-         pid.setConfig("proc"+pidpath,value+", \n");
+        // if(!value.empty())     pid.setConfig("proc:"+pidpath,value+", \n");
        j++;
       }
 
       free(namelist[i]);
+
     }
+    pid.setConfig("proc top","cat /proc/<pid>/stat");
     if(namelist)
       free(namelist);
     if(j > 0){
