@@ -20,19 +20,10 @@
 
 DLSDEVICE_USE_NAMESPACE
 
-
-
 int main(int argc, char **argv)
 {
 
     DlsDevice *computer = new DlsDevice();
-
-    QStringList  tmpStringList1 =  computer -> deviceAttris(DtkMemory);
-    qInfo() << "memory Attris:";
-    for (auto value : tmpStringList1) {
-        qInfo() << value;
-    }
-
 
     QList< device_info >  tmpLst1 = computer -> devicesInfosAll();
     for (auto value : tmpLst1) {
@@ -49,15 +40,72 @@ int main(int argc, char **argv)
         qInfo() << "Configuration: " <<  value.deviceInfoLstMap["Configuration"];
     }
 
-    devClass tmpClass = DtkDisk;
-    QStringList  tmpStringList2 =  computer -> deviceAttris(tmpClass);
-    QList< device_info >  tmpLst2 = computer ->deviceInfo(tmpClass);
+    devClass tmpClass ;
+    QList< device_info >  tmpLst2;
+    QStringList  tmpStringList1;
+    QString tmpstr;
+
+    tmpClass = DtkDisk;
+    tmpStringList1 =  computer -> deviceAttris(tmpClass);
+    qInfo() << tmpClass;
+    for (auto value : tmpStringList1) {
+        qInfo() << value;
+    }
+    tmpLst2 = computer ->deviceInfo(tmpClass);
     qInfo() << "---device  Attris---:";
     for (auto value2 : tmpLst2) {
         qInfo() << "--------\n:";
-        for (auto value1 : tmpStringList2) {
+        for (auto value1 : tmpStringList1) {
             qInfo() << value1 << value2.deviceInfoLstMap[value1];
         }
+    }
+
+    tmpClass = DtkCpu;
+    tmpStringList1 =  computer -> deviceAttris(tmpClass);
+    qInfo() << tmpClass;
+    for (auto value : tmpStringList1) {
+        tmpstr.append(value + ", ");
+    }
+    qInfo() << tmpstr;
+    qInfo() << "--------:\n";
+    tmpLst2 = computer->deviceCPU();
+    for (auto value2 : tmpLst2) {
+        for (auto value1 : tmpStringList1) {
+            qInfo() << value1 << value2.deviceInfoLstMap[value1];
+        }
+        qInfo() << "\n";
+    }
+
+    tmpClass = DtkDisplayGPU;
+    tmpStringList1 =  computer -> deviceAttris(tmpClass);
+    qInfo() << tmpClass;
+    for (auto value : tmpStringList1) {
+        tmpstr.append(value + ", ");
+    }
+    qInfo() << tmpstr;
+    qInfo() << "--------:\n";
+    tmpLst2 = computer->deviceGPU();
+    for (auto value2 : tmpLst2) {
+        for (auto value1 : tmpStringList1) {
+            qInfo() << value1 << value2.deviceInfoLstMap[value1];
+        }
+        qInfo() << "\n";
+    }
+
+    tmpClass = DtkSoundAudio;
+    tmpStringList1 =  computer -> deviceAttris(tmpClass);
+    qInfo() << tmpClass;
+    for (auto value : tmpStringList1) {
+        tmpstr.append(value + ", ");
+    }
+    qInfo() << tmpstr;
+    qInfo() << "--------:\n";
+    tmpLst2 = computer->deviceCamera();
+    for (auto value2 : tmpLst2) {
+        for (auto value1 : tmpStringList1) {
+            qInfo() << value1 << value2.deviceInfoLstMap[value1];
+        }
+        qInfo() << "\n";
     }
 
     delete computer;

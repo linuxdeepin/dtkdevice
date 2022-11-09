@@ -26,6 +26,18 @@ public:
     devClass convertClass(hw::hwClass cc);
     hw::hwClass convertClass(devClass cc);
 
+    QList< device_info >  deviceCPU();
+    QList< device_info >  deviceStorage();
+    QList< device_info >  deviceGPU();
+    QList< device_info >  deviceMemory();
+    QList< device_info >  deviceMonitor();
+    QList< device_info >  deviceAudio();
+    QList< device_info >  deviceNetwork();
+    QList< device_info >  deviceCamera();
+    QList< device_info >  deviceKeyboard();
+    QList< device_info >  deviceMouse();
+    QList< device_info >  deviceComputer();
+
     double updateSystemCpuUsage();
     QMap<QString, int> cpuStat();
     double getCpuUsage();
@@ -50,7 +62,7 @@ private:
     QStringList  attrisBluetooth;
     QStringList  attrisAudio;
     QStringList  attrisNetwork;
-    QStringList  attrisImage;
+    QStringList  attrisCameraImage;
     QStringList  attrisKeyboard;
     QStringList  attrisComputer;
     QStringList  attrisOthers;

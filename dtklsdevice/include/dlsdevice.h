@@ -31,17 +31,17 @@ public:
     QMap<QString, int> cpuStat();
     double getCpuUsage();
 
-// TODO:
+
     QList< device_info >  deviceCPU();
     QList< device_info >  deviceStorage();
     QList< device_info >  deviceGPU();
     QList< device_info >  deviceMemory();
-    QList< device_info >  deviceMonitor();
-    QList< device_info >  deviceBios();
+    QList< device_info >  deviceMonitor(); //todo
     QList< device_info >  deviceAudio();
     QList< device_info >  deviceNetwork();
     QList< device_info >  deviceCamera();
     QList< device_info >  deviceKeyboard();
+    QList< device_info >  deviceMouse();
     QList< device_info >  deviceComputer();
 
 private:

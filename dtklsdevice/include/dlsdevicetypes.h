@@ -24,7 +24,7 @@ typedef enum
     DtkStorage,  DtkDisk,
     DtkDvd,      DtkTape,
     DtkNetwork,  Dtkwlan,   DtkCommunication,
-    DtkDisplaygpu,         DtkMonitor,
+    DtkDisplayGPU,         DtkMonitor,
     DtkInput,   
     DtkMouse,  
     DtkKeyboard, 
@@ -58,9 +58,11 @@ struct device_info
     QString ProductName;
     QString Modalias;
     QString Vendor_ID;
-    QString Product_ID;
-    QString Class_ID;
+    QString Product_ID;    
     QString SysFs_PATH;
+    QString baseClassName;
+    QString subClassName;
+    QString Description;
     QStringList deviceBaseAttrisLst;
     QStringList deviceOtherAttrisLst;
     devClass eDevClass;  
