@@ -21,17 +21,20 @@ add_executable(${BIN_NAME}
 
 target_include_directories(${BIN_NAME} PUBLIC
     "../include"
+    "../src"
     ${DtkCore_INCLUDE_DIRS}
 )
 
 target_link_libraries(${BIN_NAME} PRIVATE
     Qt${QT_VERSION_MAJOR}::Core
+    Qt${QT_VERSION_MAJOR}::DBus
     ${DtkCore_LIBRARIES}
     -lpthread
     -lgcov
     -lgtest
 )
 
+target_compile_options(${BIN_NAME} PRIVATE -fno-access-control)
 if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
     target_compile_options(${BIN_NAME} PRIVATE -fprofile-instr-generate -ftest-coverage)
 endif()

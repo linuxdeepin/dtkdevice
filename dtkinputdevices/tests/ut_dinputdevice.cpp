@@ -3,6 +3,7 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
 #include "dinputdevice.h"
+#include "dinputdevice_p.h"
 #include <gtest/gtest.h>
 
 DINPUTDEVICES_USE_NAMESPACE
@@ -23,5 +24,6 @@ protected:
 
 TEST_F(TestDInputDevice, id)
 {
+    m_device->d_ptr->m_id = 10;
     EXPECT_EQ(10, m_device->id());
 }
