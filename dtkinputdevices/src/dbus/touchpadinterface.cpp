@@ -162,4 +162,9 @@ void TouchPadInterface::SetPalmMinZ(qint32 minZ)
     m_interface->setProperty("PalmMinZ", QVariant::fromValue(minZ));
 }
 
+QDBusPendingReply<> TouchPadInterface::Reset()
+{
+    return m_interface->asyncCall("Reset");
+}
+
 DINPUTDEVICES_END_NAMESPACE

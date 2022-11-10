@@ -103,4 +103,9 @@ void MouseInterface::SetDragThreshold(qint32 threshold)
     m_interface->setProperty("DragThreshold", QVariant::fromValue(threshold));
 }
 
+QDBusPendingReply<> MouseInterface::Reset()
+{
+    return m_interface->asyncCall("Reset");
+}
+
 DINPUTDEVICES_END_NAMESPACE

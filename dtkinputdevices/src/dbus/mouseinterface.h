@@ -7,6 +7,7 @@
 #include "dtkinputdevices_global.h"
 #include <DDBusInterface>
 #include <QDBusConnection>
+#include <QDBusPendingReply>
 #include <QObject>
 DINPUTDEVICES_BEGIN_NAMESPACE
 using DCORE_NAMESPACE::DDBusInterface;
@@ -64,6 +65,8 @@ Q_SIGNALS:
     void DoubleClickChanged(qint32 interval);
     void DragThresholdChanged(qint32 threshold);
     void DeviceListChanged(const QString &deviceList);
+public Q_SLOTS:
+    QDBusPendingReply<> Reset();
 
 private:
     DDBusInterface *m_interface;
