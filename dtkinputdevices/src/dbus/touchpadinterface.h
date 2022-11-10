@@ -7,6 +7,7 @@
 #include "dtkinputdevices_global.h"
 #include <DDBusInterface>
 #include <QDBusConnection>
+#include <QDBusPendingReply>
 #include <QObject>
 DINPUTDEVICES_BEGIN_NAMESPACE
 
@@ -87,6 +88,8 @@ Q_SIGNALS:
     void PalmMinWidthChanged(qint32 minWidth);
     void PalmMinZChanged(qint32 minZ);
     void DeviceListChanged(const QString &deviceList);
+public Q_SLOTS:
+    QDBusPendingReply<> Reset();
 
 private:
     DDBusInterface *m_interface;
