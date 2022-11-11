@@ -10,30 +10,35 @@
 #include <QObject>
 #include <QScopedPointer>
 
-#include "dinputdevice.h"
-#include "dinputdevicesetting.h"
 #include "dinputdevicetypes.h"
+
 DINPUTDEVICES_BEGIN_NAMESPACE
-using DevicePtr = DInputDevice::Ptr;
-using SettingPtr = DInputDeviceSetting::Ptr;
+class DInputDevice;
+class DInputDeviceSetting;
+DINPUTDEVICES_END_NAMESPACE
+using DInputDevicePtr = QSharedPointer<DTK_INPUTDEVICES_NAMESPACE::DInputDevice>;
+using DInputSettingPtr = QSharedPointer<DTK_INPUTDEVICES_NAMESPACE::DInputDeviceSetting>;
+using DInputDeviceInfoList = QList<DTK_INPUTDEVICES_NAMESPACE::DeviceInfo>;
+DINPUTDEVICES_BEGIN_NAMESPACE
+using DCORE_NAMESPACE::DExpected;
 
 class DInputDeviceManagerPrivate;
 class DInputDeviceManager : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(QList<DeviceInfo> deviceInfos READ deviceInfos)
+    Q_PROPERTY(DInputDeviceInfoList deviceInfos READ deviceInfos)
 public:
     explicit DInputDeviceManager(QObject *parent = nullptr);
     ~DInputDeviceManager() override;
-    QList<DeviceInfo> deviceInfos() const;
+    DInputDeviceInfoList deviceInfos() const;
 
 Q_SIGNALS:
     void deviceAdded(const DeviceInfo &device);
     void deviceRemoved(const DeviceInfo &device);
 
 public Q_SLOTS:
-    DExpected<DevicePtr> createDevice(const DeviceInfo &info);
-    DExpected<SettingPtr> setting();
+    DExpected<DInputDevicePtr> createDevice(const DeviceInfo &info);
+    DExpected<DInputSettingPtr> setting();
 
 private:
     QScopedPointer<DInputDeviceManagerPrivate> d_ptr;
