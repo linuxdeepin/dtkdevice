@@ -11,8 +11,8 @@
 #include <QObject>
 #include <QScopedPointer>
 
-#include "dinputdevicetypes.h"
 #include "dinputdevicepointer.h"
+#include "dtkinputdevices_types.h"
 
 DINPUTDEVICES_BEGIN_NAMESPACE
 
@@ -27,7 +27,7 @@ class DInputDeviceMouse : public DInputDevicePointer
 public:
     explicit DInputDeviceMouse(QObject *parent = nullptr);
     ~DInputDeviceMouse() override;
-    
+
     bool naturalScroll() const;
     bool middleButtonEmulation() const;
 

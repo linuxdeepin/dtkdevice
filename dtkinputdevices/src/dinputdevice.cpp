@@ -4,7 +4,7 @@
 
 #include "dinputdevice.h"
 #include "dinputdevice_p.h"
-#include "dinputdevicetypes.h"
+#include "dtkinputdevices_types.h"
 
 DINPUTDEVICES_BEGIN_NAMESPACE
 using DCORE_NAMESPACE::DError;

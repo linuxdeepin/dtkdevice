@@ -11,8 +11,8 @@
 #include <QObject>
 #include <QScopedPointer>
 
-#include "dinputdevicetypes.h"
 #include "dinputdevicepointer.h"
+#include "dtkinputdevices_types.h"
 
 DINPUTDEVICES_BEGIN_NAMESPACE
 

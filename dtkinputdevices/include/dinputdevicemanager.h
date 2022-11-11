@@ -10,7 +10,7 @@
 #include <QObject>
 #include <QScopedPointer>
 
-#include "dinputdevicetypes.h"
+#include "dtkinputdevices_types.h"
 
 DINPUTDEVICES_BEGIN_NAMESPACE
 class DInputDevice;
