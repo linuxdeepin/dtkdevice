@@ -25,12 +25,13 @@ QList<DeviceInfo> DInputDeviceManager::deviceInfos() const
     return {};
 }
 
-DExpected<DevicePtr> DInputDeviceManager::createDevice(const DeviceInfo &info)
+DExpected<DInputDevicePtr> DInputDeviceManager::createDevice(const DeviceInfo &info)
 {
+    Q_UNUSED(info)
     // TODO Implement this
     return {};
 }
-DExpected<SettingPtr> DInputDeviceManager::setting()
+DExpected<DInputSettingPtr> DInputDeviceManager::setting()
 {
     // TODO Implement this
     return {};
