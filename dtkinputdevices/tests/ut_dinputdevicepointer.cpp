@@ -3,7 +3,7 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
 #include "dinputdevicepointer.h"
-#include "dinputdevicetypes.h"
+#include "dtkinputdevices_types.h"
 #include <gtest/gtest.h>
 
 DINPUTDEVICES_USE_NAMESPACE

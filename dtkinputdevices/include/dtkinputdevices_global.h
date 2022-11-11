@@ -1,6 +1,8 @@
 // SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: LGPL-3.0-or-later
+#ifndef DTKINPUTDEVICES_GLOBAL_H
+#define DTKINPUTDEVICES_GLOBAL_H
 
 #ifndef DTK_NAMESPACE
 #    define DTK_NAMESPACE Dtk
@@ -15,3 +17,5 @@
 #define DINPUTDEVICES_END_NAMESPACE                                                                                              \
     }                                                                                                                            \
     }
+
+#endif  // DTKINPUTDEVICES_GLOBAL_H

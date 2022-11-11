@@ -12,7 +12,7 @@
 #include <QScopedPointer>
 #include <QSharedPointer>
 
-#include "dinputdevicetypes.h"
+#include "dtkinputdevices_types.h"
 
 DINPUTDEVICES_BEGIN_NAMESPACE
 using DCORE_NAMESPACE::DExpected;
