@@ -16,9 +16,6 @@
 
 DINPUTDEVICES_BEGIN_NAMESPACE
 
-
-using DCORE_NAMESPACE::DExpected;
-
 class DInputDevicePointerPrivate;
 class DInputDevicePointer : public DInputDevice
 {
@@ -46,7 +43,6 @@ private:
     QScopedPointer<DInputDevicePointerPrivate> d_ptr;
     Q_DECLARE_PRIVATE(DInputDevicePointer)
 };
-
 
 DINPUTDEVICES_END_NAMESPACE
 #endif

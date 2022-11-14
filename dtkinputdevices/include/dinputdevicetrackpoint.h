@@ -1,0 +1,63 @@
+// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+//
+// SPDX-License-Identifier: LGPL-3.0-or-later
+
+#ifndef DINPUTDEVICETRACKPOINT_H
+#define DINPUTDEVICETRACKPOINT_H
+#include "dinputdevicepointer.h"
+#include "dtkinputdevices_global.h"
+#include <DExpected>
+#include <QObject>
+#include <QScopedPointer>
+DINPUTDEVICES_BEGIN_NAMESPACE
+using DCORE_NAMESPACE::DExpected;
+class DInputDeviceTrackPointPrivate;
+class DInputDeviceTrackPoint : public DInputDevicePointer
+{
+    Q_OBJECT
+    Q_PROPERTY(bool middleButtonEnabled READ middleButtonEnabled WRITE enableMiddleButton NOTIFY middleButtonEnabledChanged)
+    Q_PROPERTY(qint32 middleButtonTimeout READ middleButtonTimeout WRITE setMiddleButtonTimeout NOTIFY middleButtonTimeoutChanged)
+    Q_PROPERTY(bool wheelEmulation READ wheelEmulation WRITE setWheelEmulation NOTIFY wheelEmulationChanged)
+    Q_PROPERTY(
+        qint32 wheelEmulationButton READ wheelEmulationButton WRITE setWheelEmulationButton NOTIFY wheelEmulationButtonChanged)
+    Q_PROPERTY(qint32 wheelEmulationTimeout READ wheelEmulationTimeout WRITE setWheelEmulationTimeout NOTIFY
+                   wheelEmulationTimeoutChanged)
+    Q_PROPERTY(
+        bool wheelHorizontalScroll READ wheelHorizontalScroll WRITE setWheelHorizontalScroll NOTIFY wheelHorizontalScrollChanged)
+
+public:
+    DInputDeviceTrackPoint(QObject *parent = nullptr);
+    ~DInputDeviceTrackPoint() override;
+
+    bool middleButtonEnabled() const;
+    qint32 middleButtonTimeout() const;
+    bool wheelEmulation() const;
+    qint32 wheelEmulationButton() const;
+    qint32 wheelEmulationTimeout() const;
+    bool wheelHorizontalScroll() const;
+
+    void enableMiddleButton(bool enabled);
+    void setMiddleButtonTimeout(qint32 timeout);
+    void setWheelEmulation(bool emulation);
+    void setWheelEmulationButton(qint32 button);
+    void setWheelEmulationTimeout(qint32 timeout);
+    void setWheelHorizontalScroll(bool horizontalScroll);
+
+Q_SIGNALS:
+
+    void middleButtonEnabledChanged(bool enabled);
+    void middleButtonTimeoutChanged(qint32 timeout);
+    void wheelEmulationChanged(bool emulation);
+    void wheelEmulationButtonChanged(qint32 button);
+    void wheelEmulationTimeoutChanged(qint32 timeout);
+    void wheelHorizontalScrollChanged(bool horizontalScroll);
+
+public Q_SLOTS:
+    DExpected<void> reset() override;
+
+private:
+    QScopedPointer<DInputDeviceTrackPointPrivate> d_ptr;
+    Q_DECLARE_PRIVATE(DInputDeviceTrackPoint)
+};
+DINPUTDEVICES_END_NAMESPACE
+#endif  // DINPUTDEVICETRACKPOINT_H
