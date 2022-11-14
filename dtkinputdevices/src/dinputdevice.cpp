@@ -10,7 +10,11 @@ DINPUTDEVICES_BEGIN_NAMESPACE
 using DCORE_NAMESPACE::DError;
 using DCORE_NAMESPACE::DUnexpected;
 DInputDevicePrivate::DInputDevicePrivate(DInputDevice *q)
-    : q_ptr(q)
+    : m_id(0)
+    , m_name("Generic device")
+    , m_type(DeviceType::Generic)
+    , m_enabled(true)
+    , q_ptr(q)
 {
 }
 

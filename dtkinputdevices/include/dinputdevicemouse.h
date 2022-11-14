@@ -12,7 +12,6 @@
 #include <QScopedPointer>
 
 #include "dinputdevicepointer.h"
-#include "dtkinputdevices_types.h"
 
 DINPUTDEVICES_BEGIN_NAMESPACE
 
@@ -35,14 +34,13 @@ public:
     void setMiddleButtonEmulation(bool middleButtonEmulation);
 
 public Q_SLOTS:
-    virtual DExpected<void> reset();
+    DExpected<void> reset() override;
 
 private:
     QScopedPointer<DInputDeviceMousePrivate> d_ptr;
     Q_DECLARE_PRIVATE(DInputDeviceMouse)
 };
 
-
 DINPUTDEVICES_END_NAMESPACE
 
-#endif // DINPUTDEVICEMOUSE_H
+#endif  // DINPUTDEVICEMOUSE_H

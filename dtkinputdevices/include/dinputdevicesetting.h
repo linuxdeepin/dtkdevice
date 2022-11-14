@@ -14,10 +14,12 @@ class DInputDeviceSetting : public QObject
 {
     Q_OBJECT
 public:
-    explicit DInputDeviceSetting(QObject *parent = nullptr);
     using Ptr = QSharedPointer<DInputDeviceSetting>;
+    ~DInputDeviceSetting() override;
 
 private:
+    explicit DInputDeviceSetting(QObject *parent = nullptr);
+    friend class DInputDeviceManager;
     QScopedPointer<DInputDeviceSettingPrivate> d_ptr;
     Q_DECLARE_PRIVATE(DInputDeviceSetting)
 };

@@ -7,13 +7,18 @@
 
 DINPUTDEVICES_BEGIN_NAMESPACE
 DInputDeviceSettingPrivate::DInputDeviceSettingPrivate(DInputDeviceSetting *q)
-    : q_ptr(q)
+    : QObject(q)
+    , q_ptr(q)
 {
 }
+
+DInputDeviceSettingPrivate::~DInputDeviceSettingPrivate() {}
 
 DInputDeviceSetting::DInputDeviceSetting(QObject *parent)
     : QObject(parent)
     , d_ptr(new DInputDeviceSettingPrivate(this))
 {
 }
+
+DInputDeviceSetting::~DInputDeviceSetting() {}
 DINPUTDEVICES_END_NAMESPACE

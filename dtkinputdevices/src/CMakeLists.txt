@@ -15,6 +15,7 @@ add_library(${BIN_NAME} SHARED
 
 target_include_directories(${BIN_NAME} PUBLIC
     "../include"
+    "./dbus"
     ${DtkCore_INCLUDE_DIRS}
 )
 

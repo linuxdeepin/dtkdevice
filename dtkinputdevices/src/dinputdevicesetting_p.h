@@ -11,6 +11,7 @@ class DInputDeviceSettingPrivate : public QObject
     Q_OBJECT
 public:
     explicit DInputDeviceSettingPrivate(DInputDeviceSetting *q);
+    ~DInputDeviceSettingPrivate() override;
 
 private:
     DInputDeviceSetting *q_ptr;
