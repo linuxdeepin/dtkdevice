@@ -15,8 +15,8 @@ public:
     ~DInputDeviceTabletPrivate() override;
 
 private:
-    DInputDeviceTablet *q_ptr;
     WacomInterface *m_wacomInter;
+    DInputDeviceTablet *q_ptr;
     Q_DECLARE_PUBLIC(DInputDeviceTablet)
 };
 DINPUTDEVICES_END_NAMESPACE

@@ -13,28 +13,14 @@ DInputDeviceTrackPoint::DInputDeviceTrackPoint(QObject *parent)
     , d_ptr(new DInputDeviceTrackPointPrivate(this))
 {
     Q_D(DInputDeviceTrackPoint);
-    connect(d->m_trackPointInter,
-            &TrackPointInterface::MiddleButtonEnabledChanged,
-            this,
-            &DInputDeviceTrackPoint::middleButtonEnabledChanged);
-    connect(d->m_trackPointInter,
-            &TrackPointInterface::MiddleButtonTimeoutChanged,
-            this,
-            &DInputDeviceTrackPoint::middleButtonTimeoutChanged);
-    connect(
-        d->m_trackPointInter, &TrackPointInterface::WheelEmulationChanged, this, &DInputDeviceTrackPoint::wheelEmulationChanged);
-    connect(d->m_trackPointInter,
-            &TrackPointInterface::WheelEmulationButtonChanged,
-            this,
-            &DInputDeviceTrackPoint::wheelEmulationButtonChanged);
-    connect(d->m_trackPointInter,
-            &TrackPointInterface::WheelEmulationTimeoutChanged,
-            this,
-            &DInputDeviceTrackPoint::wheelEmulationTimeoutChanged);
-    connect(d->m_trackPointInter,
-            &TrackPointInterface::WheelHorizScrollChanged,
-            this,
-            &DInputDeviceTrackPoint::wheelHorizontalScrollChanged);
+    d->initSignals();
+}
+
+DInputDeviceTrackPoint::DInputDeviceTrackPoint(const DeviceInfo &info, bool enabled)
+    : DInputDevicePointer(info, enabled)
+{
+    Q_D(DInputDeviceTrackPoint);
+    d->initSignals();
 }
 
 DInputDeviceTrackPoint::~DInputDeviceTrackPoint() = default;
@@ -49,6 +35,32 @@ DInputDeviceTrackPointPrivate::DInputDeviceTrackPointPrivate(DInputDeviceTrackPo
     const QString &Service = QStringLiteral("com.deepin.daemon.InputDevices");
 #endif
     m_trackPointInter = new TrackPointInterface(Service);
+}
+
+void DInputDeviceTrackPointPrivate::initSignals()
+{
+    Q_Q(DInputDeviceTrackPoint);
+    connect(m_trackPointInter,
+            &TrackPointInterface::MiddleButtonEnabledChanged,
+            q,
+            &DInputDeviceTrackPoint::middleButtonEnabledChanged);
+    connect(m_trackPointInter,
+            &TrackPointInterface::MiddleButtonTimeoutChanged,
+            q,
+            &DInputDeviceTrackPoint::middleButtonTimeoutChanged);
+    connect(m_trackPointInter, &TrackPointInterface::WheelEmulationChanged, q, &DInputDeviceTrackPoint::wheelEmulationChanged);
+    connect(m_trackPointInter,
+            &TrackPointInterface::WheelEmulationButtonChanged,
+            q,
+            &DInputDeviceTrackPoint::wheelEmulationButtonChanged);
+    connect(m_trackPointInter,
+            &TrackPointInterface::WheelEmulationTimeoutChanged,
+            q,
+            &DInputDeviceTrackPoint::wheelEmulationTimeoutChanged);
+    connect(m_trackPointInter,
+            &TrackPointInterface::WheelHorizScrollChanged,
+            q,
+            &DInputDeviceTrackPoint::wheelHorizontalScrollChanged);
 }
 
 DInputDeviceTrackPointPrivate::~DInputDeviceTrackPointPrivate()

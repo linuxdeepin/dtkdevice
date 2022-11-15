@@ -5,7 +5,6 @@
 #ifndef DINPUTDEVICEKEYBOARD_P_H
 #define DINPUTDEVICEKEYBOARD_P_H
 #include "dinputdevicekeyboard.h"
-#include "keyboardinterface.h"
 DINPUTDEVICES_BEGIN_NAMESPACE
 class DInputDeviceKeyboardPrivate : public QObject
 {
@@ -16,7 +15,6 @@ public:
 
 private:
     DInputDeviceKeyboard *q_ptr;
-    KeyboardInterface *m_keyboardInter;
     Q_DECLARE_PUBLIC(DInputDeviceKeyboard)
 };
 DINPUTDEVICES_END_NAMESPACE

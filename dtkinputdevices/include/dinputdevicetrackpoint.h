@@ -26,7 +26,6 @@ class DInputDeviceTrackPoint : public DInputDevicePointer
         bool wheelHorizontalScroll READ wheelHorizontalScroll WRITE setWheelHorizontalScroll NOTIFY wheelHorizontalScrollChanged)
 
 public:
-    DInputDeviceTrackPoint(QObject *parent = nullptr);
     ~DInputDeviceTrackPoint() override;
 
     bool middleButtonEnabled() const;
@@ -55,7 +54,12 @@ Q_SIGNALS:
 public Q_SLOTS:
     DExpected<void> reset() override;
 
+protected:
+    explicit DInputDeviceTrackPoint(QObject *parent = nullptr);
+    DInputDeviceTrackPoint(const DeviceInfo &info, bool enabled = true);
+
 private:
+    friend class DInputDeviceManager;
     QScopedPointer<DInputDeviceTrackPointPrivate> d_ptr;
     Q_DECLARE_PRIVATE(DInputDeviceTrackPoint)
 };
