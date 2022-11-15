@@ -17,6 +17,9 @@ struct DeviceInfo
     quint32 id;
     QString name;
     DeviceType type;
+
+    friend bool operator==(const DeviceInfo &lhs, const DeviceInfo &rhs);
+    friend QDebug operator<<(QDebug debug, const DeviceInfo &info);
 };
 
 enum class AccelerationProfile { Flat, Adaptive, Na };
@@ -34,6 +37,8 @@ public:
     enum ErrorCode { InvalidCall };
     Q_ENUM(ErrorCode)
 };
+
+QDebug operator<<(QDebug debug, DeviceType type);
 
 using ErrorCode = EnumWrapper::ErrorCode;
 

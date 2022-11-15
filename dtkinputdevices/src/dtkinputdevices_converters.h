@@ -1,0 +1,14 @@
+// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+//
+// SPDX-License-Identifier: LGPL-3.0-or-later
+
+#ifndef DTKINPUTDEVICES_CONVERTERS_H
+#define DTKINPUTDEVICES_CONVERTERS_H
+#include "dtkinputdevices_global.h"
+#include "dtkinputdevices_types.h"
+#include <QString>
+
+DINPUTDEVICES_BEGIN_NAMESPACE
+QString deviceTypeToString(DeviceType type);
+DINPUTDEVICES_END_NAMESPACE
+#endif  // DTKINPUTDEVICES_CONVERTERS_H

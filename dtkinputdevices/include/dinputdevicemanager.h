@@ -30,6 +30,7 @@ class DInputDeviceManager : public QObject
 
 public:
     explicit DInputDeviceManager(QObject *parent = nullptr);
+    ~DInputDeviceManager() override;
     DInputDeviceInfoList deviceInfos() const;
 
 Q_SIGNALS:
