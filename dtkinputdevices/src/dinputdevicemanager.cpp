@@ -40,82 +40,172 @@ DInputDeviceManagerPrivate::~DInputDeviceManagerPrivate()
     delete m_wacomInter;
 }
 
+void DInputDeviceManagerPrivate::initialize()
+{
+    initializeDeviceInfos();
+    initializeSignals();
+}
+
+void DInputDeviceManagerPrivate::initializeDeviceInfos()
+{
+    DeviceInfo info;
+    if (m_mouseInter->Exist()) {
+        info.type = DeviceType::Mouse;
+        QString deviceList = m_mouseInter->DeviceList();
+        QJsonParseError parseErr;
+        auto rootDoc = QJsonDocument::fromJson(deviceList.toLocal8Bit(), &parseErr);
+        if (parseErr.error != QJsonParseError::NoError) {
+            qWarning() << "Can't parse deviceList! Error:" << parseErr.error << "," << parseErr.errorString();
+        } else {
+            auto array = rootDoc.array();
+            foreach (const auto &device, array) {
+                info.id = device.toObject().value("Id").toInt();
+                info.name = device.toObject().value("Name").toString();
+                addDevice(info);
+            }
+        }
+    }
+    if (m_touchPadInter->Exist()) {
+        info.type = DeviceType::TouchPad;
+        QString deviceList = m_touchPadInter->DeviceList();
+        QJsonParseError parseErr;
+        auto rootDoc = QJsonDocument::fromJson(deviceList.toLocal8Bit(), &parseErr);
+        if (parseErr.error != QJsonParseError::NoError) {
+            qWarning() << "Can't parse deviceList! Error:" << parseErr.error << "," << parseErr.errorString();
+        } else {
+            auto array = rootDoc.array();
+            foreach (const auto &device, array) {
+                info.id = device.toObject().value("Id").toInt();
+                info.name = device.toObject().value("Name").toString();
+                addDevice(info);
+            }
+        }
+    }
+    if (m_trackPointInter->Exist()) {
+        info.type = DeviceType::TrackPoint;
+        QString deviceList = m_trackPointInter->DeviceList();
+        QJsonParseError parseErr;
+        auto rootDoc = QJsonDocument::fromJson(deviceList.toLocal8Bit(), &parseErr);
+        if (parseErr.error != QJsonParseError::NoError) {
+            qWarning() << "Can't parse deviceList! Error:" << parseErr.error << "," << parseErr.errorString();
+        } else {
+            auto array = rootDoc.array();
+            foreach (const auto &device, array) {
+                info.id = device.toObject().value("Id").toInt();
+                info.name = device.toObject().value("Name").toString();
+                addDevice(info);
+            }
+        }
+    }
+    if (m_wacomInter->Exist()) {
+        info.type = DeviceType::Tablet;
+        QString deviceList = m_wacomInter->DeviceList();
+        QJsonParseError parseErr;
+        auto rootDoc = QJsonDocument::fromJson(deviceList.toLocal8Bit(), &parseErr);
+        if (parseErr.error != QJsonParseError::NoError) {
+            qWarning() << "Can't parse deviceList! Error:" << parseErr.error << "," << parseErr.errorString();
+        } else {
+            auto array = rootDoc.array();
+            foreach (const auto &device, array) {
+                info.id = device.toObject().value("Id").toInt();
+                info.name = device.toObject().value("Name").toString();
+                addDevice(info);
+            }
+        }
+    }
+}
+
+void DInputDeviceManagerPrivate::initializeSignals()
+{
+    // initialize signals with dbus interface
+    connect(m_mouseInter,
+            &MouseInterface::DeviceListChanged,
+            this,
+            &DInputDeviceManagerPrivate::handleDeviceChanged<DeviceType::Mouse>);
+    connect(m_touchPadInter,
+            &TouchPadInterface::DeviceListChanged,
+            this,
+            &DInputDeviceManagerPrivate::handleDeviceChanged<DeviceType::TouchPad>);
+    connect(m_trackPointInter,
+            &TrackPointInterface::DeviceListChanged,
+            this,
+            &DInputDeviceManagerPrivate::handleDeviceChanged<DeviceType::TrackPoint>);
+    connect(m_wacomInter,
+            &WacomInterface::DeviceListChanged,
+            this,
+            &DInputDeviceManagerPrivate::handleDeviceChanged<DeviceType::Tablet>);
+}
+
+template <DeviceType deviceType> void DInputDeviceManagerPrivate::handleDeviceChanged(const QString &deviceList)
+{
+    auto devices = m_idMap[deviceType];
+    DeviceInfo info;
+    info.type = deviceType;
+    QJsonParseError parseErr;
+    auto rootDoc = QJsonDocument::fromJson(deviceList.toLocal8Bit(), &parseErr);
+    if (parseErr.error != QJsonParseError::NoError) {
+        qWarning() << "Can't parse deviceList! Error:" << parseErr.error << "," << parseErr.errorString();
+    } else {
+        auto array = rootDoc.array();
+        foreach (const auto &device, array) {
+            info.id = device.toObject().value("Id").toInt();
+            info.name = device.toObject().value("Name").toString();
+            if (devices.contains(info.id)) {
+                devices.removeAll(info.id);
+            } else {
+                addDevice(info);
+            }
+        }
+    }
+    foreach (const auto device, devices) {
+        removeDeviceById(device);
+    }
+}
+
+void DInputDeviceManagerPrivate::addDevice(const DeviceInfo &info)
+{
+    if (!m_idMap[info.type].contains(info.id)) {
+        m_deviceInfos.append(info);
+        m_idMap[info.type].append(info.id);
+        Q_EMIT this->deviceAdded(info);
+    }
+}
+
+void DInputDeviceManagerPrivate::removeDevice(const DeviceInfo &info)
+{
+    if (m_idMap[info.type].contains(info.id)) {
+        m_deviceInfos.removeAll(info);
+        m_idMap[info.type].removeAll(info.id);
+        Q_EMIT this->deviceRemoved(info);
+    }
+}
+
+void DInputDeviceManagerPrivate::removeDeviceById(quint32 id)
+{
+    foreach (const auto deviceInfo, m_deviceInfos) {
+        if (deviceInfo.id == id) {
+            removeDevice(deviceInfo);
+            return;
+        }
+    }
+}
+
 DInputDeviceManager::DInputDeviceManager(QObject *parent)
     : QObject(parent)
     , d_ptr(new DInputDeviceManagerPrivate(this))
 {
+    Q_D(DInputDeviceManager);
+    connect(d, &DInputDeviceManagerPrivate::deviceAdded, this, &DInputDeviceManager::deviceAdded);
+    connect(d, &DInputDeviceManagerPrivate::deviceRemoved, this, &DInputDeviceManager::deviceRemoved);
+    d->initialize();
 }
+
+DInputDeviceManager::~DInputDeviceManager() = default;
 
 QList<DeviceInfo> DInputDeviceManager::deviceInfos() const
 {
     Q_D(const DInputDeviceManager);
-    QList<DeviceInfo> infos;
-    DeviceInfo info;
-    if (d->m_mouseInter->Exist()) {
-        info.type = DeviceType::Mouse;
-        QString deviceList = d->m_mouseInter->DeviceList();
-        QJsonParseError parseErr;
-        auto rootDoc = QJsonDocument::fromJson(deviceList.toLocal8Bit(), &parseErr);
-        if (parseErr.error != QJsonParseError::NoError) {
-            qWarning() << "Can't parse deviceList!";
-        } else {
-            auto array = rootDoc.array();
-            foreach (const auto &device, array) {
-                info.id = device.toObject().value("id").toInt();
-                info.name = device.toObject().value("name").toString();
-                infos << info;
-            }
-        }
-    }
-    if (d->m_touchPadInter->Exist()) {
-        info.type = DeviceType::TouchPad;
-        QString deviceList = d->m_touchPadInter->DeviceList();
-        QJsonParseError parseErr;
-        auto rootDoc = QJsonDocument::fromJson(deviceList.toLocal8Bit(), &parseErr);
-        if (parseErr.error != QJsonParseError::NoError) {
-            qWarning() << "Can't parse deviceList!";
-        } else {
-            auto array = rootDoc.array();
-            foreach (const auto &device, array) {
-                info.id = device.toObject().value("id").toInt();
-                info.name = device.toObject().value("name").toString();
-                infos << info;
-            }
-        }
-    }
-    if (d->m_trackPointInter->Exist()) {
-        info.type = DeviceType::TrackPoint;
-        QString deviceList = d->m_trackPointInter->DeviceList();
-        QJsonParseError parseErr;
-        auto rootDoc = QJsonDocument::fromJson(deviceList.toLocal8Bit(), &parseErr);
-        if (parseErr.error != QJsonParseError::NoError) {
-            qWarning() << "Can't parse deviceList!";
-        } else {
-            auto array = rootDoc.array();
-            foreach (const auto &device, array) {
-                info.id = device.toObject().value("id").toInt();
-                info.name = device.toObject().value("name").toString();
-                infos << info;
-            }
-        }
-    }
-    if (d->m_wacomInter->Exist()) {
-        info.type = DeviceType::Tablet;
-        QString deviceList = d->m_wacomInter->DeviceList();
-        QJsonParseError parseErr;
-        auto rootDoc = QJsonDocument::fromJson(deviceList.toLocal8Bit(), &parseErr);
-        if (parseErr.error != QJsonParseError::NoError) {
-            qWarning() << "Can't parse deviceList!";
-        } else {
-            auto array = rootDoc.array();
-            foreach (const auto &device, array) {
-                info.id = device.toObject().value("id").toInt();
-                info.name = device.toObject().value("name").toString();
-                infos << info;
-            }
-        }
-    }
-    return infos;
+    return d->m_deviceInfos;
 }
 
 DExpected<DInputDevicePtr> DInputDeviceManager::createDevice(const DeviceInfo &info)
@@ -132,7 +222,7 @@ DExpected<DInputDevicePtr> DInputDeviceManager::createDevice(const DeviceInfo &i
         case DeviceType::Keyboard:
             return DInputDevicePtr{new DInputDeviceKeyboard(info)};
         case DeviceType::Generic:
-            return DInputDevicePtr{new DInputDevice};
+            return DInputDevicePtr{new DInputDevice(info)};
         default:
             return {};
     }
