@@ -4,56 +4,59 @@
 
 #include "dinputdevicemouse.h"
 #include "dinputdevicemouse_p.h"
+#include "dtkinputdevices_types.h"
 
 DINPUTDEVICES_BEGIN_NAMESPACE
 
 using DCORE_NAMESPACE::DExpected;
-using DCORE_NAMESPACE::DUnexpected;
-using DCORE_NAMESPACE::DError;
 
-DInputDeviceMousePrivate::DInputDeviceMousePrivate(DInputDeviceMouse *q):
-    q_ptr(q)
+DInputDeviceMousePrivate::DInputDeviceMousePrivate(DInputDeviceMouse *q)
+    : q_ptr(q)
 {
-
 }
 
-DInputDeviceMouse::DInputDeviceMouse(QObject *parent):
-    DInputDevicePointer(parent),
-    d_ptr(new DInputDeviceMousePrivate(this))
+DInputDeviceMouse::DInputDeviceMouse(QObject *parent)
+    : DInputDevicePointer(parent)
+    , d_ptr(new DInputDeviceMousePrivate(this))
 {
+}
 
+DInputDeviceMouse::DInputDeviceMouse(const DeviceInfo &info, bool enabled)
+    : DInputDevicePointer(info, enabled)
+    , d_ptr(new DInputDeviceMousePrivate(this))
+{
 }
 
 DInputDeviceMouse::~DInputDeviceMouse() = default;
 
 bool DInputDeviceMouse::naturalScroll() const
 {
-    //TODO Implement this
+    // TODO Implement this
     return true;
 }
 
 bool DInputDeviceMouse::middleButtonEmulation() const
 {
-    //TODO Implement this
+    // TODO Implement this
     return true;
 }
 
 DExpected<void> DInputDeviceMouse::reset()
 {
-    //TODO Implement this
+    // TODO Implement this
     return {};
 }
 
 void DInputDeviceMouse::setNaturalScroll(bool naturalScroll)
 {
-    //TODO Implement this
-    return ;
+    // TODO Implement this
+    return;
 }
 
 void DInputDeviceMouse::setMiddleButtonEmulation(bool middleButtonEmulation)
 {
-    //TODO Implement this
-    return ;
+    // TODO Implement this
+    return;
 }
 
 DINPUTDEVICES_END_NAMESPACE

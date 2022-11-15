@@ -20,26 +20,37 @@ class DInputDevicePrivate;
 class DInputDevice : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(quint32 id READ id)
-    Q_PROPERTY(QString name READ name)
-    Q_PROPERTY(DeviceType type READ type)
-    Q_PROPERTY(bool enabled READ enabled)
+    Q_PROPERTY(quint32 id READ id CONSTANT)
+    Q_PROPERTY(QString name READ name CONSTANT)
+    Q_PROPERTY(DeviceType type READ type CONSTANT)
+    Q_PROPERTY(bool enabled READ enabled NOTIFY enabledChanged)
 
 public:
-    explicit DInputDevice(QObject *parent = nullptr);
-    ~DInputDevice() override;
-    using Ptr = QSharedPointer<DInputDevice>;
-
     quint32 id() const;
     QString name() const;
     DeviceType type() const;
     bool enabled() const;
 
-public Q_SLOTS:
+    using Ptr = QSharedPointer<DInputDevice>;
+    ~DInputDevice() override;
 
+Q_SIGNALS:
+    void enabledChanged(bool enabled);
+
+public Q_SLOTS:
     virtual DExpected<void> reset();
 
+protected:
+    explicit DInputDevice(QObject *parent = nullptr);
+    DInputDevice(const DeviceInfo &info, bool enabled = true);
+    void setDeviceInfo(const DeviceInfo &info);
+    void setEnabled(bool enabled);
+    void setId(quint32 id);
+    void setType(DeviceType type);
+    void setName(const QString &name);
+
 private:
+    friend class DInputDeviceManager;
     QScopedPointer<DInputDevicePrivate> d_ptr;
     Q_DECLARE_PRIVATE(DInputDevice)
 };

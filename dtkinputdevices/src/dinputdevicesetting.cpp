@@ -12,7 +12,7 @@ DInputDeviceSettingPrivate::DInputDeviceSettingPrivate(DInputDeviceSetting *q)
 {
 }
 
-DInputDeviceSettingPrivate::~DInputDeviceSettingPrivate() {}
+DInputDeviceSettingPrivate::~DInputDeviceSettingPrivate() = default;
 
 DInputDeviceSetting::DInputDeviceSetting(QObject *parent)
     : QObject(parent)
@@ -20,5 +20,5 @@ DInputDeviceSetting::DInputDeviceSetting(QObject *parent)
 {
 }
 
-DInputDeviceSetting::~DInputDeviceSetting() {}
+DInputDeviceSetting::~DInputDeviceSetting() = default;
 DINPUTDEVICES_END_NAMESPACE

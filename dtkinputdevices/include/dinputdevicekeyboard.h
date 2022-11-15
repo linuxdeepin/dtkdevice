@@ -11,13 +11,19 @@ class DInputDeviceKeyboardPrivate;
 class DInputDeviceKeyboard : public DInputDevice
 {
     Q_OBJECT
+
 public:
-    explicit DInputDeviceKeyboard(QObject *parent = nullptr);
+    ~DInputDeviceKeyboard() override;
 
 public Q_SLOTS:
     DExpected<void> reset() override;
 
+protected:
+    explicit DInputDeviceKeyboard(QObject *parent = nullptr);
+    DInputDeviceKeyboard(const DeviceInfo &info, bool enabled = true);
+
 private:
+    friend class DInputDeviceManager;
     QScopedPointer<DInputDeviceKeyboardPrivate> d_ptr;
     Q_DECLARE_PRIVATE(DInputDeviceKeyboard)
 };

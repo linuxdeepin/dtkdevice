@@ -20,11 +20,11 @@ public:
     ~DInputDeviceManagerPrivate() override;
 
 private:
-    DInputDeviceManager *q_ptr;
     MouseInterface *m_mouseInter;
     TouchPadInterface *m_touchPadInter;
     TrackPointInterface *m_trackPointInter;
     WacomInterface *m_wacomInter;
+    DInputDeviceManager *q_ptr;
     Q_DECLARE_PUBLIC(DInputDeviceManager)
 };
 

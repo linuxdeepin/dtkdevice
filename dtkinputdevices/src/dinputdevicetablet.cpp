@@ -30,6 +30,14 @@ DInputDeviceTablet::DInputDeviceTablet(QObject *parent)
 {
 }
 
+DInputDeviceTablet::~DInputDeviceTablet() = default;
+
+DInputDeviceTablet::DInputDeviceTablet(const DeviceInfo &info, bool enabled)
+    : DInputDevicePointer(info, enabled)
+    , d_ptr(new DInputDeviceTabletPrivate(this))
+{
+}
+
 DExpected<void> DInputDeviceTablet::reset()
 {
     Q_D(DInputDeviceTablet);

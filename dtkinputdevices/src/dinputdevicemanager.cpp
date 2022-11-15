@@ -9,13 +9,17 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 
+#include "dinputdevicekeyboard.h"
 #include "dinputdevicemouse.h"
 #include "dinputdevicesetting.h"
+#include "dinputdevicetablet.h"
 #include "dinputdevicetouchpad.h"
+#include "dinputdevicetrackpoint.h"
 
 DINPUTDEVICES_BEGIN_NAMESPACE
 DInputDeviceManagerPrivate::DInputDeviceManagerPrivate(DInputDeviceManager *q)
-    : q_ptr(q)
+    : QObject(q)
+    , q_ptr(q)
 {
 #ifdef USE_FAKE_INTERFACE
     const QString &Service = QStringLiteral("org.deepin.dtk.InputDevices");
@@ -118,12 +122,15 @@ DExpected<DInputDevicePtr> DInputDeviceManager::createDevice(const DeviceInfo &i
 {
     switch (info.type) {
         case DeviceType::Mouse:
-            return DInputDevicePtr{new DInputDeviceMouse};
+            return DInputDevicePtr{new DInputDeviceMouse(info)};
         case DeviceType::TouchPad:
-            return DInputDevicePtr{new DInputDeviceTouchPad};
+            return DInputDevicePtr{new DInputDeviceTouchPad(info)};
         case DeviceType::Tablet:
+            return DInputDevicePtr{new DInputDeviceTablet(info)};
         case DeviceType::TrackPoint:
+            return DInputDevicePtr{new DInputDeviceTrackPoint(info)};
         case DeviceType::Keyboard:
+            return DInputDevicePtr{new DInputDeviceKeyboard(info)};
         case DeviceType::Generic:
             return DInputDevicePtr{new DInputDevice};
         default:

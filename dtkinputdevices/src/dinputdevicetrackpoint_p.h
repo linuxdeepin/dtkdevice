@@ -9,9 +9,13 @@
 DINPUTDEVICES_BEGIN_NAMESPACE
 class DInputDeviceTrackPointPrivate : public QObject
 {
+    Q_OBJECT
+
 public:
     DInputDeviceTrackPointPrivate(DInputDeviceTrackPoint *q);
     ~DInputDeviceTrackPointPrivate() override;
+
+    void initSignals();
 
 private:
     DInputDeviceTrackPoint *q_ptr;
