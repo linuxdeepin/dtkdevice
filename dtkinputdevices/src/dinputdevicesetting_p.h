@@ -6,6 +6,11 @@
 #define DINPUTDEVICESETTING_P_H
 #include "dinputdevicesetting.h"
 DINPUTDEVICES_BEGIN_NAMESPACE
+class InputDevicesInterface;
+class KeyboardInterface;
+class MouseInterface;
+class WacomInterface;
+
 class DInputDeviceSettingPrivate : public QObject
 {
     Q_OBJECT
@@ -14,6 +19,10 @@ public:
     ~DInputDeviceSettingPrivate() override;
 
 private:
+    InputDevicesInterface *m_inter;
+    KeyboardInterface *m_keyboardInter;
+    MouseInterface *m_mouseInter;
+    WacomInterface *m_wacomInter;
     DInputDeviceSetting *q_ptr;
     Q_DECLARE_PUBLIC(DInputDeviceSetting)
 };
