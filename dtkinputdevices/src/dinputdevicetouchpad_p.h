@@ -4,6 +4,7 @@
 #pragma once
 
 #include "dinputdevicetouchpad.h"
+#include "touchpadinterface.h"
 
 DINPUTDEVICES_BEGIN_NAMESPACE
 
@@ -11,9 +12,11 @@ class DInputDeviceTouchPadPrivate : public QObject
 {
     Q_OBJECT
 public:
-    explicit DInputDeviceTouchPadPrivate(DInputDeviceTouchPad *q = nullptr);
+    explicit DInputDeviceTouchPadPrivate(DInputDeviceTouchPad *q);
+    ~DInputDeviceTouchPadPrivate();
 
 private:
+    TouchPadInterface *m_touchPadInter;
     DInputDeviceTouchPad *q_ptr;
     Q_DECLARE_PUBLIC(DInputDeviceTouchPad)
 };

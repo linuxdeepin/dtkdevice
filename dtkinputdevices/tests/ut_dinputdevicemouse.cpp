@@ -20,8 +20,3 @@ public:
 protected:
     DInputDeviceMouse *m_deviceMouse;
 };
-
-TEST_F(TestDInputDeviceMouse, naturalScroll)
-{
-    EXPECT_EQ(true, m_deviceMouse->naturalScroll());
-}

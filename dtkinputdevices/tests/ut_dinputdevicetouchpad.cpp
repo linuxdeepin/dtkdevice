@@ -20,8 +20,3 @@ public:
 protected:
     DInputDeviceTouchPad *m_deviceTouchPad;
 };
-
-TEST_F(TestDInputDeviceTouchPad, disableWhileTyping)
-{
-    EXPECT_EQ(true, m_deviceTouchPad->disableWhileTyping());
-}

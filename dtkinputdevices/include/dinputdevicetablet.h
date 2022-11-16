@@ -22,6 +22,15 @@ public:
     void setCursorMode(bool cursorMode);
     ~DInputDeviceTablet() override;
 
+    bool leftHanded() const override;
+    ScrollMethod scrollMethod() const override;
+    AccelerationProfile accelerationProfile() const override;
+    double accelerationSpeed() const override;
+    void setLeftHanded(bool leftHanded) override;
+    void setScrollMethod(ScrollMethod scrollMethod) override;
+    void setAccelerationProfile(AccelerationProfile accelerationProfile) override;
+    void setAccelerationSpeed(double accelerationSpeed) override;
+
 Q_SIGNALS:
     void cursorModeChanged(bool cursorMode);
 

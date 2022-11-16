@@ -32,6 +32,15 @@ public:
     void setNaturalScroll(bool naturalScroll);
     void setMiddleButtonEmulation(bool middleButtonEmulation);
 
+    bool leftHanded() const override;
+    ScrollMethod scrollMethod() const override;
+    AccelerationProfile accelerationProfile() const override;
+    double accelerationSpeed() const override;
+    void setLeftHanded(bool leftHanded) override;
+    void setScrollMethod(ScrollMethod method) override;
+    void setAccelerationProfile(AccelerationProfile profile) override;
+    void setAccelerationSpeed(double speed) override;
+
 Q_SIGNALS:
     void naturalScrollChanged(bool naturalScroll);
     void middleButtonEmulationChanged(bool emulation);

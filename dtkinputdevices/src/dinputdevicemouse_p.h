@@ -6,6 +6,7 @@
 #define DINPUTDEVICEMOUSE_P_H
 
 #include "dinputdevicemouse.h"
+#include "mouseinterface.h"
 
 DINPUTDEVICES_BEGIN_NAMESPACE
 
@@ -14,12 +15,14 @@ class DInputDeviceMousePrivate : public QObject
     Q_OBJECT
 public:
     explicit DInputDeviceMousePrivate(DInputDeviceMouse *q);
+    ~DInputDeviceMousePrivate() override;
 
 private:
+    MouseInterface *m_mouseInter;
     DInputDeviceMouse *q_ptr;
     Q_DECLARE_PUBLIC(DInputDeviceMouse)
 };
 
 DINPUTDEVICES_END_NAMESPACE
 
-#endif // DINPUTDEVICEMOUSE_P_H
+#endif  // DINPUTDEVICEMOUSE_P_H

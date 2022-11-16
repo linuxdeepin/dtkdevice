@@ -29,15 +29,15 @@ class DInputDevicePointer : public DInputDevice
 public:
     ~DInputDevicePointer() override;
 
-    bool leftHanded() const;
-    ScrollMethod scrollMethod() const;
-    AccelerationProfile accelerationProfile() const;
-    double accelerationSpeed() const;
+    virtual bool leftHanded() const = 0;
+    virtual ScrollMethod scrollMethod() const = 0;
+    virtual AccelerationProfile accelerationProfile() const = 0;
+    virtual double accelerationSpeed() const = 0;
 
-    void setLeftHanded(bool leftHanded);
-    void setScrollMethod(ScrollMethod scrollMethod);
-    void setAccelerationProfile(AccelerationProfile accelerationProfile);
-    void setAccelerationSpeed(double accelerationSpeed);
+    virtual void setLeftHanded(bool leftHanded) = 0;
+    virtual void setScrollMethod(ScrollMethod scrollMethod) = 0;
+    virtual void setAccelerationProfile(AccelerationProfile accelerationProfile) = 0;
+    virtual void setAccelerationSpeed(double accelerationSpeed) = 0;
 
 Q_SIGNALS:
     void leftHandedChanged(bool leftHanded);

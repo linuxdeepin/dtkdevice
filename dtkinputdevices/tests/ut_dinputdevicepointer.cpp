@@ -2,8 +2,8 @@
 //
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
+#include "dinputdevicemouse.h"
 #include "dinputdevicepointer.h"
-#include "dtkinputdevices_types.h"
 #include <gtest/gtest.h>
 
 DINPUTDEVICES_USE_NAMESPACE
@@ -11,8 +11,8 @@ DINPUTDEVICES_USE_NAMESPACE
 class TestDInputDevicePointer : public testing::Test
 {
 public:
-    TestDInputDevicePointer():
-        m_devicePointer(new DInputDevicePointer)
+    TestDInputDevicePointer()
+        : m_devicePointer(new DInputDeviceMouse)
     {
     }
 
@@ -21,13 +21,3 @@ public:
 protected:
     DInputDevicePointer *m_devicePointer;
 };
-
-TEST_F(TestDInputDevicePointer, leftHanded)
-{
-    EXPECT_EQ(true, m_devicePointer->leftHanded());
-}
-
-TEST_F(TestDInputDevicePointer, scrollMethod)
-{
-    EXPECT_EQ(ScrollMethod::NoScroll, m_devicePointer->scrollMethod());
-}
