@@ -152,4 +152,48 @@ DExpected<void> DInputDeviceTrackPoint::reset()
     }
 }
 
+bool DInputDeviceTrackPoint::leftHanded() const
+{
+    Q_D(const DInputDeviceTrackPoint);
+    return d->m_trackPointInter->LeftHanded();
+}
+
+void DInputDeviceTrackPoint::setLeftHanded(bool leftHanded)
+{
+    Q_D(DInputDeviceTrackPoint);
+    d->m_trackPointInter->SetLeftHanded(leftHanded);
+}
+
+AccelerationProfile DInputDeviceTrackPoint::accelerationProfile() const
+{
+    // TODO(asterwyx): Here we cannot acquire the profile using dde-daemon
+    return AccelerationProfile::Adaptive;
+}
+
+void DInputDeviceTrackPoint::setAccelerationProfile(AccelerationProfile profile)
+{
+    Q_UNUSED(profile)
+}
+
+ScrollMethod DInputDeviceTrackPoint::scrollMethod() const
+{
+    return ScrollMethod::ScrollOnButtonDown;
+}
+
+void DInputDeviceTrackPoint::setScrollMethod(ScrollMethod method)
+{
+    Q_UNUSED(method)
+}
+
+double DInputDeviceTrackPoint::accelerationSpeed() const
+{
+    Q_D(const DInputDeviceTrackPoint);
+    return d->m_trackPointInter->MotionAcceleration();
+}
+
+void DInputDeviceTrackPoint::setAccelerationSpeed(double speed)
+{
+    Q_D(DInputDeviceTrackPoint);
+    d->m_trackPointInter->SetMotionAcceleration(speed);
+}
 DINPUTDEVICES_END_NAMESPACE

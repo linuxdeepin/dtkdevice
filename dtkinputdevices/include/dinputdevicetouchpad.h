@@ -35,6 +35,15 @@ public:
     void setNaturalScroll(bool naturalScroll);
     void setTapToClick(bool tapToClick);
 
+    bool leftHanded() const override;
+    ScrollMethod scrollMethod() const override;
+    AccelerationProfile accelerationProfile() const override;
+    double accelerationSpeed() const override;
+    void setLeftHanded(bool leftHanded) override;
+    void setScrollMethod(ScrollMethod scrollMethod) override;
+    void setAccelerationProfile(AccelerationProfile accelerationProfile) override;
+    void setAccelerationSpeed(double accelerationSpeed) override;
+
 public Q_SLOTS:
     DExpected<void> reset() override;
     DExpected<void> enable(bool enabled = true);

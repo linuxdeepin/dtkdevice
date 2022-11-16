@@ -28,6 +28,8 @@ DInputDeviceTablet::DInputDeviceTablet(QObject *parent)
     : DInputDevicePointer(parent)
     , d_ptr(new DInputDeviceTabletPrivate(this))
 {
+    Q_D(DInputDeviceTablet);
+    connect(d->m_wacomInter, &WacomInterface::CursorModeChanged, this, &DInputDeviceTablet::cursorModeChanged);
 }
 
 DInputDeviceTablet::~DInputDeviceTablet() = default;
@@ -62,4 +64,45 @@ void DInputDeviceTablet::setCursorMode(bool cursorMode)
     d->m_wacomInter->SetCursorMode(cursorMode);
 }
 
+bool DInputDeviceTablet::leftHanded() const
+{
+    Q_D(const DInputDeviceTablet);
+    return d->m_wacomInter->LeftHanded();
+}
+
+void DInputDeviceTablet::setLeftHanded(bool leftHanded)
+{
+    Q_D(DInputDeviceTablet);
+    d->m_wacomInter->SetLeftHanded(leftHanded);
+}
+
+AccelerationProfile DInputDeviceTablet::accelerationProfile() const
+{
+    return AccelerationProfile::Na;
+}
+
+void DInputDeviceTablet::setAccelerationProfile(AccelerationProfile profile)
+{
+    Q_UNUSED(profile)
+}
+
+ScrollMethod DInputDeviceTablet::scrollMethod() const
+{
+    return ScrollMethod::ScrollOnButtonDown;
+}
+
+void DInputDeviceTablet::setScrollMethod(ScrollMethod method)
+{
+    Q_UNUSED(method)
+}
+
+double DInputDeviceTablet::accelerationSpeed() const
+{
+    return 0;
+}
+
+void DInputDeviceTablet::setAccelerationSpeed(double speed)
+{
+    Q_UNUSED(speed)
+}
 DINPUTDEVICES_END_NAMESPACE

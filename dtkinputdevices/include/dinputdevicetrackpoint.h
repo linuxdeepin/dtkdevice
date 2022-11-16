@@ -42,6 +42,15 @@ public:
     void setWheelEmulationTimeout(qint32 timeout);
     void setWheelHorizontalScroll(bool horizontalScroll);
 
+    bool leftHanded() const override;
+    ScrollMethod scrollMethod() const override;
+    AccelerationProfile accelerationProfile() const override;
+    double accelerationSpeed() const override;
+    void setLeftHanded(bool leftHanded) override;
+    void setScrollMethod(ScrollMethod scrollMethod) override;
+    void setAccelerationProfile(AccelerationProfile accelerationProfile) override;
+    void setAccelerationSpeed(double accelerationSpeed) override;
+
 Q_SIGNALS:
 
     void middleButtonEnabledChanged(bool enabled);
