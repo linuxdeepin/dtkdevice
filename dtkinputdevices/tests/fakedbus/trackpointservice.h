@@ -78,7 +78,7 @@ public Q_SLOTS:
     void Reset();
 
 public:
-    TrackPointService(const QString &service = QStringLiteral("com.deepin.daemon.InputDevices"),
+    TrackPointService(const QString &service = QStringLiteral("org.deepin.dtk.InputDevices"),
                       const QString &path = QStringLiteral("/com/deepin/daemon/InputDevice/Mouse"),
                       QObject *parent = nullptr);
     ~TrackPointService() override;

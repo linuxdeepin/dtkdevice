@@ -73,7 +73,7 @@ public Q_SLOTS:
     void Reset();
 
 public:
-    MouseService(const QString &service = QStringLiteral("com.deepin.daemon.InputDevices"),
+    MouseService(const QString &service = QStringLiteral("org.deepin.dtk.InputDevices"),
                  const QString &path = QStringLiteral("/com/deepin/daemon/InputDevice/Mouse"),
                  QObject *parent = nullptr);
     ~MouseService() override;

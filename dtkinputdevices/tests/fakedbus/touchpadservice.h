@@ -88,7 +88,7 @@ public Q_SLOTS:
     void Reset();
 
 public:
-    TouchPadService(const QString &service = QStringLiteral("com.deepin.daemon.InputDevice.TouchPad"),
+    TouchPadService(const QString &service = QStringLiteral("org.deepin.dtk.InputDevices"),
                     const QString &path = QStringLiteral("/com/deepin/daemon/InputDevice/TouchPad"),
                     QObject *parent = nullptr);
     ~TouchPadService() override;

@@ -76,9 +76,15 @@ DExpected<void> DInputDeviceTouchPad::reset()
     }
 }
 
+bool DInputDeviceTouchPad::enabled() const
+{
+    Q_D(const DInputDeviceTouchPad);
+    return d->m_touchPadInter->TPadEnable();
+}
+
 DExpected<void> DInputDeviceTouchPad::enable(bool enabled)
 {
-    setEnabled(enabled);
+    DInputDevice::setEnabled(enabled);
     Q_D(DInputDeviceTouchPad);
     d->m_touchPadInter->SetTPadEnable(enabled);
     return {};
@@ -143,6 +149,7 @@ void DInputDeviceTouchPad::setScrollMethod(ScrollMethod method)
         case ScrollMethod::NoScroll:
             d->m_touchPadInter->SetEdgeScroll(false);
             d->m_touchPadInter->SetVertScroll(false);
+            break;
         default:
             Q_UNREACHABLE();
     }

@@ -8,10 +8,12 @@
 #include "dtkinputdevices_global.h"
 #include "dtkinputdevices_types.h"
 
+#include <DExpected>
 #include <QObject>
 #include <QSharedPointer>
-#include <DExpected>
 
+using DInputKeyAction = DTK_INPUTDEVICES_NAMESPACE::KeyAction;
+using DInputKey = DTK_INPUTDEVICES_NAMESPACE::Key;
 DINPUTDEVICES_BEGIN_NAMESPACE
 using DCORE_NAMESPACE::DExpected;
 
@@ -19,8 +21,10 @@ class DInputDeviceSettingPrivate;
 class DInputDeviceSetting : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(bool disableTouchPadWhileMouse READ disableTouchPadWhileMouse WRITE setDisableTouchPadWhileMouse NOTIFY disableTouchPadWhileMouseChanged)
-    Q_PROPERTY(quint32 doubleClickInterval READ doubleClickInterval WRITE setDoubleClickInterval NOTIFY doubleClickIntervalChanged)
+    Q_PROPERTY(bool disableTouchPadWhileMouse READ disableTouchPadWhileMouse WRITE setDisableTouchPadWhileMouse NOTIFY
+                   disableTouchPadWhileMouseChanged)
+    Q_PROPERTY(
+        quint32 doubleClickInterval READ doubleClickInterval WRITE setDoubleClickInterval NOTIFY doubleClickIntervalChanged)
     Q_PROPERTY(quint32 dragThreshold READ dragThreshold WRITE setDragThreshold NOTIFY dragThresholdChanged)
     Q_PROPERTY(bool repeatEnabled READ repeatEnabled WRITE setRepeatEnabled NOTIFY repeatEnabledChanged)
     Q_PROPERTY(quint32 repeatDelay READ repeatDelay WRITE setRepeatDelay NOTIFY repeatDelayChanged)
@@ -50,17 +54,17 @@ public:
     void setCursorBlinkInterval(qint32 interval);
     void setWheelSpeed(quint32 speed);
 
-signals:
-   void disableTouchPadWhileMouseChanged(bool disable);
-   void doubleClickIntervalChanged(quint32 interval);
-   void dragThresholdChanged(quint32 distance);
-   void repeatEnabledChanged(bool enabled);
-   void repeatDelayChanged(quint32 delay);
-   void repeatIntervalChanged(quint32 interval);
-   void cursorBlinkIntervalChanged(qint32 interval);
-   void wheelSpeedChanged(quint32 speed);
+Q_SIGNALS:
+    void disableTouchPadWhileMouseChanged(bool disable);
+    void doubleClickIntervalChanged(quint32 interval);
+    void dragThresholdChanged(quint32 distance);
+    void repeatEnabledChanged(bool enabled);
+    void repeatDelayChanged(quint32 delay);
+    void repeatIntervalChanged(quint32 interval);
+    void cursorBlinkIntervalChanged(qint32 interval);
+    void wheelSpeedChanged(quint32 speed);
 
-public slots:
+public Q_SLOTS:
     DExpected<quint32> pressureSensitivity(quint32 id);
     DExpected<quint32> rawSampleSize(quint32 id);
     DExpected<quint32> pressureThreshold(quint32 id);
@@ -74,8 +78,8 @@ public slots:
     DExpected<void> forceProportions(quint32 id, bool force);
     DExpected<void> setMouseEnterRemap(quint32 id, bool remap);
     DExpected<void> setSuppress(quint32 id, quint32 suppress);
-    DExpected<DTK_INPUTDEVICES_NAMESPACE::KeyAction> keymap(quint32 id, DTK_INPUTDEVICES_NAMESPACE::Key key);
-    DExpected<void> setKeymap(quint32 id, DTK_INPUTDEVICES_NAMESPACE::Key key, DTK_INPUTDEVICES_NAMESPACE::KeyAction action);
+    DExpected<DInputKeyAction> keymap(quint32 id, DInputKey key);
+    DExpected<void> setKeymap(quint32 id, DInputKey key, DInputKeyAction action);
 
 private:
     explicit DInputDeviceSetting(QObject *parent = nullptr);
