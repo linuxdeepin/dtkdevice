@@ -43,7 +43,7 @@ public Q_SLOTS:
     void Reset();
 
 public:
-    KeyboardService(const QString &service = QStringLiteral("com.deepin.daemon.InputDevices"),
+    KeyboardService(const QString &service = QStringLiteral("org.deepin.dtk.InputDevices"),
                     const QString &path = QStringLiteral("/com/deepin/daemon/InputDevice/Keyboard"),
                     QObject *parent = nullptr);
     ~KeyboardService() override;

@@ -23,6 +23,7 @@ target_include_directories(${BIN_NAME} PUBLIC
     "../include"
     "../src"
     "../src/dbus"
+    "./fakedbus"
     ${DtkCore_INCLUDE_DIRS}
 )
 
@@ -34,6 +35,8 @@ target_link_libraries(${BIN_NAME} PRIVATE
     -lgcov
     -lgtest
 )
+
+target_compile_definitions(${BIN_NAME} PRIVATE -DUSE_FAKE_INTERFACE)
 
 target_compile_options(${BIN_NAME} PRIVATE -fno-access-control)
 if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")

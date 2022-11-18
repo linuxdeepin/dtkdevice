@@ -16,7 +16,7 @@ DInputDeviceMousePrivate::DInputDeviceMousePrivate(DInputDeviceMouse *q)
     : QObject(q)
     , q_ptr(q)
 {
-#ifdef USE_FAKE_SERVICE
+#ifdef USE_FAKE_INTERFACE
     const QString &Service = QStringLiteral("org.deepin.dtk.InputDevices");
 #else
     const QString &Service = QStringLiteral("com.deepin.daemon.InputDevices");

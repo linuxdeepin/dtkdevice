@@ -35,7 +35,7 @@ class TouchPadInterface : public QObject
 
 public:
     static inline const char *staticInterfaceName() { return "com.deepin.daemon.InputDevice.TouchPad"; }
-    explicit TouchPadInterface(const QString &service = QStringLiteral("com.deepin.daemon.InputDevice.TouchPad"),
+    explicit TouchPadInterface(const QString &service = QStringLiteral("com.deepin.daemon.InputDevices"),
                                const QString &path = QStringLiteral("/com/deepin/daemon/InputDevice/TouchPad"),
                                QDBusConnection connection = QDBusConnection::sessionBus(),
                                QObject *parent = nullptr);

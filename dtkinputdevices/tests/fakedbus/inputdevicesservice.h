@@ -21,7 +21,7 @@ Q_SIGNALS:
     void WheelSpeedChanged(quint32 speed);
 
 public:
-    InputDevicesService(const QString &service = QStringLiteral("com.deepin.daemon.InputDevices"),
+    InputDevicesService(const QString &service = QStringLiteral("org.deepin.dtk.InputDevices"),
                         const QString &path = QStringLiteral("/com/deepin/daemon/InputDevices"),
                         QObject *parent = nullptr);
     ~InputDevicesService() override;

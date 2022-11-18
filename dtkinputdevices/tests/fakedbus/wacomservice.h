@@ -108,7 +108,7 @@ public Q_SLOTS:
     void Reset();
 
 public:
-    WacomService(const QString &service = QStringLiteral("com.deepin.daemon.InputDevices"),
+    WacomService(const QString &service = QStringLiteral("org.deepin.dtk.InputDevices"),
                  const QString &path = QStringLiteral("/com/deepin/daemon/InputDevice/Wacom"),
                  QObject *parent = nullptr);
     ~WacomService() override;

@@ -26,10 +26,10 @@ class DInputDevice : public QObject
     Q_PROPERTY(bool enabled READ enabled NOTIFY enabledChanged)
 
 public:
-    quint32 id() const;
-    QString name() const;
-    DeviceType type() const;
-    bool enabled() const;
+    virtual quint32 id() const;
+    virtual QString name() const;
+    virtual DeviceType type() const;
+    virtual bool enabled() const;
 
     using Ptr = QSharedPointer<DInputDevice>;
     ~DInputDevice() override;
@@ -43,11 +43,11 @@ public Q_SLOTS:
 protected:
     explicit DInputDevice(QObject *parent = nullptr);
     DInputDevice(const DeviceInfo &info, bool enabled = true);
-    void setDeviceInfo(const DeviceInfo &info);
-    void setEnabled(bool enabled);
-    void setId(quint32 id);
-    void setType(DeviceType type);
-    void setName(const QString &name);
+    virtual void setDeviceInfo(const DeviceInfo &info);
+    virtual void setEnabled(bool enabled);
+    virtual void setId(quint32 id);
+    virtual void setType(DeviceType type);
+    virtual void setName(const QString &name);
 
 private:
     friend class DInputDeviceManager;
