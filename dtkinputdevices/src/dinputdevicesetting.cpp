@@ -21,7 +21,8 @@ DInputDeviceSettingPrivate::DInputDeviceSettingPrivate(DInputDeviceSetting *q)
 {
 }
 
-DInputDeviceSettingPrivate::~DInputDeviceSettingPrivate() {
+DInputDeviceSettingPrivate::~DInputDeviceSettingPrivate()
+{
     delete m_inter;
     delete m_keyboardInter;
     delete m_mouseInter;
@@ -32,7 +33,7 @@ DInputDeviceSetting::DInputDeviceSetting(QObject *parent)
     : QObject(parent)
     , d_ptr(new DInputDeviceSettingPrivate(this))
 {
-#if defined(USE_FAKE_INTERFACE) //for unit test
+#if defined(USE_FAKE_INTERFACE)  // for unit test
     const QString &Service = QStringLiteral("org.deepin.dtk.InputDevices");
 #else
     const QString &Service = QStringLiteral("com.deepin.daemon.InputDevices");
@@ -153,52 +154,58 @@ void DInputDeviceSetting::setWheelSpeed(quint32 speed)
     d->m_inter->SetWheelSpeed(speed);
 }
 
-
-
 DExpected<quint32> DInputDeviceSetting::pressureSensitivity(quint32 id)
 {
+    Q_UNUSED(id)
     Q_D(const DInputDeviceSetting);
     return d->m_wacomInter->EraserPressureSensitive();
 }
 
 DExpected<quint32> DInputDeviceSetting::rawSampleSize(quint32 id)
 {
+    Q_UNUSED(id)
     Q_D(const DInputDeviceSetting);
     return d->m_wacomInter->EraserRawSample();
 }
 
 DExpected<quint32> DInputDeviceSetting::pressureThreshold(quint32 id)
 {
+    Q_UNUSED(id)
     Q_D(const DInputDeviceSetting);
     return d->m_wacomInter->EraserThreshold();
 }
 
 DExpected<bool> DInputDeviceSetting::forceProportions(quint32 id)
 {
+    Q_UNUSED(id)
     Q_D(const DInputDeviceSetting);
     return d->m_wacomInter->ForceProportions();
 }
 
 DExpected<QString> DInputDeviceSetting::mapOutput(quint32 id)
 {
+    Q_UNUSED(id)
     Q_D(const DInputDeviceSetting);
     return d->m_wacomInter->MapOutput();
 }
 
 DExpected<bool> DInputDeviceSetting::mouseEnterRemap(quint32 id)
 {
+    Q_UNUSED(id)
     Q_D(const DInputDeviceSetting);
     return d->m_wacomInter->MouseEnterRemap();
 }
 
 DExpected<quint32> DInputDeviceSetting::suppress(quint32 id)
 {
+    Q_UNUSED(id)
     Q_D(const DInputDeviceSetting);
     return d->m_wacomInter->Suppress();
 }
 
 DExpected<void> DInputDeviceSetting::setPressureSensitivity(quint32 id, quint32 sensitivity)
 {
+    Q_UNUSED(id)
     Q_D(DInputDeviceSetting);
     d->m_wacomInter->SetEraserPressureSensitive(sensitivity);
     return {};
@@ -206,6 +213,7 @@ DExpected<void> DInputDeviceSetting::setPressureSensitivity(quint32 id, quint32 
 
 DExpected<void> DInputDeviceSetting::setRawSampleSize(quint32 id, quint32 size)
 {
+    Q_UNUSED(id)
     Q_D(DInputDeviceSetting);
     d->m_wacomInter->SetEraserRawSample(size);
     return {};
@@ -213,6 +221,7 @@ DExpected<void> DInputDeviceSetting::setRawSampleSize(quint32 id, quint32 size)
 
 DExpected<void> DInputDeviceSetting::setPressureThreshold(quint32 id, quint32 size)
 {
+    Q_UNUSED(id)
     Q_D(DInputDeviceSetting);
     d->m_wacomInter->SetEraserThreshold(size);
     return {};
@@ -220,6 +229,7 @@ DExpected<void> DInputDeviceSetting::setPressureThreshold(quint32 id, quint32 si
 
 DExpected<void> DInputDeviceSetting::forceProportions(quint32 id, bool force)
 {
+    Q_UNUSED(id)
     Q_D(DInputDeviceSetting);
     d->m_wacomInter->SetForceProportions(force);
     return {};
@@ -227,6 +237,7 @@ DExpected<void> DInputDeviceSetting::forceProportions(quint32 id, bool force)
 
 DExpected<void> DInputDeviceSetting::setMouseEnterRemap(quint32 id, bool remap)
 {
+    Q_UNUSED(id)
     Q_D(DInputDeviceSetting);
     d->m_wacomInter->SetMouseEnterRemap(remap);
     return {};
@@ -234,6 +245,7 @@ DExpected<void> DInputDeviceSetting::setMouseEnterRemap(quint32 id, bool remap)
 
 DExpected<void> DInputDeviceSetting::setSuppress(quint32 id, quint32 suppress)
 {
+    Q_UNUSED(id)
     Q_D(DInputDeviceSetting);
     d->m_wacomInter->SetSuppress(suppress);
     return {};
@@ -241,14 +253,14 @@ DExpected<void> DInputDeviceSetting::setSuppress(quint32 id, quint32 suppress)
 
 DExpected<KeyAction> DInputDeviceSetting::keymap(quint32 id, Key key)
 {
+    Q_UNUSED(id)
     Q_D(const DInputDeviceSetting);
 
-    static const QMap<QString,KeyAction> map{
-        {"LeftClick", KeyAction::LeftClick},
-        {"MiddleClick", KeyAction::MiddleClick},
-        {"RightClick", KeyAction::RightClick},
-        {"PageUp", KeyAction::PageUp},
-        {"PageDown", KeyAction::PageDown}};
+    static const QMap<QString, KeyAction> map{{"LeftClick", KeyAction::LeftClick},
+                                              {"MiddleClick", KeyAction::MiddleClick},
+                                              {"RightClick", KeyAction::RightClick},
+                                              {"PageUp", KeyAction::PageUp},
+                                              {"PageDown", KeyAction::PageDown}};
     QString ret;
     if (key == Key::KeyUp) {
         ret = d->m_wacomInter->KeyUpAction();
@@ -260,13 +272,13 @@ DExpected<KeyAction> DInputDeviceSetting::keymap(quint32 id, Key key)
 
 DExpected<void> DInputDeviceSetting::setKeymap(quint32 id, Key key, KeyAction action)
 {
+    Q_UNUSED(id)
     Q_D(DInputDeviceSetting);
-    static const QMap<KeyAction,QString> map{
-        {KeyAction::LeftClick,"LeftClick"},
-        {KeyAction::MiddleClick,"MiddleClick"},
-        {KeyAction::RightClick,"RightClick"},
-        {KeyAction::PageUp,"PageUp"},
-        {KeyAction::PageDown,"PageDown"}};
+    static const QMap<KeyAction, QString> map{{KeyAction::LeftClick, "LeftClick"},
+                                              {KeyAction::MiddleClick, "MiddleClick"},
+                                              {KeyAction::RightClick, "RightClick"},
+                                              {KeyAction::PageUp, "PageUp"},
+                                              {KeyAction::PageDown, "PageDown"}};
     if (key == Key::KeyUp) {
         d->m_wacomInter->SetKeyUpAction(map[action]);
     } else {
@@ -274,6 +286,5 @@ DExpected<void> DInputDeviceSetting::setKeymap(quint32 id, Key key, KeyAction ac
     }
     return {};
 }
-
 
 DINPUTDEVICES_END_NAMESPACE
