@@ -15,7 +15,7 @@ class DInputDeviceTrackPointPrivate;
 class DInputDeviceTrackPoint : public DInputDevicePointer
 {
     Q_OBJECT
-    Q_PROPERTY(bool middleButtonEnabled READ middleButtonEnabled WRITE enableMiddleButton NOTIFY middleButtonEnabledChanged)
+    Q_PROPERTY(bool middleButtonEnabled READ middleButtonEnabled WRITE setMiddleButtonEnabled NOTIFY middleButtonEnabledChanged)
     Q_PROPERTY(qint32 middleButtonTimeout READ middleButtonTimeout WRITE setMiddleButtonTimeout NOTIFY middleButtonTimeoutChanged)
     Q_PROPERTY(bool wheelEmulation READ wheelEmulation WRITE setWheelEmulation NOTIFY wheelEmulationChanged)
     Q_PROPERTY(
@@ -35,7 +35,7 @@ public:
     qint32 wheelEmulationTimeout() const;
     bool wheelHorizontalScroll() const;
 
-    void enableMiddleButton(bool enabled);
+    void setMiddleButtonEnabled(bool enabled);
     void setMiddleButtonTimeout(qint32 timeout);
     void setWheelEmulation(bool emulation);
     void setWheelEmulationButton(qint32 button);

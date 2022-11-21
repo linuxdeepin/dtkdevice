@@ -2,14 +2,15 @@
 //
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
-#ifndef TRACKPOINTSERVICE_H
-#define TRACKPOINTSERVICE_H
+#ifndef TRACKPOINTADAPTOR_H
+#define TRACKPOINTADAPTOR_H
+
 #include "dtkinputdevices_global.h"
-#include <QObject>
+#include <QDBusAbstractAdaptor>
 
 DINPUTDEVICES_BEGIN_NAMESPACE
 
-class TrackPointService : public QObject
+class TrackPointAdaptor : public QDBusAbstractAdaptor
 {
     Q_OBJECT
     Q_CLASSINFO("D-Bus Interface", "com.deepin.daemon.InputDevice.TrackPoint")
@@ -78,14 +79,8 @@ public Q_SLOTS:
     void Reset();
 
 public:
-    TrackPointService(const QString &service = QStringLiteral("org.deepin.dtk.InputDevices"),
-                      const QString &path = QStringLiteral("/com/deepin/daemon/InputDevice/Mouse"),
-                      QObject *parent = nullptr);
-    ~TrackPointService() override;
-
-private:
-    bool registerService(const QString &service, const QString &path);
-    void unregisterService();
+    TrackPointAdaptor(QObject *parent = nullptr);
+    ~TrackPointAdaptor() override;
 
 private:
     bool m_exist;
@@ -98,9 +93,7 @@ private:
     qint32 m_wheelEmulationButton;
     qint32 m_wheelEmulationTimeout;
     QString m_deviceList;
-    QString m_service;
-    QString m_path;
 };
 
 DINPUTDEVICES_END_NAMESPACE
-#endif  // TRACKPOINTSERVICE_H
+#endif  // TRACKPOINTADAPTOR_H

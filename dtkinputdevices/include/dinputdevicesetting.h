@@ -75,7 +75,7 @@ public Q_SLOTS:
     DExpected<void> setPressureSensitivity(quint32 id, quint32 sensitivity);
     DExpected<void> setRawSampleSize(quint32 id, quint32 size);
     DExpected<void> setPressureThreshold(quint32 id, quint32 size);
-    DExpected<void> forceProportions(quint32 id, bool force);
+    DExpected<void> setForceProportions(quint32 id, bool force);
     DExpected<void> setMouseEnterRemap(quint32 id, bool remap);
     DExpected<void> setSuppress(quint32 id, quint32 suppress);
     DExpected<DInputKeyAction> keymap(quint32 id, DInputKey key);

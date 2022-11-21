@@ -9,12 +9,32 @@ DINPUTDEVICES_BEGIN_NAMESPACE
 
 QString deviceTypeToString(DeviceType type)
 {
-    const QMap<DeviceType, QString> &typeMap = {{DeviceType::Generic, "Generic"},
-                                                {DeviceType::Keyboard, "Keyboard"},
-                                                {DeviceType::Mouse, "Mouse"},
-                                                {DeviceType::Tablet, "Tablet"},
-                                                {DeviceType::TouchPad, "TouchPad"},
-                                                {DeviceType::TrackPoint, "TrackPoint"}};
+    static const QMap<DeviceType, QString> &typeMap = {{DeviceType::Generic, "Generic"},
+                                                       {DeviceType::Keyboard, "Keyboard"},
+                                                       {DeviceType::Mouse, "Mouse"},
+                                                       {DeviceType::Tablet, "Tablet"},
+                                                       {DeviceType::TouchPad, "TouchPad"},
+                                                       {DeviceType::TrackPoint, "TrackPoint"}};
     return typeMap[type];
 }
+QString keyActionToString(KeyAction action)
+{
+    static const QMap<KeyAction, QString> map{{KeyAction::LeftClick, "LeftClick"},
+                                              {KeyAction::MiddleClick, "MiddleClick"},
+                                              {KeyAction::RightClick, "RightClick"},
+                                              {KeyAction::PageUp, "PageUp"},
+                                              {KeyAction::PageDown, "PageDown"}};
+    return map[action];
+}
+
+KeyAction stringToKeyAction(const QString &action)
+{
+    static const QMap<QString, KeyAction> map{{"LeftClick", KeyAction::LeftClick},
+                                              {"MiddleClick", KeyAction::MiddleClick},
+                                              {"RightClick", KeyAction::RightClick},
+                                              {"PageUp", KeyAction::PageUp},
+                                              {"PageDown", KeyAction::PageDown}};
+    return map[action];
+}
+
 DINPUTDEVICES_END_NAMESPACE
