@@ -18,6 +18,7 @@ DInputDeviceTrackPoint::DInputDeviceTrackPoint(QObject *parent)
 
 DInputDeviceTrackPoint::DInputDeviceTrackPoint(const DeviceInfo &info, bool enabled)
     : DInputDevicePointer(info, enabled)
+    , d_ptr(new DInputDeviceTrackPointPrivate(this))
 {
     Q_D(DInputDeviceTrackPoint);
     d->initSignals();
@@ -104,7 +105,7 @@ bool DInputDeviceTrackPoint::wheelHorizontalScroll() const
     return d->m_trackPointInter->WheelHorizScroll();
 }
 
-void DInputDeviceTrackPoint::enableMiddleButton(bool enabled)
+void DInputDeviceTrackPoint::setMiddleButtonEnabled(bool enabled)
 {
     Q_D(DInputDeviceTrackPoint);
     d->m_trackPointInter->SetMiddleButtonEnabled(enabled);

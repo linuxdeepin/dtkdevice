@@ -9,6 +9,7 @@
 
 #include "dinputdevicesetting.h"
 #include "dinputdevicesetting_p.h"
+#include "dtkinputdevices_converters.h"
 #include "inputdevicesinterface.h"
 #include "keyboardinterface.h"
 #include "mouseinterface.h"
@@ -227,7 +228,7 @@ DExpected<void> DInputDeviceSetting::setPressureThreshold(quint32 id, quint32 si
     return {};
 }
 
-DExpected<void> DInputDeviceSetting::forceProportions(quint32 id, bool force)
+DExpected<void> DInputDeviceSetting::setForceProportions(quint32 id, bool force)
 {
     Q_UNUSED(id)
     Q_D(DInputDeviceSetting);
@@ -255,34 +256,23 @@ DExpected<KeyAction> DInputDeviceSetting::keymap(quint32 id, Key key)
 {
     Q_UNUSED(id)
     Q_D(const DInputDeviceSetting);
-
-    static const QMap<QString, KeyAction> map{{"LeftClick", KeyAction::LeftClick},
-                                              {"MiddleClick", KeyAction::MiddleClick},
-                                              {"RightClick", KeyAction::RightClick},
-                                              {"PageUp", KeyAction::PageUp},
-                                              {"PageDown", KeyAction::PageDown}};
     QString ret;
     if (key == Key::KeyUp) {
         ret = d->m_wacomInter->KeyUpAction();
     } else {
-        ret = d->m_wacomInter->KeyUpAction();
+        ret = d->m_wacomInter->KeyDownAction();
     }
-    return map[ret];
+    return stringToKeyAction(ret);
 }
 
 DExpected<void> DInputDeviceSetting::setKeymap(quint32 id, Key key, KeyAction action)
 {
     Q_UNUSED(id)
     Q_D(DInputDeviceSetting);
-    static const QMap<KeyAction, QString> map{{KeyAction::LeftClick, "LeftClick"},
-                                              {KeyAction::MiddleClick, "MiddleClick"},
-                                              {KeyAction::RightClick, "RightClick"},
-                                              {KeyAction::PageUp, "PageUp"},
-                                              {KeyAction::PageDown, "PageDown"}};
     if (key == Key::KeyUp) {
-        d->m_wacomInter->SetKeyUpAction(map[action]);
+        d->m_wacomInter->SetKeyUpAction(keyActionToString(action));
     } else {
-        d->m_wacomInter->SetKeyDownAction(map[action]);
+        d->m_wacomInter->SetKeyDownAction(keyActionToString(action));
     }
     return {};
 }
