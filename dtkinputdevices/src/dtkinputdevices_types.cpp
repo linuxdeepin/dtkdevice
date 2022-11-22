@@ -18,6 +18,12 @@ QDebug operator<<(QDebug debug, DeviceType type)
     return debug;
 }
 
+QDebug operator<<(QDebug debug, AccelerationProfile profile)
+{
+    debug << profileToString(profile);
+    return debug;
+}
+
 QDebug operator<<(QDebug debug, const DeviceInfo &info)
 {
     debug << "{id: " << info.id << ", name: " << info.name << ", type: " << info.type << "}";
