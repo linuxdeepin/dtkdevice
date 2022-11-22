@@ -37,4 +37,12 @@ KeyAction stringToKeyAction(const QString &action)
     return map[action];
 }
 
+QString profileToString(AccelerationProfile profile)
+
+{
+    static const QMap<AccelerationProfile, QString> profileMap = {
+        {AccelerationProfile::Adaptive, "adaptive"}, {AccelerationProfile::Flat, "flat"}, {AccelerationProfile::Na, "na"}};
+    return profileMap[profile];
+}
+
 DINPUTDEVICES_END_NAMESPACE

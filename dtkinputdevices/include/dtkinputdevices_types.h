@@ -39,6 +39,7 @@ public:
 };
 
 QDebug operator<<(QDebug debug, DeviceType type);
+QDebug operator<<(QDebug debug, AccelerationProfile profile);
 
 using ErrorCode = EnumWrapper::ErrorCode;
 

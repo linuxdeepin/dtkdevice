@@ -12,5 +12,6 @@ DINPUTDEVICES_BEGIN_NAMESPACE
 QString deviceTypeToString(DeviceType type);
 QString keyActionToString(KeyAction action);
 KeyAction stringToKeyAction(const QString &action);
+QString profileToString(AccelerationProfile profile);
 DINPUTDEVICES_END_NAMESPACE
 #endif  // DTKINPUTDEVICES_CONVERTERS_H
