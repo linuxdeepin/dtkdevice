@@ -52,7 +52,7 @@ sudo apt build-dep .
     该配置下，会编译单元测试，用户可以运行
 
     ```bash
-    ./test-recoverage.sh
+    ./test-coverage.sh
     ```
 
     获取单元测试报告
