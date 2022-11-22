@@ -14,6 +14,9 @@ project(dtkdevice
     VERSION ${VERSION}
 )
 
-
+# enable tests in advance to gather them
+if (CMAKE_BUILD_TYPE STREQUAL "Debug")
+    enable_testing()
+endif()
 add_subdirectory(dtklsdevice)
 add_subdirectory(dtkinputdevices)

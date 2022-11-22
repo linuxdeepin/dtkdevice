@@ -54,7 +54,7 @@ sudo apt build-dep .
     Notice, under debug config, we can run
 
     ```bash
-    ./test-recoverage.sh
+    ./test-coverage.sh
     ```
 
     to acquire test coverage info.
