@@ -55,7 +55,7 @@ public:
     void setWheelSpeed(quint32 speed);
 
 Q_SIGNALS:
-    void disableTouchPadWhileMouseChanged(bool disable);
+    void disableTouchPadWhileMouseChanged(bool disabled);
     void doubleClickIntervalChanged(quint32 interval);
     void dragThresholdChanged(quint32 distance);
     void repeatEnabledChanged(bool enabled);
@@ -74,7 +74,7 @@ public Q_SLOTS:
     DExpected<quint32> suppress(quint32 id);
     DExpected<void> setPressureSensitivity(quint32 id, quint32 sensitivity);
     DExpected<void> setRawSampleSize(quint32 id, quint32 size);
-    DExpected<void> setPressureThreshold(quint32 id, quint32 size);
+    DExpected<void> setPressureThreshold(quint32 id, quint32 threshold);
     DExpected<void> setForceProportions(quint32 id, bool force);
     DExpected<void> setMouseEnterRemap(quint32 id, bool remap);
     DExpected<void> setSuppress(quint32 id, quint32 suppress);

@@ -32,7 +32,7 @@ DInputDeviceTouchPadPrivate::~DInputDeviceTouchPadPrivate()
     delete m_touchPadInter;
 }
 
-DInputDeviceTouchPad::DInputDeviceTouchPad(DInputDevicePointer *parent)
+DInputDeviceTouchPad::DInputDeviceTouchPad(QObject *parent)
     : DInputDevicePointer(parent)
     , d_ptr(new DInputDeviceTouchPadPrivate(this))
 {
