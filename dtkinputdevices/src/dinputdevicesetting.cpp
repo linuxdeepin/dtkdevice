@@ -220,11 +220,11 @@ DExpected<void> DInputDeviceSetting::setRawSampleSize(quint32 id, quint32 size)
     return {};
 }
 
-DExpected<void> DInputDeviceSetting::setPressureThreshold(quint32 id, quint32 size)
+DExpected<void> DInputDeviceSetting::setPressureThreshold(quint32 id, quint32 threshold)
 {
     Q_UNUSED(id)
     Q_D(DInputDeviceSetting);
-    d->m_wacomInter->SetEraserThreshold(size);
+    d->m_wacomInter->SetEraserThreshold(threshold);
     return {};
 }
 

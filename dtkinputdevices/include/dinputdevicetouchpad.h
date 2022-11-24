@@ -55,7 +55,7 @@ Q_SIGNALS:
     void tapToClickChanged(bool tapToClick);
 
 protected:
-    explicit DInputDeviceTouchPad(DInputDevicePointer *parent = nullptr);
+    explicit DInputDeviceTouchPad(QObject *parent = nullptr);
     DInputDeviceTouchPad(const DeviceInfo &info, bool enabled = true);
 
 private:
