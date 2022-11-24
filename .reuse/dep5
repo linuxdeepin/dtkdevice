@@ -37,3 +37,8 @@ License: MIT
 Files: dtklsdevice/3rdparty/* 
 Copyright: None
 License: GPL-2.0-or-later
+
+# doxygen theme
+Files: doxygentheme/*
+Copyright: Copyright (c) 2021 - 2022 jothepro
+License: MIT
