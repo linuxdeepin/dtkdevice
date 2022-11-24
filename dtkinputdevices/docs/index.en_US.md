@@ -1,8 +1,26 @@
 @~english
 
-## dtkinputdevices
+@mainpage
+
+## Introduction
 
 dtkinputdevices provides access to input devices and global input settings on deepin and uos.
+
+## Structure
+
+There are 9 classes in this module:
+
++ **DInputDeviceManager** InputDevices manager, can be directly constructed
++ **DInputDeviceSetting** global settings, can be acquired from manager
++ **DInputDevice** abstract device base class (also generic device class), can be instantiated by manager
++ **DInputDevicePointer** abstract pointer device, as a abstract layer, it cannot be instantiated
++ **DInputDeviceMouse** mouse device, derived from DInputDevicePointer, can be instantiated by manager
++ **DInputDeviceTouchPad** touch pad device, derived from DInputDevicePointer, can be instantiated by manager
++ **DInputDeviceTrackPoint** track point device, derived from DInputDevicePointer, can be instantiated by manager
++ **DInputDeviceTablet** tablet pad and tablet tools device, derived from DInputDevicePointer, can be instantiated by manager
++ **DInputDeviceKeyboard** keyboard device, derived from DInputDevice, can be instantiated by manager
+
+## Example
 
 Here is a simple example：
 

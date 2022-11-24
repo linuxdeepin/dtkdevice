@@ -8,7 +8,7 @@
 dtkinputdevices_types.h 中定义了 inputdevices组件需要用到的一些自定义数据结构
 
 @enum Dtk::InputDevices::DeviceType dtkinputdevices_types.h
-@brief 定义设备类型
+@brief 设备类型
 | 值           | 序号  | 含义 |
 |--------------|------|-----|
 | Mouse        | 0     | 鼠标 |
@@ -19,7 +19,7 @@ dtkinputdevices_types.h 中定义了 inputdevices组件需要用到的一些自�
 | Generic      | 5     | 其他设备 |
 
 @struct Dtk::InputDevices::DeviceInfo dtkinputdevices_types.h
-@brief 定义设备信息的数据结构
+@brief 设备信息类
 @var DeviceInfo DeviceInfo::id
 设备id
 @var DeviceInfo DeviceInfo::name
@@ -72,12 +72,3 @@ dtkinputdevices_types.h 中定义了 inputdevices组件需要用到的一些自�
 | InvalidCall | 0    | 无效调用 |
 
 */
-
-
-
-
-
-
-
-
-

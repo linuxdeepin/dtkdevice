@@ -1,12 +1,26 @@
 @~chinese
 
-\mainpage
+@mainpage
 
-## dtkinputdevices
-
-[英文版本](index.en_US.md)
+## 项目介绍
 
 dtkinputdevices是对deepin和uos上输入设备的封装，输入设备包括键盘、鼠标、触摸板、数位板、指针杆等。除此之外，dtkinputdevices还提供全局的输入相关设置的访问与修改。
+
+## 项目结构
+
+该模块一共提供九个类：
+
++ **DInputDeviceManager** InputDevices管理类，可直接构造
++ **DInputDeviceSetting** 全局设置，可通过管理类获取
++ **DInputDevice** 设备抽象基类（通用设备类），可实例化，但是只能通过管理类实例化
++ **DInputDevicePointer** 抽象指针设备类，继承自DInputDevice，DInputDevicePointer为中间抽象层，不可实例化
++ **DInputDeviceMouse** 鼠标设备类，继承自DInputDevicePointer，可通过管理类实例化
++ **DInputDeviceTouchPad** 触摸板设备类，继承自DInputDevicePointer，可通过管理类实例化
++ **DInputDeviceTrackPoint** 指针杆设备类，继承自DInputDevicePointer，可通过管理类实例化
++ **DInputDeviceTablet** 数位板设备类，继承自DInputDevicePointer，可通过管理类实例化
++ **DInputDeviceKeyboard** 键盘设备类，继承自DInputDevice，可通过管理类实例化
+
+## 使用实例
 
 以下是一个简单的例子：
 
