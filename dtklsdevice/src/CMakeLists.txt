@@ -23,9 +23,6 @@ add_library(${BIN_NAME} SHARED
     ${SRCS}
 )
 
-
-
-
 set_target_properties(${BIN_NAME} PROPERTIES
     VERSION ${CMAKE_PROJECT_VERSION}
     SOVERSION ${CMAKE_PROJECT_VERSION_MAJOR})

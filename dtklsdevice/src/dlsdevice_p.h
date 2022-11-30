@@ -22,32 +22,30 @@ public:
     {
     }
 
-    void addDeviceInfo(hwNode &node, QList< device_info >   &ll);
-    devClass convertClass(hw::hwClass cc);
-    hw::hwClass convertClass(devClass cc);
+    void addDeviceInfo(hwNode &node, QList< DDeviceInfo >   &ll);
+    DevClass convertClass(hw::hwClass cc);
+    hw::hwClass convertClass(DevClass cc);
 
-    QList< device_info >  deviceCPU();
-    QList< device_info >  deviceStorage();
-    QList< device_info >  deviceGPU();
-    QList< device_info >  deviceMemory();
-    QList< device_info >  deviceMonitor();
-    QList< device_info >  deviceAudio();
-    QList< device_info >  deviceNetwork();
-    QList< device_info >  deviceCamera();
-    QList< device_info >  deviceKeyboard();
-    QList< device_info >  deviceMouse();
-    QList< device_info >  deviceComputer();
+    QList< DDeviceInfo >  deviceCPU();
+    QList< DDeviceInfo >  deviceStorage();
+    QList< DDeviceInfo >  deviceGPU();
+    QList< DDeviceInfo >  deviceMemory();
+    QList< DDeviceInfo >  deviceMonitor();
+    QList< DDeviceInfo >  deviceAudio();
+    QList< DDeviceInfo >  deviceNetwork();
+    QList< DDeviceInfo >  deviceCamera();
+    QList< DDeviceInfo >  deviceKeyboard();
+    QList< DDeviceInfo >  deviceMouse();
+    QList< DDeviceInfo >  deviceComputer();
 
     double updateSystemCpuUsage();
-    QMap<QString, int> cpuStat();
+    QMap<QString, int> CpuStat();
     double getCpuUsage();
 
 public:
-
-    QList< device_info >      m_ListDeviceInfo;
-
-    hwNode m_hwNode ;
-    DlsDevice *q_ptr = nullptr;
+    QList< DDeviceInfo >      m_listDeviceInfo;
+    hwNode                    m_hwNode ;
+    DlsDevice                *q_ptr = nullptr;
 
 private:
     QMap<QString, int> mLastCpuStat;

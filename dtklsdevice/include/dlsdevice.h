@@ -19,30 +19,30 @@ public:
     explicit DlsDevice(QObject *parent = nullptr);
     ~DlsDevice();
 
-    QList< device_info >  devicesInfosAll();
+    QList< DDeviceInfo >  devicesInfosAll();
 
-    QStringList  deviceAttris(devClass etype);
-    QList< device_info > deviceInfo(devClass etype);
-    QList< device_info >  deviceInfo(devClass etype, const int idex);
+    QStringList  deviceAttris(DevClass etype);
+    QList< DDeviceInfo > deviceInfo(DevClass etype);
+    QList< DDeviceInfo >  deviceInfo(DevClass etype, const int idex);
 
     int devicesCount() ;
-    int devicesCount(devClass devclass);
+    int devicesCount(DevClass devclass);
     double updateSystemCpuUsage();
-    QMap<QString, int> cpuStat();
+    QMap<QString, int> CpuStat();
     double getCpuUsage();
 
 
-    QList< device_info >  deviceCPU();
-    QList< device_info >  deviceStorage();
-    QList< device_info >  deviceGPU();
-    QList< device_info >  deviceMemory();
-    QList< device_info >  deviceMonitor(); //todo
-    QList< device_info >  deviceAudio();
-    QList< device_info >  deviceNetwork();
-    QList< device_info >  deviceCamera();
-    QList< device_info >  deviceKeyboard();
-    QList< device_info >  deviceMouse();
-    QList< device_info >  deviceComputer();
+    QList< DDeviceInfo >  deviceCPU();
+    QList< DDeviceInfo >  deviceStorage();
+    QList< DDeviceInfo >  deviceGPU();
+    QList< DDeviceInfo >  deviceMemory();
+    QList< DDeviceInfo >  deviceMonitor(); //todo
+    QList< DDeviceInfo >  deviceAudio();
+    QList< DDeviceInfo >  deviceNetwork();
+    QList< DDeviceInfo >  deviceCamera();
+    QList< DDeviceInfo >  deviceKeyboard();
+    QList< DDeviceInfo >  deviceMouse();
+    QList< DDeviceInfo >  deviceComputer();
 
 private:
     QScopedPointer<DlsDevicePrivate> d_ptr;

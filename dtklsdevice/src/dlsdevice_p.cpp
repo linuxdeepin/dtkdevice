@@ -41,9 +41,9 @@ DlsDevicePrivate::DlsDevicePrivate(DlsDevice *parent)
     , q_ptr(parent)
 {
     // m_classAttrisLstMap.clear();
-    m_ListDeviceInfo.clear();
+    m_listDeviceInfo.clear();
     scan_system(m_hwNode);
-    addDeviceInfo(m_hwNode, m_ListDeviceInfo);
+    addDeviceInfo(m_hwNode, m_listDeviceInfo);
 
     // mLastCpuStat record the Cpu status
     // init  all  mLastCpuStat
@@ -121,7 +121,7 @@ double DlsDevicePrivate::updateSystemCpuUsage()
     return cpuUsage;
 }
 
-QMap<QString, int> DlsDevicePrivate::cpuStat()
+QMap<QString, int> DlsDevicePrivate::CpuStat()
 {
     return mLastCpuStat;
 }
@@ -131,21 +131,20 @@ double DlsDevicePrivate::getCpuUsage()
     return mCpuUsage;
 }
 
-void DlsDevicePrivate::addDeviceInfo(hwNode &node, QList<device_info > &ll)
+void DlsDevicePrivate::addDeviceInfo(hwNode &node, QList<DDeviceInfo > &ll)
 {
-
-    struct device_info entry;
+    struct DDeviceInfo entry;
 
     entry.deviceInfoLstMap.clear();
     entry.deviceInfoLstMap.clear();
-    entry.eDevClass = DtkUnkown;
+    entry.devClass = DtkUnkown;
 
     if (node.getBusInfo() != "") {
         entry.deviceBaseAttrisLst.append("SysFs_PATH");
         entry.deviceInfoLstMap["SysFs_PATH"] = QString::fromStdString(node.getBusInfo());
     }
 
-    entry.eDevClass = convertClass(node.getClass());
+    entry.devClass = convertClass(node.getClass());
     entry.subClassName = QString::fromStdString(node.getsubClassName());
 
     entry.deviceBaseAttrisLst.append("Description");
@@ -270,7 +269,7 @@ void DlsDevicePrivate::addDeviceInfo(hwNode &node, QList<device_info > &ll)
     }
 }
 
-devClass DlsDevicePrivate::convertClass(hw::hwClass cc)
+DevClass DlsDevicePrivate::convertClass(hw::hwClass cc)
 {
     switch (cc) {
     case bridge:  return DtkBridge;
@@ -295,7 +294,7 @@ devClass DlsDevicePrivate::convertClass(hw::hwClass cc)
     }
 }
 
-hwClass DlsDevicePrivate::convertClass(devClass cc)
+hwClass DlsDevicePrivate::convertClass(DevClass cc)
 {
     switch (cc) {
     case DtkBridge:  return bridge;
@@ -320,112 +319,112 @@ hwClass DlsDevicePrivate::convertClass(devClass cc)
     }
 }
 
-QList<device_info> DlsDevicePrivate::deviceCPU()
+QList<DDeviceInfo> DlsDevicePrivate::deviceCPU()
 {
-    QList<device_info >  infoList;
-    for (int it = 0; it < m_ListDeviceInfo.count(); it++) {
-        if ((m_ListDeviceInfo.at(it).eDevClass == DtkCpu))
-            infoList.append(m_ListDeviceInfo.at(it));
+    QList<DDeviceInfo >  infoList;
+    for (int it = 0; it < m_listDeviceInfo.count(); it++) {
+        if ((m_listDeviceInfo.at(it).devClass == DtkCpu))
+            infoList.append(m_listDeviceInfo.at(it));
     }
     return infoList;
 }
 
-QList<device_info> DlsDevicePrivate::deviceStorage()
+QList<DDeviceInfo> DlsDevicePrivate::deviceStorage()
 {
-    QList<device_info >  infoList;
-    for (int it = 0; it < m_ListDeviceInfo.count(); it++) {
-        if ((m_ListDeviceInfo.at(it).eDevClass == DtkDisk) \
-                || (m_ListDeviceInfo.at(it).eDevClass == DtkStorage))
-            infoList.append(m_ListDeviceInfo.at(it));
+    QList<DDeviceInfo >  infoList;
+    for (int it = 0; it < m_listDeviceInfo.count(); it++) {
+        if ((m_listDeviceInfo.at(it).devClass == DtkDisk) \
+                || (m_listDeviceInfo.at(it).devClass == DtkStorage))
+            infoList.append(m_listDeviceInfo.at(it));
     }
     return infoList;
 }
 
-QList<device_info> DlsDevicePrivate::deviceGPU()
+QList<DDeviceInfo> DlsDevicePrivate::deviceGPU()
 {
-    QList<device_info >  infoList;
-    for (int it = 0; it < m_ListDeviceInfo.count(); it++) {
-        if ((m_ListDeviceInfo.at(it).eDevClass == DtkDisplayGPU))
-            infoList.append(m_ListDeviceInfo.at(it));
+    QList<DDeviceInfo >  infoList;
+    for (int it = 0; it < m_listDeviceInfo.count(); it++) {
+        if ((m_listDeviceInfo.at(it).devClass == DtkDisplayGPU))
+            infoList.append(m_listDeviceInfo.at(it));
     }
     return infoList;
 }
 
-QList<device_info> DlsDevicePrivate::deviceMemory()
+QList<DDeviceInfo> DlsDevicePrivate::deviceMemory()
 {
-    QList<device_info >  infoList;
-    for (int it = 0; it < m_ListDeviceInfo.count(); it++) {
-        if ((m_ListDeviceInfo.at(it).eDevClass == DtkMemory))
-            infoList.append(m_ListDeviceInfo.at(it));
+    QList<DDeviceInfo >  infoList;
+    for (int it = 0; it < m_listDeviceInfo.count(); it++) {
+        if ((m_listDeviceInfo.at(it).devClass == DtkMemory))
+            infoList.append(m_listDeviceInfo.at(it));
     }
     return infoList;
 }
 
-QList<device_info> DlsDevicePrivate::deviceMonitor()
+QList<DDeviceInfo> DlsDevicePrivate::deviceMonitor()
 {
 //todo
 }
 
 
-QList<device_info> DlsDevicePrivate::deviceAudio()
+QList<DDeviceInfo> DlsDevicePrivate::deviceAudio()
 {
-    QList<device_info >  infoList;
-    for (int it = 0; it < m_ListDeviceInfo.count(); it++) {
-        if ((m_ListDeviceInfo.at(it).eDevClass == DtkSoundAudio))
-            infoList.append(m_ListDeviceInfo.at(it));
+    QList<DDeviceInfo >  infoList;
+    for (int it = 0; it < m_listDeviceInfo.count(); it++) {
+        if ((m_listDeviceInfo.at(it).devClass == DtkSoundAudio))
+            infoList.append(m_listDeviceInfo.at(it));
     }
     return infoList;
 }
 
-QList<device_info> DlsDevicePrivate::deviceNetwork()
+QList<DDeviceInfo> DlsDevicePrivate::deviceNetwork()
 {
-    QList<device_info >  infoList;
-    for (int it = 0; it < m_ListDeviceInfo.count(); it++) {
-        if ((m_ListDeviceInfo.at(it).eDevClass == DtkNetwork))
-            infoList.append(m_ListDeviceInfo.at(it));
+    QList<DDeviceInfo >  infoList;
+    for (int it = 0; it < m_listDeviceInfo.count(); it++) {
+        if ((m_listDeviceInfo.at(it).devClass == DtkNetwork))
+            infoList.append(m_listDeviceInfo.at(it));
     }
     return infoList;
 }
 
-QList<device_info> DlsDevicePrivate::deviceCamera()
+QList<DDeviceInfo> DlsDevicePrivate::deviceCamera()
 {
-    QList<device_info >  infoList;
-    for (int it = 0; it < m_ListDeviceInfo.count(); it++) {
+    QList<DDeviceInfo >  infoList;
+    for (int it = 0; it < m_listDeviceInfo.count(); it++) {
         //if (m_ListDeviceInfo.at(it).eDevClass == DtkInput)
-        if (m_ListDeviceInfo.at(it).subClassName == "camera")
-            infoList.append(m_ListDeviceInfo.at(it));
+        if (m_listDeviceInfo.at(it).subClassName == "camera")
+            infoList.append(m_listDeviceInfo.at(it));
     }
     return infoList;
 }
 
-QList<device_info> DlsDevicePrivate::deviceKeyboard()
+QList<DDeviceInfo> DlsDevicePrivate::deviceKeyboard()
 {
-    QList<device_info >  infoList;
-    for (int it = 0; it < m_ListDeviceInfo.count(); it++) {
-        if (m_ListDeviceInfo.at(it).eDevClass == DtkInput)
-            if (m_ListDeviceInfo.at(it).subClassName == "keyboard")
-                infoList.append(m_ListDeviceInfo.at(it));
+    QList<DDeviceInfo >  infoList;
+    for (int it = 0; it < m_listDeviceInfo.count(); it++) {
+        if (m_listDeviceInfo.at(it).devClass == DtkInput)
+            if (m_listDeviceInfo.at(it).subClassName == "keyboard")
+                infoList.append(m_listDeviceInfo.at(it));
     }
     return infoList;
 }
 
-QList<device_info> DlsDevicePrivate::deviceMouse()
+QList<DDeviceInfo> DlsDevicePrivate::deviceMouse()
 {
-    QList<device_info >  infoList;
-    for (int it = 0; it < m_ListDeviceInfo.count(); it++) {
-        if (m_ListDeviceInfo.at(it).eDevClass == DtkInput)
-            if (m_ListDeviceInfo.at(it).subClassName == "mouse")
-                infoList.append(m_ListDeviceInfo.at(it));
+    QList<DDeviceInfo >  infoList;
+    for (int it = 0; it < m_listDeviceInfo.count(); it++) {
+        if (m_listDeviceInfo.at(it).devClass == DtkInput)
+            if (m_listDeviceInfo.at(it).subClassName == "mouse")
+                infoList.append(m_listDeviceInfo.at(it));
     }
     return infoList;
 }
 
-QList<device_info> DlsDevicePrivate::deviceComputer()
+QList<DDeviceInfo> DlsDevicePrivate::deviceComputer()
 {
-    QList<device_info >  infoList;
-    for (int it = 0; it < m_ListDeviceInfo.count(); it++) {
-        if ((m_ListDeviceInfo.at(it).eDevClass == DtkProductSystem))
-            infoList.append(m_ListDeviceInfo.at(it));
+    QList<DDeviceInfo >  infoList;
+    for (int it = 0; it < m_listDeviceInfo.count(); it++) {
+        if ((m_listDeviceInfo.at(it).devClass == DtkProductSystem))
+            infoList.append(m_listDeviceInfo.at(it));
     }
     return infoList;
 }
