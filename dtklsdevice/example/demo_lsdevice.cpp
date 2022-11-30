@@ -25,10 +25,10 @@ int main(int argc, char **argv)
 
     DlsDevice *computer = new DlsDevice();
 
-    QList< device_info >  tmpLst1 = computer -> devicesInfosAll();
+    QList< DDeviceInfo >  tmpLst1 = computer -> devicesInfosAll();
     for (auto value : tmpLst1) {
 
-        qInfo() << "设备 --------- " << value.deviceInfoLstMap["sysID"];
+        qInfo() << "Device --------- " << value.deviceInfoLstMap["sysID"];
         qInfo() << "BusInfo: " <<  value.deviceInfoLstMap["sysID"];
         qInfo() << "Description: " << value.deviceInfoLstMap["Description"];
         qInfo() << "Product Name: " <<  value.deviceInfoLstMap["Name"];
@@ -40,8 +40,8 @@ int main(int argc, char **argv)
         qInfo() << "Configuration: " <<  value.deviceInfoLstMap["Configuration"];
     }
 
-    devClass tmpClass ;
-    QList< device_info >  tmpLst2;
+    DevClass tmpClass ;
+    QList< DDeviceInfo >  tmpLst2;
     QStringList  tmpStringList1;
     QString tmpstr;
 

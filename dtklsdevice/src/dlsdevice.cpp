@@ -27,49 +27,49 @@ DlsDevice::~DlsDevice()
 {
 }
 
-QList<device_info > DlsDevice::devicesInfosAll()
+QList<DDeviceInfo > DlsDevice::devicesInfosAll()
 {
     Q_D(const DlsDevice);
-    return d->m_ListDeviceInfo;
+    return d->m_listDeviceInfo;
 }
 
-QStringList DlsDevice::deviceAttris(devClass etype)
+QStringList DlsDevice::deviceAttris(DevClass etype)
 {
 
     Q_D(const DlsDevice);
     QStringList  tmpInfoLst;
     tmpInfoLst.clear();
 
-    for (int it = 0; it < d->m_ListDeviceInfo.count(); it++) {
-        if (d->m_ListDeviceInfo.at(it).eDevClass == etype)
-            return d->m_ListDeviceInfo.at(it).deviceBaseAttrisLst;
+    for (int it = 0; it < d->m_listDeviceInfo.count(); it++) {
+        if (d->m_listDeviceInfo.at(it).devClass == etype)
+            return d->m_listDeviceInfo.at(it).deviceBaseAttrisLst;
     }
     return tmpInfoLst;
 }
 
-QList<device_info > DlsDevice::deviceInfo(devClass etype)
+QList<DDeviceInfo > DlsDevice::deviceInfo(DevClass etype)
 {
     Q_D(const DlsDevice);
-    QList<device_info >  infoList;
+    QList<DDeviceInfo >  infoList;
 
-    for (int it = 0; it < d->m_ListDeviceInfo.count(); it++) {
-        if (d->m_ListDeviceInfo.at(it).eDevClass == etype)
-            infoList.append(d->m_ListDeviceInfo.at(it));
+    for (int it = 0; it < d->m_listDeviceInfo.count(); it++) {
+        if (d->m_listDeviceInfo.at(it).devClass == etype)
+            infoList.append(d->m_listDeviceInfo.at(it));
     }
     return infoList;
 }
 
-QList< device_info > DlsDevice::deviceInfo(devClass etype, const int idex)
+QList< DDeviceInfo > DlsDevice::deviceInfo(DevClass etype, const int idex)
 {
     Q_D(const DlsDevice);
-    QList<device_info >  infoList;
+    QList<DDeviceInfo >  infoList;
     int cnt = 0;
     infoList.clear();
 
-    for (int it = 0; it < d->m_ListDeviceInfo.count(); it++) {
-        if (d->m_ListDeviceInfo.at(it).eDevClass == etype)
+    for (int it = 0; it < d->m_listDeviceInfo.count(); it++) {
+        if (d->m_listDeviceInfo.at(it).devClass == etype)
             if (cnt++ == idex) {
-                infoList.append(d->m_ListDeviceInfo.at(it));
+                infoList.append(d->m_listDeviceInfo.at(it));
                 break;
             }
     }
@@ -82,7 +82,7 @@ int DlsDevice::devicesCount()
     return  d->m_hwNode.countChildren();
 }
 
-int DlsDevice::devicesCount(devClass devclass)
+int DlsDevice::devicesCount(DevClass devclass)
 {
     Q_D(DlsDevice);
     return  d->m_hwNode.countChildren(d->convertClass(devclass));
@@ -94,10 +94,10 @@ double DlsDevice::updateSystemCpuUsage()
     return  d->updateSystemCpuUsage();
 }
 
-QMap<QString, int> DlsDevice::cpuStat()
+QMap<QString, int> DlsDevice::CpuStat()
 {
     Q_D(DlsDevice);
-    return   d->cpuStat();
+    return   d->CpuStat();
 }
 
 double DlsDevice::getCpuUsage()
@@ -106,67 +106,67 @@ double DlsDevice::getCpuUsage()
     return  d->getCpuUsage();
 }
 
-QList<device_info> DlsDevice::deviceCPU()
+QList<DDeviceInfo> DlsDevice::deviceCPU()
 {
     Q_D(DlsDevice);
     return  d->deviceCPU();
 }
 
-QList<device_info> DlsDevice::deviceStorage()
+QList<DDeviceInfo> DlsDevice::deviceStorage()
 {
     Q_D(DlsDevice);
     return  d->deviceStorage();
 }
 
-QList<device_info> DlsDevice::deviceGPU()
+QList<DDeviceInfo> DlsDevice::deviceGPU()
 {
     Q_D(DlsDevice);
     return  d->deviceGPU();
 }
 
-QList<device_info> DlsDevice::deviceMemory()
+QList<DDeviceInfo> DlsDevice::deviceMemory()
 {
     Q_D(DlsDevice);
     return  d->deviceMemory();
 }
 
-QList<device_info> DlsDevice::deviceMonitor()
+QList<DDeviceInfo> DlsDevice::deviceMonitor()
 {
     Q_D(DlsDevice);
     return  d->deviceMonitor();
 }
 
-QList<device_info> DlsDevice::deviceAudio()
+QList<DDeviceInfo> DlsDevice::deviceAudio()
 {
     Q_D(DlsDevice);
     return  d->deviceAudio();
 }
 
-QList<device_info> DlsDevice::deviceNetwork()
+QList<DDeviceInfo> DlsDevice::deviceNetwork()
 {
     Q_D(DlsDevice);
     return  d->deviceNetwork();
 }
 
-QList<device_info> DlsDevice::deviceCamera()
+QList<DDeviceInfo> DlsDevice::deviceCamera()
 {
     Q_D(DlsDevice);
     return  d->deviceCamera();
 }
 
-QList<device_info> DlsDevice::deviceKeyboard()
+QList<DDeviceInfo> DlsDevice::deviceKeyboard()
 {
     Q_D(DlsDevice);
     return  d->deviceKeyboard();
 }
 
-QList<device_info> DlsDevice::deviceMouse()
+QList<DDeviceInfo> DlsDevice::deviceMouse()
 {
     Q_D(DlsDevice);
     return  d->deviceMouse();
 }
 
-QList<device_info> DlsDevice::deviceComputer()
+QList<DDeviceInfo> DlsDevice::deviceComputer()
 {
     Q_D(DlsDevice);
     return  d->deviceComputer();
