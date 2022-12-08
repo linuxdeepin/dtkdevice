@@ -6,7 +6,7 @@
 
 #include "dtklsdevice_global.h"
 
-#include <qobject.h>
+#include <QObject>
 
 DLSDEVICE_BEGIN_NAMESPACE
 
@@ -18,14 +18,14 @@ public:
     ~DMemoryDevice();
 
     int count();
-    QString vendor(const int &index);
-    QString model(const int &index);
-    QString totalWidth(const int &index);
-    QString dataWidth(const int &index);
-    QString type(const int &index);
-    QString speed(const int &index);
-    QString serialNum(const int &index);
-    QString size(const int &index);
+    QString vendor(int index);
+    QString model(int index);
+    QString totalWidth(int index);
+    QString dataWidth(int index);
+    QString type(int index);
+    QString speed(int index);
+    QString serialNumber(int index);
+    QString size(int index);
     QString swapSize();
 
     QString available();
@@ -49,5 +49,3 @@ private:
 DLSDEVICE_END_NAMESPACE
 
 #endif // DMEMORYDEVICE_H
-
-
