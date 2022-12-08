@@ -7,7 +7,7 @@
 #include "dtklsdevice_global.h"
 #include "dlsdevicetypes.h"
 
-#include <qobject.h>
+#include <QObject>
 
 DLSDEVICE_BEGIN_NAMESPACE
 
@@ -19,24 +19,27 @@ public:
     ~DCpuDevice();
 
     int physicalCount();
-    int coreCount(const int &physicalID);
-    int threadCount(const int &physicalID, const int &coreID);
-    int physicalID(const int &processorID);
-    int coreID(const int &processorID);
-    QString architecture(const int &physicalID);
-    QString vendor(const int &physicalID);
-    QString model(const int &physicalID);
-    QString minFreq(const int &processorID);
-    QString maxFreq(const int &processorID);
-    QString cache(const int &processorID, QString type);
-    QString flags(const int &processorID);
-    QString stepping(const int &processorID);
-    QString family(const int &processorID);
-    QString bogoMIPS(const int &processorID);
+    int coreCount(int physicalID);
+    int threadCount(int physicalID, int coreID);
+    int physicalID(int processorID);
+    int coreID(int processorID);
+    QString architecture(int physicalID);
+    QString vendor(int physicalID);
+    QString model(int physicalID);
+    QString minFreq(int processorID);
+    QString maxFreq(int processorID);
+    QString cache(int processorID, QString type);
+    QString flags(int processorID);
+    QString stepping(int processorID);
+    QString family(int processorID);
+    QString bogoMIPS(int processorID);
 
-    QString currentFreq(const int &processorID);
-    DCpuStat stat(const int &processorID);
-    DCpuUsage usage(const int &processorID);
+    QString temperature(int physicalID);
+    QString currentFreq(int processorID);
+    DCpuStat stat();
+    DCpuUsage usage();
+    DCpuStat stat(int processorID);
+    DCpuUsage usage(int processorID);
 
 private:
     QScopedPointer<DCpuDevicePrivate> d_ptr;
@@ -46,5 +49,3 @@ private:
 DLSDEVICE_END_NAMESPACE
 
 #endif // DCPUDEVICE_H
-
-

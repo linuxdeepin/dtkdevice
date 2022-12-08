@@ -36,42 +36,42 @@ int DMemoryDevice::count()
     return 0;
 }
 
-QString DMemoryDevice::vendor(const int &index)
+QString DMemoryDevice::vendor(int index)
 {
     return QString();
 }
 
-QString DMemoryDevice::model(const int &index)
+QString DMemoryDevice::model(int index)
 {
     return QString();
 }
 
-QString DMemoryDevice::totalWidth(const int &index)
+QString DMemoryDevice::totalWidth(int index)
 {
     return QString();
 }
 
-QString DMemoryDevice::dataWidth(const int &index)
+QString DMemoryDevice::dataWidth(int index)
 {
     return QString();
 }
 
-QString DMemoryDevice::type(const int &index)
+QString DMemoryDevice::type(int index)
 {
     return QString();
 }
 
-QString DMemoryDevice::speed(const int &index)
+QString DMemoryDevice::speed(int index)
 {
     return QString();
 }
 
-QString DMemoryDevice::serialNum(const int &index)
+QString DMemoryDevice::serialNumber(int index)
 {
     return QString();
 }
 
-QString DMemoryDevice::size(const int &index)
+QString DMemoryDevice::size(int index)
 {
     return QString();
 }

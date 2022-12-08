@@ -7,7 +7,7 @@
 #include "dtklsdevice_global.h"
 #include "dlsdevicetypes.h"
 
-#include <qobject.h>
+#include <QObject>
 
 DLSDEVICE_BEGIN_NAMESPACE
 class DlsDevicePrivate;

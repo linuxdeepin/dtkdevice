@@ -36,89 +36,104 @@ int DCpuDevice::physicalCount()
     return 0;
 }
 
-int DCpuDevice::coreCount(const int &physicalID)
+int DCpuDevice::coreCount(int physicalID)
 {
     return 0;
 }
 
-int DCpuDevice::threadCount(const int &physicalID, const int &coreID)
+int DCpuDevice::threadCount(int physicalID, int coreID)
 {
     return 0;
 }
 
-int DCpuDevice::physicalID(const int &processorID)
+int DCpuDevice::physicalID(int processorID)
 {
     return -1;
 }
 
-int DCpuDevice::coreID(const int &processorID)
+int DCpuDevice::coreID(int processorID)
 {
     return -1;
 }
 
-QString DCpuDevice::architecture(const int &physicalID)
+QString DCpuDevice::architecture(int physicalID)
 {
     return QString();
 }
 
-QString DCpuDevice::vendor(const int &physicalID)
+QString DCpuDevice::vendor(int physicalID)
 {
     return QString();
 }
 
-QString DCpuDevice::model(const int &physicalID)
+QString DCpuDevice::model(int physicalID)
 {
     return QString();
 }
 
-QString DCpuDevice::minFreq(const int &processorID)
+QString DCpuDevice::minFreq(int processorID)
 {
     return QString();
 }
 
-QString DCpuDevice::maxFreq(const int &processorID)
+QString DCpuDevice::maxFreq(int processorID)
 {
     return QString();
 }
 
-QString DCpuDevice::currentFreq(const int &processorID)
+QString DCpuDevice::cache(int processorID, QString type)
 {
     return QString();
 }
 
-DCpuStat DCpuDevice::stat(const int &processorID)
+QString DCpuDevice::flags(int processorID)
+{
+    return QString();
+}
+
+QString DCpuDevice::stepping(int processorID)
+{
+    return QString();
+}
+
+QString DCpuDevice::family(int processorID)
+{
+    return QString();
+}
+
+QString DCpuDevice::bogoMIPS(int processorID)
+{
+    return QString();
+}
+
+QString DCpuDevice::temperature(int physicalID)
+{
+    return QString();
+}
+
+QString DCpuDevice::currentFreq(int processorID)
+{
+    return QString();
+}
+
+DCpuStat DCpuDevice::stat()
+{
+
+}
+
+DCpuUsage DCpuDevice::usage()
+{
+
+}
+
+DCpuStat DCpuDevice::stat(int processorID)
 {
     return DCpuStat();
 }
 
-DCpuUsage DCpuDevice::usage(const int &processorID)
+DCpuUsage DCpuDevice::usage(int processorID)
 {
     return DCpuUsage();
-}
-
-QString DCpuDevice::cache(const int &processorID, QString type)
-{
-    return QString();
-}
-
-QString DCpuDevice::flags(const int &processorID)
-{
-    return QString();
-}
-
-QString DCpuDevice::stepping(const int &processorID)
-{
-    return QString();
-}
-
-QString DCpuDevice::family(const int &processorID)
-{
-    return QString();
-}
-
-QString DCpuDevice::bogoMIPS(const int &processorID)
-{
-    return QString();
 }
 
 DLSDEVICE_END_NAMESPACE
