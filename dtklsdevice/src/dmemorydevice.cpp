@@ -121,11 +121,6 @@ QString DMemoryDevice::swapCached()
     return QString();
 }
 
-QString DMemoryDevice::shmem()
-{
-    return QString();
-}
-
 QString DMemoryDevice::slab()
 {
     return QString();

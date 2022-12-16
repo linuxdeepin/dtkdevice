@@ -21,9 +21,9 @@ set (DOXYGEN_TAGFILES "qtcore.tags=qthelp://doc.qt.io/qt-5/" CACHE STRING "Doxyg
 set (DOXYGEN_MACRO_EXPANSION "YES")
 set (DOXYGEN_EXPAND_ONLY_PREDEF "YES")
 set (DOXYGEN_PREDEFINED
-    "DLSDEVICE_BEGIN_NAMESPACE=namespace Dtk { namespace lsDevice {"
+    "DLSDEVICE_BEGIN_NAMESPACE=namespace Dtk { namespace LsDevice {"
     "DLSDEVICE_END_NAMESPACE=}}"
-    "DLSDEVICE_USE_NAMESPACE=using namespace Dtk::lsDevice;"   
+    "DLSDEVICE_USE_NAMESPACE=using namespace Dtk::LsDevice;"
 )
 
 doxygen_add_docs (doxygen_dtklsdevice

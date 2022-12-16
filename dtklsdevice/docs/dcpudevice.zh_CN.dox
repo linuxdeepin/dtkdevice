@@ -1,0 +1,112 @@
+/*!
+@~chinese
+@file dcpudevice.h
+
+@class Dtk::LsDevice::DCpuDevice dcpudevice.h
+@brief CPU设备信息.
+
+@fn int DCpuDevice::physicalCount()
+@brief 获取所有物理CPU个数.
+@return 所有物理CPU个数.
+
+@fn int DCpuDevice::coreCount(int physicalID)
+@brief 获取指定CPU的核心个数.
+@param[in] physicalID 指定CPU的ID.
+@return 指定CPU的核心个数.
+
+@fn int DCpuDevice::threadCount(int physicalID, int coreID)
+@brief 获取指定CPU和物理核的线程个数.
+@param[in] physicalID 指定CPU的ID.
+@param[in] coreID 指定物理核ID.
+@return 指定CPU和物理核的线程个数.
+
+@fn int DCpuDevice::physicalID(int processorID)
+@brief 获取指定线程ID的CPU的ID.
+@param[in] processorID 指定线程ID.
+@return 指定线程ID的CPU的ID.
+
+@fn int DCpuDevice::coreID(int processorID)
+@brief 获取指定线程ID的物理核ID.
+@param[in] processorID 指定线程ID.
+@return 指定线程ID的物理核ID.
+
+@fn QString DCpuDevice::architecture(int physicalID)
+@brief 获取指定CPU的架构.
+@param[in] physicalID 指定CPU的ID.
+@return 指定CPU的架构.
+
+@fn QString DCpuDevice::vendor(int physicalID)
+@brief 获取指定CPU的厂商.
+@param[in] physicalID 指定CPU的ID.
+@return 指定CPU的厂商.
+
+@fn QString DCpuDevice::model(int physicalID)
+@brief 获取指定CPU的型号.
+@param[in] physicalID 指定CPU的ID.
+@return 指定CPU的型号.
+
+@fn QString DCpuDevice::minFreq(int processorID)
+@brief 获取指定线程ID的最小频率(kHz、MHz、GHz).
+@param[in] processorID 指定线程ID.
+@return 指定线程ID的最小频率.
+
+@fn QString DCpuDevice::maxFreq(int processorID)
+@brief 获取指定线程ID的最大频率(kHz、MHz、GHz).
+@param[in] processorID 指定线程ID.
+@return 指定线程ID的最大频率.
+
+@fn QString DCpuDevice::cache(int processorID, QString type)
+@brief 获取指定线程ID和缓存类型的缓存大小.
+@param[in] processorID 指定线程ID.
+@param[in] type 缓存类型，l1d L1数据缓存，l1i L1指令缓存，l2 L2缓存，l3 L3缓存.
+@return 指定线程ID和缓存类型的缓存大小.
+
+@fn QString DCpuDevice::flags(int processorID)
+@brief 获取指定线程ID的特性.
+@param[in] processorID 指定线程ID.
+@return 指定线程ID的特性.
+
+@fn QString DCpuDevice::stepping(int processorID)
+@brief 获取指定线程ID的步进.
+@param[in] processorID 指定线程ID.
+@return 指定线程ID的步进.
+
+@fn QString DCpuDevice::family(int processorID)
+@brief 获取指定线程ID的家族.
+@param[in] processorID 指定线程ID.
+@return 指定线程ID的家族.
+
+@fn QString DCpuDevice::bogoMIPS(int processorID)
+@brief 获取指定线程ID的运算速度.
+@param[in] processorID 指定线程ID.
+@return 指定线程ID的运算速度.
+
+@fn QString DCpuDevice::temperature(int physicalID)
+@brief 获取指定CPU的温度.
+@param[in] physicalID 指定CPU的ID.
+@return 指定CPU的温度.
+
+@fn QString DCpuDevice::currentFreq(int processorID)
+@brief 获取指定线程ID的当前频率(kHz、MHz、GHz).
+@param[in] processorID 指定线程ID.
+@return 指定线程ID的当前频率.
+
+@fn DCpuStat DCpuDevice::stat()
+@brief 获取所有CPU的状态.
+@return 所有CPU的状态.
+
+@fn DCpuStat DCpuDevice::usage()
+@brief 获取所有CPU的资源占用信息.
+@return 所有CPU的资源占用信息.
+
+@fn DCpuStat DCpuDevice::stat(int processorID)
+@brief 获取指定线程ID的状态.
+@param[in] processorID 指定线程ID.
+@return 指定线程ID的的状态.
+
+@fn DCpuStat DCpuDevice::usage(int processorID)
+@brief 获取指定线程ID的资源占用信息.
+@param[in] processorID 指定线程ID.
+@return 指定线程ID的资源占用信息.
+
+*/

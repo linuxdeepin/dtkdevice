@@ -36,7 +36,6 @@ public:
     QString sharedSize();
     QString swapFree();
     QString swapCached();
-    QString shmem();
     QString slab();
     QString dirty();
     QString mapped();
