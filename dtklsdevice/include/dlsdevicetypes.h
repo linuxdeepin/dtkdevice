@@ -162,7 +162,7 @@ struct DProcessNetworkInfo {
 struct DProcessStatus {
     char             state;                // process state
     pid_t            ppid;                 // parent process
-    pid_t            pgid;                 // process group id
+    gid_t            pgid;                 // process group id
     uid_t            uid;                  // real uid
     gid_t            gid;                  // real gid
     uid_t            euid;                 // effective uid

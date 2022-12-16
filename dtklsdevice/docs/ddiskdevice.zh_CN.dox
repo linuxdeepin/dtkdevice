@@ -1,0 +1,72 @@
+/*!
+@~chinese
+@file ddiskdevice.h
+
+@class Dtk::LsDevice::DDiskDevice ddiskdevice.h
+@brief 磁盘设备信息.
+
+@fn int DDiskDevice::count()
+@brief 获取所有磁盘个数.
+@return 所有磁盘个数.
+
+@fn QString DDiskDevice::vendor(int index)
+@brief 获取指定磁盘的厂商.
+@param[in] index 指定磁盘的ID.
+@return 指定磁盘的厂商.
+
+@fn QString DDiskDevice::model(int index)
+@brief 获取指定磁盘的型号.
+@param[in] index 指定磁盘的ID.
+@return 指定磁盘的型号.
+
+@fn QString DDiskDevice::mediaType(int index)
+@brief 获取指定磁盘的介质类型.
+@param[in] index 指定磁盘的ID.
+@return 指定磁盘的介质类型.
+
+@fn QString DDiskDevice::size(int index)
+@brief 获取指定磁盘大小.
+@param[in] index 指定磁盘的ID.
+@return 指定磁盘大小.
+
+@fn QString DDiskDevice::interface(int index)
+@brief 获取指定磁盘的接口.
+@param[in] index 指定磁盘的ID.
+@return 指定磁盘的接口.
+
+@fn QString DDiskDevice::serialNumber(int index)
+@brief 获取指定磁盘的序列号.
+@param[in] index 指定磁盘的ID.
+@return 指定磁盘的序列号.
+
+@fn QString DDiskDevice::deviceFile(int index)
+@brief 获取指定磁盘的设备文件.
+@param[in] index 指定磁盘的ID.
+@return 指定磁盘的设备文件.
+
+@fn QString DDiskDevice::rotationRate(int index)
+@brief 获取指定磁盘的转速.
+@param[in] index 指定磁盘的ID.
+@return 指定磁盘的转速.
+
+@fn QString DDiskDevice::firmwareVersion(int index)
+@brief 获取指定磁盘的固件版本.
+@param[in] index 指定磁盘的ID.
+@return 指定磁盘的固件版本.
+
+@fn QString DDiskDevice::sectorSize(int index)
+@brief 获取指定磁盘的逻辑分区大小.
+@param[in] index 指定磁盘的ID.
+@return 指定磁盘的逻辑分区大小.
+
+@fn QString DDiskDevice::temperature(int index)
+@brief 获取指定磁盘的温度.
+@param[in] index 指定磁盘的ID.
+@return 指定磁盘的温度.
+
+@fn DDiskIoStat DDiskDevice::diskIoStat(int index)
+@brief 获取指定磁盘的IO状态.
+@param[in] index 指定磁盘的ID.
+@return 指定磁盘的IO状态.
+
+*/

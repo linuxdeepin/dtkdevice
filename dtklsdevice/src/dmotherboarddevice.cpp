@@ -41,7 +41,7 @@ QString DMotherboardDevice::model()
     return QString();
 }
 
-QString DMotherboardDevice::data()
+QString DMotherboardDevice::date()
 {
     return QString();
 }

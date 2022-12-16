@@ -19,7 +19,7 @@ public:
 
     QString vendor();
     QString model();
-    QString data();
+    QString date();
     QString serialNumber();
     QString biosInformation();
     QString chassisInformation();
