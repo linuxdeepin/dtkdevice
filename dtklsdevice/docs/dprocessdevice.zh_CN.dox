@@ -1,0 +1,51 @@
+// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+//
+// SPDX-License-Identifier: LGPL-3.0-or-later
+
+/*!
+@~chinese
+@file dprocessdevice.h
+
+@class Dtk::LsDevice::DProcessDevice dprocessdevice.h
+@brief 应用信息.
+
+@fn QList< pid_t >  DProcessDevice::allPids()
+@brief 获取所有应用ID.
+@return 所有应用ID.
+
+@fn QHash< QString, QString >  DProcessDevice::environment(pid_t pid)
+@brief 获取指定应用的环境信息.
+@param[in] pid 应用的ID
+@return 指定应用的环境信息.
+
+@fn QString DProcessDevice::groupName(const gid_t &gid)
+@brief 获取指定组的名称.
+@param[in] gid 组的ID
+@return 指定组的名称.
+
+@fn QString DProcessDevice::baseInfo(pid_t pid)
+@brief 获取指定应用的基本信息.
+@param[in] pid 应用的ID
+@return 指定应用的基本信息.
+
+@fn QString DProcessDevice::memoryInfo(pid_t pid)
+@brief 获取指定应用的内存信息.
+@param[in] pid 应用的ID
+@return 获取指定应用的内存信息.
+
+@fn QString DProcessDevice::ioInfo(pid_t pid)
+@brief 获取指定应用的IO信息.
+@param[in] pid 应用的ID
+@return 获取指定应用的IO信息.
+
+@fn QString DProcessDevice::networkInfo(pid_t pid)
+@brief 获取指定应用的网络信息.
+@param[in] pid 应用的ID
+@return 获取指定应用的网络信息.
+
+@fn QString DProcessDevice::status(pid_t pid)
+@brief 获取指定应用的状态信息.
+@param[in] pid 应用的ID
+@return 获取指定应用的状态信息.
+
+*/
