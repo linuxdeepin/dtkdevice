@@ -1,7 +1,9 @@
 // SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: LGPL-3.0-or-later
-
+#include "scan.h"
+#include "../3rdparty/hw.h"
+#include "dlsdevicetypes.h"
 #include "dprocessdevice.h"
 
 #include <QDebug>
