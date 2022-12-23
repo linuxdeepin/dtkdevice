@@ -73,8 +73,8 @@
  *      Fix return value of dmi_card_size
  *
  */
+#include "print.h"
 
-#include "version.h"
 #include "config.h"
 #include "options.h"
 #include "dmi.h"
@@ -223,8 +223,7 @@ static string dmi_bootinfo(u8 code)
 }
 
 
-static string dmi_string(struct dmi_header *dm,
-u8 s)
+static string dmi_string(struct dmi_header *dm, u8 s)
 {
   char *bp = (char *) dm;
   if (!s)
@@ -294,9 +293,7 @@ static const char *dmi_board_type(u8 data)
 }
 
 
-static void dmi_bios_features(u32 data1,
-u32 data2,
-hwNode & bios)
+static void dmi_bios_features(u32 data1, u32 data2,  hwNode & bios)
 {
   if (data1 & (1 << 3))                           // BIOS characteristics not supported
     return;
@@ -360,9 +357,7 @@ hwNode & bios)
 }
 
 
-static void dmi_bios_features_ext(const u8 * data,
-int len,
-hwNode & bios)
+static void dmi_bios_features_ext(const u8 * data, int len, hwNode & bios)
 {
   if (len < 1)
     return;
@@ -415,8 +410,7 @@ static unsigned long long dmi_cache_size_long(u32 n)
     return (n & 0x7FFFFFFF) * 1024;                   // value is in 1K blocks
 }
 
-static void dmi_cache_sramtype(u16 c,
-hwNode & n)
+static void dmi_cache_sramtype(u16 c, hwNode & n)
 {
   string result = "";
 
@@ -437,10 +431,7 @@ hwNode & n)
 }
 
 
-static void dmi_cache_describe(hwNode & n,
-u16 config,
-u16 sramtype = 0,
-u8 cachetype = 0)
+static void dmi_cache_describe(hwNode & n, u16 config, u16 sramtype = 0, u8 cachetype = 0)
 {
   string result = "";
   char buffer[10];
@@ -974,12 +965,7 @@ static string dmi_handle(u16 handle)
 }
 
 
-static void dmi_table(const u8 *buf,
-int len,
-hwNode & node,
-int dmiversionmaj,
-int dmiversionmin,
-int dmiversionrev)
+static void dmi_table(const u8 *buf, int len, hwNode & node,  int dmiversionmaj, int dmiversionmin, int dmiversionrev)
 {
   struct dmi_header *dm;
   hwNode *hardwarenode = NULL;
@@ -1006,11 +992,11 @@ int dmiversionrev)
 
     handle = dmi_handle(dm->handle);
 
-    hardwarenode = node.getChild("core");
+    hardwarenode = node.getChild("motherboard");
     if (!hardwarenode)
     {
-      node.addChild(hwNode("core", hw::bus));
-      hardwarenode = node.getChild("core");
+      node.addChild(hwNode("motherboard", hw::motherboard));
+      hardwarenode = node.getChild("motherboard");
     }
     if (!hardwarenode)
       hardwarenode = &node;
@@ -1022,10 +1008,7 @@ int dmiversionrev)
         {
           string release(dmi_string(dm,
             data[0x08]));
-          hwNode newnode("firmware",
-            hw::memory,
-            dmi_string(dm,
-            data[0x04]));
+          hwNode newnode("firmware",  hw::bios, dmi_string(dm,  data[0x04]));
           newnode.setVersion(dmi_string(dm, data[5]));
           if (data[0x09] != 0xFF)
             newnode.setCapacity(64 * (data[0x09] + 1) * 1024);
@@ -1045,10 +1028,8 @@ int dmiversionrev)
           newnode.addHint("icon", string("chip"));
           newnode.claim();
 
-          dmi_bios_features(data[0x0D] << 24 | data[0x0C] << 16 | data[0x0B] << 8 |
-            data[0x0A],
-            data[0x11] << 24 | data[0x10] << 16 | data[0x0F] << 8 |
-            data[0x0E], newnode);
+          dmi_bios_features(data[0x0D] << 24 | data[0x0C] << 16 | data[0x0B] << 8 | data[0x0A],
+            data[0x11] << 24 | data[0x10] << 16 | data[0x0F] << 8 | data[0x0E], newnode);
 
           if (dm->length > 0x12)
             dmi_bios_features_ext(&data[0x12], dm->length - 0x12, newnode);
@@ -1071,14 +1052,13 @@ int dmiversionrev)
         if (dm->length >= 0x1B)
         {
           node.setConfig("sku", dmi_string(dm, data[0x19]));
-	  if (dmi_string(dm, data[0x19]) != "")
-	    node.setProduct(node.getProduct() + " (" + dmi_string(dm, data[0x19]) + ")");
+          if (dmi_string(dm, data[0x19]) != "")
+            node.setProduct(node.getProduct() + " (" + dmi_string(dm, data[0x19]) + ")");
           node.setConfig("family", dmi_string(dm, data[0x1A]));
         }
         break;
 
-      case 2:
-// Board Information Block
+      case 2:       // Board Information Block
         {
           // we are the only system board on the computer so connect everything to us
           if ((dm->length <= 0x0E) || (data[0x0E] == 0))
@@ -1095,15 +1075,11 @@ int dmiversionrev)
           }
           else
           {
-            hwNode newnode("board",
-              hw::bus);
+            hwNode newnode("board",  hw::motherboard);
 
             if (dm->length >= 0x0E)
               for (int i = 0; i < data[0x0E]; i++)
-                newnode.
-                  attractHandle(dmi_handle
-                  (data[0x0F + 2 * i + 1] << 8 |
-                  data[0x0F + 2 * i]));
+                newnode.attractHandle(dmi_handle(data[0x0F + 2 * i + 1] << 8 | data[0x0F + 2 * i]));
 
             newnode.setVendor(dmi_string(dm, data[0x04]));
             newnode.setProduct(dmi_string(dm, data[0x05]));
@@ -1137,37 +1113,50 @@ int dmiversionrev)
       case 4:
 // Processor
         {
-          hwNode newnode("cpu",
-            hw::processor);
+          hwNode *cpunode = hardwarenode->getChild("motherboard/cpu");
+          if(!cpunode)
+          {
+            hwNode *mbnode = hardwarenode->getChild("motherboard");
+            if (!mbnode)
+            {
+              hardwarenode->addChild(hwNode("motherboard", hw::motherboard));
+              mbnode = hardwarenode->getChild("motherboard");
+            }
 
-          newnode.claim();
-          newnode.setBusInfo(cpubusinfo(currentcpu++));
-          newnode.setSlot(dmi_string(dm, data[0x04]));
-          newnode.setDescription(_("CPU"));
-          newnode.addHint("icon", string("cpu"));
+            if (mbnode)
+            {
+              mbnode->addChild(hwNode("cpu", hw::processor));
+              cpunode = mbnode->getChild("cpu");
+            } 
+          }
+
+          hwNode newnode("cpu",  hw::processor);
+          cpunode->claim();
+          cpunode->setBusInfo(cpubusinfo(currentcpu++));
+          cpunode->setSlot(dmi_string(dm, data[0x04]));
+          cpunode->setDescription(_("CPU"));
+          cpunode->addHint("icon", string("cpu"));
           if (dm->length >= 0x2A)
-            newnode.setProduct(dmi_processor_family(
-                (((uint16_t) data[0x29]) << 8) + data[0x28]));
+            cpunode->setProduct(dmi_processor_family( (((uint16_t) data[0x29]) << 8) + data[0x28]));
           else
-            newnode.setProduct(dmi_processor_family(data[0x06]));
-          newnode.setVersion(dmi_string(dm, data[0x10]));
-          newnode.setVendor(dmi_string(dm, data[0x07]));
-          newnode.setPhysId(dm->handle);
+            cpunode->setProduct(dmi_processor_family(data[0x06]));
+          cpunode->setVersion(dmi_string(dm, data[0x10]));
+          cpunode->setVendor(dmi_string(dm, data[0x07]));
+          cpunode->setPhysId(dm->handle);
           if (dm->length > 0x1A)
           {
 // L1 cache
-            newnode.attractHandle(dmi_handle(data[0x1B] << 8 | data[0x1A]));
+            cpunode->attractHandle(dmi_handle(data[0x1B] << 8 | data[0x1A]));
 // L2 cache
-            newnode.attractHandle(dmi_handle(data[0x1D] << 8 | data[0x1C]));
+            cpunode->attractHandle(dmi_handle(data[0x1D] << 8 | data[0x1C]));
 // L3 cache
-            newnode.attractHandle(dmi_handle(data[0x1F] << 8 | data[0x1E]));
+            cpunode->attractHandle(dmi_handle(data[0x1F] << 8 | data[0x1E]));
           }
           if (dm->length > 0x20)
           {
-            newnode.setSerial(dmi_string(dm, data[0x20]));
+            cpunode->setSerial(dmi_string(dm, data[0x20]));
             if (dmi_string(dm, data[0x22]) != "")
-              newnode.setProduct(newnode.getProduct() + " (" +
-                string(dmi_string(dm, data[0x22])) + ")");
+              cpunode->setProduct(cpunode->getProduct() + " (" +  string(dmi_string(dm, data[0x22])) + ")");
           }
 
 // CPU socket populated ?
@@ -1175,27 +1164,27 @@ int dmiversionrev)
           {
 	// external clock
           	u = data[0x13] << 8 | data[0x12];
-          	newnode.setClock(u * 1000000);
+          	cpunode->setClock(u * 1000000);
 	// maximum speed
           	u = data[0x15] << 8 | data[0x14];
-          	newnode.setCapacity(u * 1000000);
+          	cpunode->setCapacity(u * 1000000);
 	// current speed
           	u = data[0x17] << 8 | data[0x16];
-          	newnode.setSize(u * 1000000);
+          	cpunode->setSize(u * 1000000);
 
-          	if (newnode.getCapacity() < newnode.getSize())
-            	newnode.setCapacity(0);
+          	if (cpunode->getCapacity() < cpunode->getSize())
+            	cpunode->setCapacity(0);
 
 	// CPU enabled/disabled by BIOS?
           	u = data[0x18] & 0x07;
           	if ((u == 2) || (u == 3) || (u == 4))
-            	newnode.disable();
+            	cpunode->disable();
           }
           else
           {
-            newnode.setBusInfo("");	// blank businfo to make sure further detections can't confuse this empty CPU slot with a real CPU
-            newnode.setDescription(newnode.getDescription() + " " + _("[empty]"));
-            newnode.disable();
+            cpunode->setBusInfo("");	// blank businfo to make sure further detections can't confuse this empty CPU slot with a real CPU
+            cpunode->setDescription(cpunode->getDescription() + " " + _("[empty]"));
+            cpunode->disable();
           }
 
           if (dm->length >= 0x28)
@@ -1203,43 +1192,41 @@ int dmiversionrev)
             if (data[0x23] != 0)
             {
               if (data[0x23] == 0xFF)
-                newnode.setConfig("cores", data[0x2B] << 8 | data[0x2A]);
+                cpunode->setConfig("cores", data[0x2B] << 8 | data[0x2A]);
               else
-                newnode.setConfig("cores", data[0x23]);
+                cpunode->setConfig("cores", data[0x23]);
             }
             if (data[0x24] != 0)
             {
               if (data[0x24] == 0xFF)
-                newnode.setConfig("enabledcores", data[0x2D] << 8 | data[0x2C]);
+                cpunode->setConfig("enabledcores", data[0x2D] << 8 | data[0x2C]);
               else
-                newnode.setConfig("enabledcores", data[0x24]);
+                cpunode->setConfig("enabledcores", data[0x24]);
             }
             if (data[0x25] != 0)
             {
               if (data[0x25] == 0xFF)
-                newnode.setConfig("threads", data[0x2F] << 8 | data[0x2E]);
+                cpunode->setConfig("threads", data[0x2F] << 8 | data[0x2E]);
               else
-                newnode.setConfig("threads", data[0x25]);
+                cpunode->setConfig("threads", data[0x25]);
             }
             if (data[0x26] & 0x4)
-              newnode.addCapability("lm", _("64-bit capable"));
+              cpunode->addCapability("lm", _("64-bit capable"));
           }
+          // cpunode->setHandle(handle);
 
-          newnode.setHandle(handle);
-
-          hardwarenode->addChild(newnode);
+          // hardwarenode->addChild(newnode);
         }
         break;
+
 
       case 5:
 // Memory Controller (obsolete in DMI 2.1+)
 // therefore ignore the entry if the DMI version is recent enough
-        if ((dmiversionmaj < 2)
-          || ((dmiversionmaj == 2) && (dmiversionmin < 1)))
+        if ((dmiversionmaj < 2)   || ((dmiversionmaj == 2) && (dmiversionmin < 1)))
         {
           unsigned long long size = 0;
-          hwNode newnode("memory",
-            hw::memory);
+          hwNode newnode("ddrmemory",   hw::memory);
 
           newnode.setHandle(handle);
           newnode.setPhysId(dm->handle);
@@ -1254,8 +1241,7 @@ int dmiversionrev)
             newnode.attractHandle(dmi_handle(slothandle));
           }
 
-          newnode.setProduct(dmi_decode_ram(data[0x0C] << 8 | data[0x0B]) +
-            _(" Memory Controller"));
+          newnode.setProduct(dmi_decode_ram(data[0x0C] << 8 | data[0x0B]) +  _(" Memory Controller"));
 
           hardwarenode->addChild(newnode);
         }
@@ -1264,11 +1250,9 @@ int dmiversionrev)
       case 6:
 // Memory Bank (obsolete in DMI 2.1+)
 // therefore ignore the entry if the DMI version is recent enough
-        if ((dmiversionmaj < 2)
-          || ((dmiversionmaj == 2) && (dmiversionmin < 1)))
+        if ((dmiversionmaj < 2)   || ((dmiversionmaj == 2) && (dmiversionmin < 1)))
         {
-          hwNode newnode("bank",
-            hw::memory);
+          hwNode newnode("ddr_bank",   hw::memory);
           unsigned long long clock = 0;
           unsigned long long capacity = 0;
           unsigned long long size = 0;
@@ -1315,26 +1299,21 @@ int dmiversionrev)
 // bank has uncorrectable errors (BIOS disabled)
               newnode.disable();
           }
-
           newnode.setHandle(handle);
-
           hardwarenode->addChild(newnode);
         }
         break;
       case 7:
 // Cache
         {
-          hwNode newnode("cache",
-            hw::memory);
-	  int level;
-
+          hwNode newnode("cache", hw::cpu_cache);
+          int level;
           newnode.setSlot(dmi_string(dm, data[0x04]));
           u = data[0x06] << 8 | data[0x05];
           level = 1 + (u & 7);
 
           if (dm->length > 0x11)
-            dmi_cache_describe(newnode, u, data[0x0E] << 8 | data[0x0D],
-              data[0x11]);
+            dmi_cache_describe(newnode, u, data[0x0E] << 8 | data[0x0D],  data[0x11]);
           else
             dmi_cache_describe(newnode, u, data[0x0E] << 8 | data[0x0D]);
 
@@ -1361,27 +1340,47 @@ int dmiversionrev)
           newnode.setHandle(handle);
           newnode.setPhysId(dm->handle);
           newnode.claim();
+
+          // if(newnode.getSize()!=0)
+          //     hardwarenode->addChild(newnode); 
+
+        hwNode *cpu = hardwarenode->getChild("motherboard/cpu");
+          if(!cpu)
+          {
+            hwNode *mbnode = hardwarenode->getChild("motherboard");
+            if (!mbnode)
+            {
+              hardwarenode->addChild(hwNode("motherboard", hw::motherboard));
+              mbnode = hardwarenode->getChild("motherboard");
+            }
+
+            if (mbnode)
+            {
+              mbnode->addChild(hwNode("cpu", hw::processor));
+              cpu = mbnode->getChild("cpu");
+            } 
+          }
+
           if(newnode.getSize()!=0)
-            hardwarenode->addChild(newnode);
+              cpu->addChild(newnode); 
+            // printsimple(*cpu,  0);
+
+
         }
+
         break;
       case 8:
 //printf("\tPort Connector\n");
-//printf("\t\tInternal Designator: %s\n",
-//dmi_string(dm, data[4]).c_str());
-//printf("\t\tInternal Connector Type: %s\n",
-//dmi_port_connector_type(data[5]));
-//printf("\t\tExternal Designator: %s\n",
-//dmi_string(dm, data[6]).c_str());
-//printf("\t\tExternal Connector Type: %s\n",
-//dmi_port_connector_type(data[7]));
+//printf("\t\tInternal Designator: %s\n", dmi_string(dm, data[4]).c_str());
+//printf("\t\tInternal Connector Type: %s\n", dmi_port_connector_type(data[5]));
+//printf("\t\tExternal Designator: %s\n", dmi_string(dm, data[6]).c_str());
+//printf("\t\tExternal Connector Type: %s\n", dmi_port_connector_type(data[7]));
 //printf("\t\tPort Type: %s\n", dmi_port_type(data[8]));
         break;
       case 9:
 #if 0
         {
-          hwNode newnode("cardslot",
-            hw::bus);
+          hwNode newnode("cardslot", hw::bus);
           newnode.setHandle(handle);
           newnode.setSlot(dmi_string(dm, data[0x04]));
           printf("\t\tType: %s%s%s\n",
@@ -1408,7 +1407,6 @@ int dmiversionrev)
           printf("\t\tType: %s\n", dmi_onboard_type(data[2 * u]));
         }
 #endif
-
         break;
       case 11:
 // OEM Data
@@ -1437,7 +1435,7 @@ int dmiversionrev)
       case 16:
 // Physical Memory Array
         {
-          string id = "memory";
+          string id = "ddr";
           string description = "";
           bool claim = false, memory_icon = false;
           switch (data[0x05])
@@ -1468,43 +1466,42 @@ int dmiversionrev)
               description = _("Generic Memory");
               memory_icon = true;
           }
-          if (id == "memory" && hardwarenode->getChild("memory"))
+          if (id == "ddr" && hardwarenode->getChild("ddr"))
           {
-            // we don't want multiple "System memory" nodes,
-            // so just ignore this one
+            // we don't want multiple "System memory" nodes,  // so just ignore this one
             break;
           }
-          hwNode newnode(id, hw::memory);
-          newnode.setHandle(handle);
-          newnode.setPhysId(dm->handle);
-          newnode.setDescription(description);
-          newnode.setSlot(dmi_memory_array_location(data[0x04]));
+          hwNode ddrnode(id, hw::ddr);
+          ddrnode.setHandle(handle);
+          ddrnode.setPhysId(dm->handle);
+          ddrnode.setDescription(description);
+          ddrnode.setSlot(dmi_memory_array_location(data[0x04]));
           if (memory_icon)
-            newnode.addHint("icon", string("memory"));
+            ddrnode.addHint("icon", string("memory"));
           if (claim)
-            newnode.claim();
+            ddrnode.claim();
           switch (data[0x06])
           {
             case 0x04:
-              newnode.addCapability("parity", _("Parity error correction"));
-              newnode.setConfig("errordetection", "parity");
+              ddrnode.addCapability("parity", _("Parity error correction"));
+              ddrnode.setConfig("errordetection", "parity");
               break;
             case 0x05:
-              newnode.addCapability("ecc", _("Single-bit error-correcting code (ECC)"));
-              newnode.setConfig("errordetection", "ecc");
+              ddrnode.addCapability("ecc", _("Single-bit error-correcting code (ECC)"));
+              ddrnode.setConfig("errordetection", "ecc");
               break;
             case 0x06:
-              newnode.addCapability("ecc", _("Multi-bit error-correcting code (ECC)"));
-              newnode.setConfig("errordetection", "multi-bit-ecc");
+              ddrnode.addCapability("ecc", _("Multi-bit error-correcting code (ECC)"));
+              ddrnode.setConfig("errordetection", "multi-bit-ecc");
               break;
             case 0x07:
-              newnode.addCapability("crc", _("CRC error correction"));
-              newnode.setConfig("errordetection", "crc");
+              ddrnode.addCapability("crc", _("CRC error correction"));
+              ddrnode.setConfig("errordetection", "crc");
               break;
           }
           u2 = data[0x0A] << 24 | data[0x09] << 16 | data[0x08] << 8 | data[0x07];
           if (u2 != 0x80000000)                   // magic value for "unknown"
-            newnode.setCapacity(u2 * 1024);
+            ddrnode.setCapacity(u2 * 1024);
           else if (dm->length >= 0x17)
           {
             uint64_t capacity = (((uint64_t) data[0x16]) << 56) +
@@ -1515,16 +1512,20 @@ int dmiversionrev)
                                 (((uint64_t) data[0x11]) << 16) +
                                 (((uint64_t) data[0x10]) << 8) +
                                 data[0x0F];
-            newnode.setCapacity(capacity);
+            ddrnode.setCapacity(capacity);
           }
-          hardwarenode->addChild(newnode);
+          hardwarenode->addChild(ddrnode);
         }
         break;
       case 17:
 // Memory Device
         {
-          hwNode newnode("bank",
-            hw::memory);
+          hwNode newnode("ddr", hw::ddr);
+          hwNode *ddrnode =   hardwarenode->getChild("ddr");
+          if(!ddrnode){
+            ddrnode = &newnode;
+          }
+
           string slot = "";
           string description = "";
           unsigned long long size = 0;
@@ -1532,10 +1533,23 @@ int dmiversionrev)
           u16 width = 0;
           char bits[10];
           string arrayhandle;
-          newnode.setDescription(_("empty memory bank"));
-          newnode.addHint("icon", string("memory"));
+          // ddrnode->setDescription(_("empty memory bank"));
+          ddrnode->addHint("icon", string("memory"));
           arrayhandle = dmi_handle(data[0x05] << 8 | data[0x04]);
           strcpy(bits, "");
+// size
+          u = data[0x0D] << 8 | data[0x0C];
+          if (((dmiversionmaj > 2)   || ((dmiversionmaj == 2) && (dmiversionmin >= 7)))     && u == 0x7FFF) {
+              unsigned long long extendsize = (data[0x1F] << 24) | (data[0x1E] << 16) | (data[0x1D] << 8) | data[0x1C];
+              extendsize &= 0x7FFFFFFFUL;
+              size = extendsize * 1024ULL * 1024ULL;
+          }
+          else
+          if (u != 0xFFFF)
+            size = (1024ULL * (u & 0x7FFF) * ((u & 0x8000) ? 1 : 1024ULL));
+          if(0 == size)
+            break;
+
 // total width
           u = data[0x09] << 8 | data[0x08];
           if (u != 0xFFFF)
@@ -1547,12 +1561,12 @@ int dmiversionrev)
             if ((u == width) || (width == 0))
             {
               snprintf(bits, sizeof(bits), "%d", u);
-              newnode.setWidth(width);
+              ddrnode->setWidth(width);
             }
             else
             {
               snprintf(bits, sizeof(bits), "%d/%d", width, u);
-              newnode.setWidth(u<width?u:width);
+              ddrnode->setWidth(u<width?u:width);
             }
           }
           else
@@ -1560,22 +1574,11 @@ int dmiversionrev)
             if (width != 0)
             {
               snprintf(bits, sizeof(bits), "%d", width);
-              newnode.setWidth(width);
+              ddrnode->setWidth(width);
             }
           }
 
-// size
-          u = data[0x0D] << 8 | data[0x0C];
-          if (((dmiversionmaj > 2)
-            || ((dmiversionmaj == 2) && (dmiversionmin >= 7)))
-            && u == 0x7FFF) {
-              unsigned long long extendsize = (data[0x1F] << 24) | (data[0x1E] << 16) | (data[0x1D] << 8) | data[0x1C];
-              extendsize &= 0x7FFFFFFFUL;
-              size = extendsize * 1024ULL * 1024ULL;
-          }
-          else
-          if (u != 0xFFFF)
-            size = (1024ULL * (u & 0x7FFF) * ((u & 0x8000) ? 1 : 1024ULL));
+
           description += string(dmi_memory_device_form_factor(data[0x0E]));
           slot = dmi_string(dm, data[0x10]);
 //printf("\t\tBank Locator: %s\n", dmi_string(dm, data[0x11]));
@@ -1592,37 +1595,35 @@ int dmiversionrev)
             if (u == 0)
               strcpy(buffer, "");
             else
-              snprintf(buffer, sizeof(buffer),
-                "%u MHz (%.1f ns)", u, (1000.0 / u));
+              snprintf(buffer, sizeof(buffer),"%u MHz (%.1f ns)", u, (1000.0 / u));
             description += " " + string(buffer);
           }
 
-          newnode.setHandle(handle);
-//newnode.setPhysId(dm->handle);
-          newnode.setSlot(slot);
+          ddrnode->setHandle(handle);
+//ddrnode->setPhysId(dm->handle);
+          ddrnode->setSlot(slot);
           if (dm->length > 0x17)
-            newnode.setVendor(dmi_string(dm, data[0x17]));
+            ddrnode->setVendor(dmi_string(dm, data[0x17]));
           if (dm->length > 0x18)
-            newnode.setSerial(dmi_string(dm, data[0x18]));
+            ddrnode->setSerial(dmi_string(dm, data[0x18]));
           if (dm->length > 0x1A)
-            newnode.setProduct(dmi_string(dm, data[0x1A]));
-          newnode.setDescription(description);
-          newnode.setSize(size);
-          if(newnode.getSize()==0)
-            newnode.setDescription(newnode.getDescription() + " " + _("[empty]"));
-          newnode.setClock(clock);
-          hwNode *memoryarray = hardwarenode->findChildByHandle(arrayhandle);
-          if (!memoryarray)
-            memoryarray = hardwarenode->getChild("memory");
-          if (!memoryarray)
-          {
-            hwNode ramnode("memory",
-              hw::memory);
-            ramnode.addHint("icon", string("memory"));
-            hardwarenode->addChild(ramnode);
-            memoryarray = hardwarenode->getChild("memory");
-          }
-          memoryarray->addChild(newnode);
+            ddrnode->setProduct(dmi_string(dm, data[0x1A]));
+          ddrnode->setDescription(description);
+          ddrnode->setSize(size);
+          if(ddrnode->getSize()==0)
+            ddrnode->setDescription(ddrnode->getDescription() + " " + _("[empty]"));
+          ddrnode->setClock(clock);
+          // hwNode *memoryarray = hardwarenode->findChildByHandle(arrayhandle);
+          // if (!memoryarray)
+          //   memoryarray = hardwarenode->getChild("ddr");
+          // if (!memoryarray)
+          // {
+          //   hwNode ramnode("memory", hw::memory);
+          //   ramnode.addHint("icon", string("memory"));
+          //   hardwarenode->addChild(ramnode);
+          //   memoryarray = hardwarenode->getChild("memory");
+          // }
+          // memoryarray->addChild(ddrnode);
         }
         break;
       case 18:
@@ -1631,8 +1632,7 @@ int dmiversionrev)
       case 19:
 // Memory Array Mapped Address
         {
-          hwNode newnode("range",
-            hw::address);
+          hwNode newnode("range", hw::address);
           uint64_t start = 0, end = 0;
           string arrayhandle = dmi_handle(data[0x0D] << 8 | data[0x0C]);
           start = data[0x07] << 24 | data[0x06] << 16 | data[0x05] << 8 | data[0x04];
@@ -1669,8 +1669,7 @@ int dmiversionrev)
       case 20:
 // Memory Device Mapped Address
         {
-          hwNode newnode("range",
-            hw::address);
+          hwNode newnode("range",   hw::address);
           unsigned long long start = 0, end = 0;
           string devicehandle = dmi_handle(data[0x0D] << 8 | data[0x0C]);
           start = data[0x07] << 24 | data[0x06] << 16 | data[0x05] << 8 | data[0x04];
@@ -1930,12 +1929,10 @@ static bool scan_dmi_sysfs(hwNode & n)
   ep_stream.read((char *)ep_buf.data(), ep_len);
   if (!ep_stream)
     return false;
-  if (!smbios_entry_point(ep_buf.data(), ep_len, n,
-        dmimaj, dmimin, dmirev, table_len, table_base))
+  if (!smbios_entry_point(ep_buf.data(), ep_len, n, dmimaj, dmimin, dmirev, table_len, table_base))
     return false;
 
-  ifstream dmi_stream(SYSFSDMI "/DMI",
-      ifstream::in | ifstream::binary | ifstream::ate);
+  ifstream dmi_stream(SYSFSDMI "/DMI", ifstream::in | ifstream::binary | ifstream::ate);
   ifstream::pos_type dmi_len = dmi_stream.tellg();
   vector < u8 > dmi_buf(dmi_len);
   dmi_stream.seekg(0, ifstream::beg);

@@ -7,7 +7,7 @@
  *
  */
 #include "config.h"
-#include "version.h"
+
 #include "pnp.h"
 #include "sysfs.h"
 #include "osutils.h"

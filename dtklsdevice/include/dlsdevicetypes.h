@@ -85,7 +85,9 @@ struct DCpuUsage {
     quint64 idle {0};
 };
 
-struct DDiskIoStat {
+struct DDiskIoStat {  
+    //https://www.kernel.org/doc/html/latest/block/stat.html
+    //https://www.kernel.org/doc/Documentation/iostats.txt
     quint64 readsCompletedSuccessfully {0};     // # of reads completed successfully
     quint64 readsMerged {0};                    // # of reads merged
     quint64 readSectors {0};                    // # of sectors read

@@ -14,7 +14,7 @@
  *
  */
 
-#include "version.h"
+
 #include "config.h"
 #include "network.h"
 #include "osutils.h"
@@ -35,9 +35,9 @@
 #include <string.h>
 #include <string>
 #include <sys/types.h>
+#include <map>
 using namespace std;
 
-//
 
 #ifndef ARPHRD_IEEE1394
 #define ARPHRD_IEEE1394 24
@@ -238,7 +238,11 @@ struct ethtool_value
 #define AUTONEG_DISABLE         0x00
 #define AUTONEG_ENABLE          0x01
 
-bool load_interfaces(vector < string > &interfaces)
+  //  /proc/net/dev  net-tools
+  //  /proc/net/if_inet6
+
+
+bool load_interfaces(vector < string > &interfaces, map < string, string > &interface_data)
 {
   vector < string > procnetdev;
 
@@ -258,8 +262,13 @@ bool load_interfaces(vector < string > &interfaces)
 // extract interfaces names
     size_t pos = procnetdev[i].find(':');
 
-    if (pos != string::npos)
-      interfaces.push_back(hw::strip(procnetdev[i].substr(0, pos)));
+    if (pos != string::npos){
+      string value = hw::strip(procnetdev[i]);
+      string key = hw::strip(procnetdev[i].substr(0, pos));
+       
+      interfaces.push_back(key);
+      interface_data.insert(std::pair<string, string>(key, value));
+    }
   }
 
   return true;
@@ -687,9 +696,10 @@ static void scan_modes(hwNode & interface, int fd)
 bool scan_network(hwNode & n)
 {
   vector < string > interfaces;
+  map < string, string > interface_data;
   char buffer[2 * IFNAMSIZ + 1];
 
-  if (!load_interfaces(interfaces))
+  if (!load_interfaces(interfaces,interface_data))
     return false;
 
   int fd = socket(PF_INET, SOCK_DGRAM, 0);
@@ -703,10 +713,11 @@ bool scan_network(hwNode & n)
     for (unsigned int i = 0; i < interfaces.size(); i++)
     {
       hwNode *existing;
-      hwNode interface("network",
-        hw::network);
+      hwNode interface("network",  hw::network);
 
       interface.setLogicalName(interfaces[i]);
+      interface.setConfig("proc_net_dev_data",interface_data[interfaces[i]]);
+      
       interface.claim();
       interface.addHint("icon", string("network"));
 
@@ -751,6 +762,7 @@ bool scan_network(hwNode & n)
         if (ifr.ifr_flags & IFF_MULTICAST)
           interface.setConfig("multicast", "yes");
       }
+      
 
       memset(&ifr, 0, sizeof(ifr));
       strcpy(ifr.ifr_name, interfaces[i].c_str());

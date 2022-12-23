@@ -2,7 +2,7 @@
  * This module scans /sys for CPUfreq info
  */
 
-#include "version.h"
+
 #include "hw.h"
 #include "osutils.h"
 #include <string.h>
