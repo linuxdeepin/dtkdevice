@@ -1,6 +1,7 @@
 /*!
 @~chinese
 @file dlsdevice.h
+@ingroup dtklsdevice
 
 这里是 dlsdevice.h 的描述
 

@@ -1,6 +1,7 @@
 /*!
 @~chinese
 @file ddiskdevice.h
+@ingroup dtklsdevice
 
 @class Dtk::LsDevice::DDiskDevice ddiskdevice.h
 @brief 磁盘设备信息.

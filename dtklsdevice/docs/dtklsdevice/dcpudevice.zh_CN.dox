@@ -1,6 +1,7 @@
 /*!
 @~chinese
 @file dcpudevice.h
+@ingroup dtklsdevice
 
 @class Dtk::LsDevice::DCpuDevice dcpudevice.h
 @brief CPU设备信息.

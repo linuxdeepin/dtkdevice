@@ -1,6 +1,7 @@
 /*!
 @~chinese
 @file dnetdevice.h
+@ingroup dtklsdevice
 
 @class Dtk::LsDevice::DNetDevice dnetdevice.h
 @brief 网卡设备信息.

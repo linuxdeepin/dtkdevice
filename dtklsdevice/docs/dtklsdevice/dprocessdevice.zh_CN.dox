@@ -1,6 +1,7 @@
 /*!
 @~chinese
 @file dprocessdevice.h
+@ingroup dtklsdevice
 
 @class Dtk::LsDevice::DProcessDevice dprocessdevice.h
 @brief 应用信息.

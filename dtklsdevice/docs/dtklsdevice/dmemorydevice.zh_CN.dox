@@ -1,6 +1,7 @@
 /*!
 @~chinese
 @file dmemorydevice.h
+@ingroup dtklsdevice
 
 @class Dtk::LsDevice::DMemoryDevice dmemorydevice.h
 @brief 内存设备信息.

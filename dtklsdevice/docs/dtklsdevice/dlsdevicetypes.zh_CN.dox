@@ -1,6 +1,7 @@
 /*!
 @~chinese
 @file dlsdevicetypes.h
+@ingroup dtklsdevice
 
 @enum Dtk::LsDevice::DevClass
 @brief 设备类型分类

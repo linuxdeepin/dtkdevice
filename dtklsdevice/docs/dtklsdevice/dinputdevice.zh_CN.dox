@@ -1,6 +1,7 @@
 /*!
 @~chinese
 @file dinputdevice.h
+@ingroup dtklsdevice
 
 @class Dtk::LsDevice::DInputDevice dinputdevice.h
 @brief 外设设备信息.

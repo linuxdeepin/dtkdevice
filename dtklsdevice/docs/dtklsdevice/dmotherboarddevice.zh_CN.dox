@@ -1,6 +1,7 @@
 /*!
 @~chinese
 @file dmotherboarddevice.h
+@ingroup dtklsdevice
 
 @class Dtk::LsDevice::DMotherboardDevice dmotherboarddevice.h
 @brief 主板设备信息.
