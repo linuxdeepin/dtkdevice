@@ -73,7 +73,6 @@
  *      Fix return value of dmi_card_size
  *
  */
-#include "print.h"
 
 #include "config.h"
 #include "options.h"
