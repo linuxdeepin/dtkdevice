@@ -1,4 +1,4 @@
-#include "version.h"
+
 #include "osutils.h"
 #include <sstream>
 #include <iomanip>
@@ -26,7 +26,6 @@
 #include <zlib.h>
 #endif
 
-//
 
 using namespace std;
 
@@ -196,6 +195,15 @@ long get_number(const string & path, long def)
   if(s=="") return def;
 
   return strtol(s.c_str(), NULL, 10);
+}
+
+long get_hexnumber(const string & path, long def)
+{
+  string s = get_string(path, "");
+
+  if(s=="") return def;
+
+  return strtol(s.c_str(), NULL, 16);
 }
 
 int selectdir(const struct dirent *d)

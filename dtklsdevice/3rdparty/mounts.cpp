@@ -4,7 +4,7 @@
  *
  */
 
-#include "version.h"
+
 #include "mounts.h"
 #include "osutils.h"
 #include <vector>
@@ -16,7 +16,6 @@
 #include <unistd.h>
 #include <cstdlib>
 
-//
 
 #define MOUNTS "/proc/mounts"
 

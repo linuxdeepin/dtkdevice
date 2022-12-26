@@ -1,5 +1,5 @@
 
-#include "version.h"
+
 #include "cdrom.h"
 #include "partitions.h"
 #include <sys/types.h>
