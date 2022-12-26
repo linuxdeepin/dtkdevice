@@ -9,11 +9,8 @@
 
 #include "../3rdparty/hw.h"
 
-
-#include "options.h"
-#include "version.h"
 #include "osutils.h"
-#include "config.h"
+
 #include <cstring>
 #include <iostream>
 #include <sstream>
@@ -160,19 +157,19 @@ void DlsDevicePrivate::addDeviceInfo(hwNode &node, QList<DDeviceInfo > &ll)
     entry.deviceBaseAttrisLst.append("Name");
     entry.deviceInfoLstMap.insert("Name", QString::fromStdString(node.getProduct()));
 
-    if (! node.getConfig("Vendor_ID").empty()) {
+    if (! node.getVendor_id().empty()) {
         entry.deviceBaseAttrisLst.append("Vendor_ID");
-        entry.deviceInfoLstMap.insert("Vendor_ID", QString::fromStdString(node.getConfig("Vendor_ID")));
+        entry.deviceInfoLstMap.insert("Vendor_ID", QString::fromStdString(node.getVendor_id()));
     }
 
-    if (! node.getConfig("Product_ID").empty()) {
+    if (! node.getProduct_id().empty()) {
         entry.deviceBaseAttrisLst.append("Product_ID");
-        entry.deviceInfoLstMap.insert("Product_ID", QString::fromStdString(node.getConfig("Product_ID")));
+        entry.deviceInfoLstMap.insert("Product_ID", QString::fromStdString(node.getProduct_id()));
     }
 
-    if (! node.getConfig("VID:PID").empty()) {
+    if (! node.getConfig("vid:pid").empty()) {
         entry.deviceBaseAttrisLst.append("VID:PID");
-        entry.deviceInfoLstMap.insert("VID:PID", QString::fromStdString(node.getConfig("VID:PID")));
+        entry.deviceInfoLstMap.insert("VID:PID", QString::fromStdString(node.getConfig("vid:pid")));
     }
 
     if (node.getModalias().length() > 53) {

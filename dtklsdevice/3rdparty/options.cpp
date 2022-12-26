@@ -5,7 +5,7 @@
  *
  */
 
-#include "version.h"
+
 #include "options.h"
 #include "osutils.h"
 

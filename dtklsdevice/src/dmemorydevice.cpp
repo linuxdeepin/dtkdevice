@@ -31,7 +31,19 @@ public:
 private:
     DMemoryDevice *q_ptr = nullptr;
 };
-
+/*
+     [ ddr----ddr ]
+          description = DIMM DDR4 Synchronous 2667 MHz (0.4 ns)
+          vendor = Hitachi
+          product = TMKU8G68AHFHC-26V
+          physical id = b
+          serial = 00002791
+          slot = ChannelA-DIMM0
+          size = 8589934592
+          width = 64 bits
+          clock = 2667MHz
+          configuration: MemAvailable=2817952 kB MemFree=563700 kB MemTotal=8068476 kB MemUsage=65 %
+*/
 void DMemoryDevicePrivate::addDeviceInfo(hwNode &node, QList<DDeviceInfo> &infoLst)
 {
     struct DDeviceInfo entry;
@@ -60,8 +72,20 @@ void DMemoryDevicePrivate::addDeviceInfo(hwNode &node, QList<DDeviceInfo> &infoL
     entry.deviceInfoLstMap.insert("Name", QString::fromStdString(node.getProduct()));
     entry.productName = QString::fromStdString(node.getProduct());
 
+    if (node.getSize() > 0) {
+        string size = to_string(node.getSize());
+        entry.deviceBaseAttrisLst.append("size");
+        entry.deviceInfoLstMap.insert("size",  QString::fromStdString(size));
+    }
+
+//    entry.deviceInfoLstMap.insert("speed", QString::fromStdString(node.getClock()));
+    entry.deviceInfoLstMap.insert("serial", QString::fromStdString(node.getSerial()));
+//    entry.deviceInfoLstMap.insert("width", QString::fromStdString(node.getWidth()));
+    entry.deviceInfoLstMap.insert("type", QString::fromStdString(node.getDescription()));
+    entry.deviceInfoLstMap.insert("MemAvailable", QString::fromStdString(node.getConfig("MemAvailable")));
+
 //--------------------------------ADD Children---------------------
-    if (hw::memory == node.getClass())
+    if (hw::ddr == node.getClass())
         infoLst.append(entry);
     for (int i = 0; i < node.countChildren(); i++) {
         addDeviceInfo(*node.getChild(i), infoLst);
@@ -102,6 +126,7 @@ QString DMemoryDevice::model(int index)
         return QString();
 }
 
+
 QString DMemoryDevice::totalWidth(int index)
 {
     return QString();
@@ -112,6 +137,19 @@ QString DMemoryDevice::dataWidth(int index)
     return QString();
 }
 
+/*
+     [ ddr----ddr ]
+          description = DIMM DDR4 Synchronous 2667 MHz (0.4 ns)
+          vendor = Hitachi
+          product = TMKU8G68AHFHC-26V
+          physical id = b
+          serial = 00002791
+          slot = ChannelA-DIMM0
+          size = 8589934592
+          width = 64 bits
+          clock = 2667MHz
+          configuration: MemAvailable=2817952 kB MemFree=563700 kB MemTotal=8068476 kB MemUsage=65 %
+*/
 QString DMemoryDevice::type(int index)
 {
     Q_D(DMemoryDevice);
@@ -134,14 +172,18 @@ QString DMemoryDevice::serialNumber(int index)
 {
     Q_D(DMemoryDevice);
     if (index < d->m_listDeviceInfo.count())  {
-        return  d->m_listDeviceInfo[index].deviceInfoLstMap.value("serialnumber");
+        return  d->m_listDeviceInfo[index].deviceInfoLstMap.value("serial");
     } else
         return QString();
 }
 
 QString DMemoryDevice::size(int index)
 {
-    return QString();
+    Q_D(DMemoryDevice);
+    if (index < d->m_listDeviceInfo.count()) {
+        return  d->m_listDeviceInfo[index].deviceInfoLstMap.value("size");
+    } else
+        return QString();
 }
 
 QString DMemoryDevice::swapSize()
@@ -151,7 +193,8 @@ QString DMemoryDevice::swapSize()
 
 QString DMemoryDevice::available()
 {
-    return QString();
+    Q_D(DMemoryDevice);
+    return QString(); //return  d->m_listDeviceInfo.deviceInfoLstMap.value("MemAvailable");
 }
 
 QString DMemoryDevice::buffers()

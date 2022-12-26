@@ -1,4 +1,4 @@
-#include "version.h"
+
 #include "config.h"
 #include "cpuid.h"
 #include <stdio.h>
@@ -28,7 +28,7 @@ int n = 0)
     return cache;
 
 // "cache:0" is equivalent to "cache" if we only have L1 cache
-  if ((n == 0) && (node.countChildren(hw::memory) <= 1))
+  if ((n == 0) && (node.countChildren(hw::cpu_cache) <= 1))
     cache = node.getChild(string("cache"));
   if (cache)
     return cache;
@@ -252,9 +252,7 @@ long long &l2cache)
 }
 
 
-static bool dointel(unsigned long maxi,
-hwNode * cpu,
-int cpunumber = 0)
+static bool dointel(unsigned long maxi, hwNode * cpu, int cpunumber = 0)
 {
   char buffer[1024];
   unsigned long signature = 0, flags = 0, bflags = 0, eax = 0, ebx = 0, ecx = 0, edx = 0, unused = 0;
@@ -366,8 +364,7 @@ int cpunumber = 0)
       }
       else
       {
-        hwNode cache("cache",
-          hw::memory);
+        hwNode cache("cache", hw::cpu_cache);
         cache.setSize(l1cache);
         cache.setDescription(_("L1 cache"));
 
@@ -384,8 +381,7 @@ int cpunumber = 0)
         }
         else
         {
-          hwNode cache("cache",
-            hw::memory);
+          hwNode cache("cache", hw::cpu_cache);
           cache.setSize(l2cache);
           cache.setDescription(_("L2 cache"));
 
@@ -414,9 +410,7 @@ int cpunumber = 0)
 }
 
 
-static bool doamd(unsigned long maxi,
-hwNode * cpu,
-int cpunumber = 0)
+static bool doamd(unsigned long maxi, hwNode * cpu, int cpunumber = 0)
 {
   unsigned long maxei = 0, eax, ebx, ecx, edx;
   long long l1cache = 0, l2cache = 0;
@@ -460,8 +454,7 @@ int cpunumber = 0)
       l1->setSize(l1cache);
     else
     {
-      hwNode newl1("cache",
-        hw::memory);
+      hwNode newl1("cache",  hw::cpu_cache);
 
       newl1.setDescription(_("L1 cache"));
       newl1.setSize(l1cache);
@@ -472,8 +465,7 @@ int cpunumber = 0)
       l2->setSize(l2cache);
     else
     {
-      hwNode newl2("cache",
-        hw::memory);
+      hwNode newl2("cache",    hw::cpu_cache);
 
       newl2.setDescription(_("L2 cache"));
       newl2.setSize(l2cache);
@@ -487,9 +479,7 @@ int cpunumber = 0)
 }
 
 
-static bool docyrix(unsigned long maxi,
-hwNode * cpu,
-int cpunumber = 0)
+static bool docyrix(unsigned long maxi, hwNode * cpu, int cpunumber = 0)
 {
   unsigned long eax, ebx, ecx, edx;
   unsigned int family = 0, model = 0, stepping = 0;

@@ -9,7 +9,7 @@
  *
  */
 
-#include "version.h"
+
 #include "config.h"
 #include "lvm.h"
 #include "osutils.h"
