@@ -4,17 +4,17 @@ Upstream-Contact: UnionTech Software Technology Co., Ltd.
 Source: https://github.com/linuxdeepin/dtkdevice
 
 # Config files
-Files: .clang-format misc/*.in config.sh *.in
+Files: .clang-format config.sh *.in
 Copyright: None
 License: CC0-1.0
 
-# Readme
-Files: README*.md */*.md
-Copyright: UnionTech Software Technology Co., Ltd.
-License: CC-BY-4.0
+# cmake
+Files: *.cmake *CMakeLists.txt *.pc.in
+Copyright: None
+License: CC0-1.0
 
 # docs
-Files: */docs/*.md */docs/*.dox
+Files: *.dox *.md
 Copyright: UnionTech Software Technology Co., Ltd.
 License: CC-BY-4.0
 
@@ -28,17 +28,37 @@ Files: .github/* .gitignore
 Copyright: None
 License: CC0-1.0
 
+# qt
+Files: *.pro *.pri *.qrc
+Copyright: None
+License: CC0-1.0
+
 # cpp-stub
-Files: dtklsdevice/tests/3rdparty/cpp-stub/*
+Files: tests/3rdparty/cpp-stub/*
 Copyright: None
 License: MIT
 
-# dtklsdevice
-Files: dtklsdevice/3rdparty/* 
+# stub-ext
+Files: tests/3rdparty/stub-ext/*
+Copyright: 2020 Zhang Yu
+License: MIT
+
+# 3rdparty
+Files: src/3rdparty/* 
 Copyright: None
 License: GPL-2.0-or-later
 
-# doxygen theme
-Files: doxygentheme/*
+#doxygentheme
+Files: docs/doxygentheme/*
 Copyright: Copyright (c) 2021 - 2022 jothepro
 License: MIT
+
+# doxygen src
+Files: docs/dtklsdevice/*
+Copyright: None
+License: CC0-1.0
+
+# interface
+Files: include/dtkdevice/DDevice/*
+Copyright: None
+License: CC0-1.0
