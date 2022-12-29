@@ -1,13 +1,13 @@
 cmake_minimum_required(VERSION 3.10)
 
 # If do't define version number, specify the version number
-set(VERSION "1.0.0" CACHE STRING "define project version")
+set(DVERSION "1.0.0" CACHE STRING "define project version")
 
 project(dtkdevice
-    LANGUAGES CXX
-    HOMEPAGE_URL https://github.com/linuxdeepin/dtkdevice
+    VERSION ${DVERSION}
     DESCRIPTION "DTK library for device."
-    VERSION ${VERSION}
+    HOMEPAGE_URL https://github.com/linuxdeepin/dtkdevice
+    LANGUAGES CXX C
 )
 message(STATUS ${PROJECT_VERSION})
 
@@ -23,10 +23,6 @@ set (MKSPECS_INSTALL_DIR "${CMAKE_INSTALL_LIBDIR}/qt5/mkspecs/modules" CACHE STR
 set (CONFIG_CMAKE_INSTALL_DIR "${CMAKE_INSTALL_LIBDIR}/cmake/DtkCore" CACHE STRING "Install dir for cmake config files")
 
 set (BUILD_EXAMPLES ON CACHE BOOL "Build examples")
-option(BUILD_VERSION "buildversion" "0")
-if(NOT BUILD_VERSION)
-  set(BUILD_VERSION "0")
-endif()
 
 if(UNIX AND NOT APPLE)
   set(LINUX TRUE)

@@ -12,7 +12,7 @@ VERSION = $(DEB_VERSION_UPSTREAM)
 PACK_VER = $(shell echo $(VERSION) | awk -F'[+_~-]' '{print $$1}')
 
 override_dh_auto_configure:
-	dh_auto_configure -- -DBUILD_EXAMPLES=OFF -DBUILD_DOCS=ON -DBUILD_VERSION=$(BUILD_VER) -DDVERSION=$(PACK_VER)
+	dh_auto_configure -- -DBUILD_EXAMPLES=OFF -DBUILD_DOCS=ON -DDVERSION=$(PACK_VER)
 
 override_dh_makeshlibs:
 	dh_makeshlibs -V "libdtkcore5 (>= $(shell echo $(VERSION) | cut -d '.' -f 1,2))"
