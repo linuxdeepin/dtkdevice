@@ -4,7 +4,7 @@ set_and_check(DtkDevice_INCLUDE_DIRS "@PACKAGE_INCLUDE_INSTALL_DIR@")
 set_and_check(DtkDevice_LIBRARY_DIRS "@PACKAGE_LIBRARY_INSTALL_DIR@")
 
 include(CMakeFindDependencyMacro)
-find_dependency(Core dbus)
+find_dependency(Dtk REQUIRED Core)
 find_library(DtkDevice_LIBRARIES dtkdevice ${DtkDevice_LIBRARY_DIRS})
 set(DtkDevice_LIBRARIES ${DtkDevice_LIBRARIES} ${DtkCore_LIBRARIES} )
 

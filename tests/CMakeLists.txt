@@ -25,8 +25,8 @@ find_package(Qt5 REQUIRED COMPONENTS DBus)
 # set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-access-control -fno-inline -Wno-pmf-conversions")
 
 file(GLOB_RECURSE INCLUDE_FILES
-    "../include/dtkdevice/lsdevice/*.h"
-    "../include/dtkdevice/global/*.h"
+    "../include/lsdevice/*.h"
+    "../include/global/*.h"
     "../src/3rdparty/*.h"
 )
 file(GLOB_RECURSE SRCS
@@ -38,8 +38,8 @@ file(GLOB_RECURSE SRCS
 file(GLOB_RECURSE TEST_FILES "./*.h" "./*.cpp")
 
 include_directories(
-    "../include/dtkdevice/lsdevice"
-    "../include/dtkdevice/global"
+    "../include/lsdevice"
+    "../include/global"
     "../src/3rdparty"
     "../src/dbus"
 )

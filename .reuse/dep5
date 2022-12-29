@@ -59,6 +59,6 @@ Copyright: None
 License: CC0-1.0
 
 # interface
-Files: include/dtkdevice/DDevice/*
+Files: include/DDevice/*
 Copyright: None
 License: CC0-1.0
