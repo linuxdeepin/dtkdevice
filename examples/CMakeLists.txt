@@ -22,16 +22,16 @@ find_package(Qt5 REQUIRED COMPONENTS Core)
 find_package(Qt5 REQUIRED COMPONENTS DBus)
 
 file(GLOB_RECURSE INCLUDE_FILES
-    "../include/dtkdevice/lsdevice/*.h"
-    "../include/dtkdevice/global/*.h"
+    "../include/lsdevice/*.h"
+    "../include/global/*.h"
 )
 file(GLOB_RECURSE SRCS
     "./*.h"
     "./*.cpp"
 )
 
-include_directories(../include/dtkdevice/lsdevice)
-include_directories(../include/dtkdevice/global)
+include_directories(../include/lsdevice)
+include_directories(../include/global)
 
 add_executable(${BIN_NAME}
     ${INCLUDE_FILES}

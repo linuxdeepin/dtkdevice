@@ -31,9 +31,9 @@ target_link_libraries(
 
 target_include_directories(${LIB_NAME} PUBLIC
   $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/src/3rdparty>
-  $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/dtkdevice/global>
-  $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/dtkdevice/lsdevice>
-  $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/dtkdevice/DtkDevice>
+  $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/global>
+  $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/lsdevice>
+  $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/DtkDevice>
 )
 
 set_target_properties(${LIB_NAME} PROPERTIES
@@ -42,6 +42,6 @@ set_target_properties(${LIB_NAME} PROPERTIES
 )
 
 install(TARGETS ${LIB_NAME} DESTINATION ${LIBRARY_INSTALL_DIR})
-install(DIRECTORY ../include/dtkdevice/DDevice/ DESTINATION "${INCLUDE_INSTALL_DIR}" FILES_MATCHING PATTERN "*")
-install(DIRECTORY ../include/dtkdevice/lsdevice/ DESTINATION "${INCLUDE_INSTALL_DIR}" FILES_MATCHING PATTERN "*")
-install(DIRECTORY ../include/dtkdevice/global/ DESTINATION "${INCLUDE_INSTALL_DIR}" FILES_MATCHING PATTERN "*")
+install(DIRECTORY ../include/DDevice/ DESTINATION "${INCLUDE_INSTALL_DIR}" FILES_MATCHING PATTERN "*")
+install(DIRECTORY ../include/lsdevice/ DESTINATION "${INCLUDE_INSTALL_DIR}" FILES_MATCHING PATTERN "*")
+install(DIRECTORY ../include/global/ DESTINATION "${INCLUDE_INSTALL_DIR}" FILES_MATCHING PATTERN "*")
