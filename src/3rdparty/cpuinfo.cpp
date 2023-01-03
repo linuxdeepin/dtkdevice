@@ -1,4 +1,4 @@
-#include "version.h"
+
 #include "cpuinfo.h"
 #include "osutils.h"
 #include <sys/types.h>

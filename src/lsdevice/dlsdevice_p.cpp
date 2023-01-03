@@ -14,7 +14,6 @@
 #include <QDebug>
 
 #include "options.h"
-#include "version.h"
 #include "osutils.h"
 #include "config.h"
 #include <cstring>

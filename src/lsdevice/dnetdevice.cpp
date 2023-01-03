@@ -6,16 +6,28 @@
 
 #include "scan.h"
 #include "hw.h"
+#include "nl_link.h"
+#include "nl_addr.h"
+#include "netlink.h"
 
+#include <QMultiMap>
+#include <QMap>
 #include <QDebug>
 
 DDEVICE_BEGIN_NAMESPACE
+
+
+// using INetAddr = std::shared_ptr<struct inet_addr_t>;
+
+using INet4Addr = std::shared_ptr<  DNetDevice::DInetAddr4 >;
+using INet6Addr = std::shared_ptr<  DNetDevice::DInetAddr6 >;
 
 class DNetDevicePrivate
 {
 public:
     explicit DNetDevicePrivate(DNetDevice *parent)
         : q_ptr(parent)
+        , m_netlink(new Netlink())
         , m_hwNode("computer", hw::sys_tem)
     {
         m_listDeviceInfo.clear();
@@ -27,10 +39,45 @@ public:
     void addDeviceInfo(hwNode &node, QList< DlsDevice::DDeviceInfo >  &infoLst);
     Q_DECLARE_PUBLIC(DNetDevice)
 
+protected:
+    void update_addr();
+    // void update_netif_info();
+
 private:
     DNetDevice *q_ptr = nullptr;
+    std::unique_ptr<Netlink> m_netlink;
+    QMultiMap< int, INet4Addr > m_addrIpv4DB;
+    QMultiMap< int, INet6Addr > m_addrIpv6DB;
 };
 
+void DNetDevicePrivate::update_addr()
+{
+    AddrIterator iter = m_netlink->addrIterator();
+    m_addrIpv4DB.clear();
+    m_addrIpv6DB.clear();
+
+    while (iter.hasNext()) {
+        auto it = iter.next();
+        if (it->family() == AF_INET) {
+            std::shared_ptr< DNetDevice::DInetAddr4 > ip4net = std::make_shared< DNetDevice::DInetAddr4 >();
+            // DNetDevice::DInetAddr4 ip4net;
+            it->local();
+            ip4net->family = it->family();
+            ip4net->addr = it->netaddr();
+            ip4net->mask = it->netmask();
+            ip4net->bcast = it->broadcast();
+            m_addrIpv4DB.insert(it->ifindex(), ip4net);
+        } else if (it->family() == AF_INET6) {
+            std::shared_ptr< DNetDevice:: DInetAddr6> ip6net = std::make_shared< DNetDevice:: DInetAddr6>();
+            it->local();
+            ip6net->family = it->family();
+            ip6net->addr = it->netaddr();
+            ip6net->scope = it->scope();
+            ip6net->prefixlen = it->prefixlen();
+            m_addrIpv6DB.insert(it->ifindex(), ip6net);
+        }
+    }
+}
 
 void DNetDevicePrivate::addDeviceInfo(hwNode &node, QList<DlsDevice::DDeviceInfo> &infoLst)
 {
@@ -58,21 +105,21 @@ void DNetDevicePrivate::addDeviceInfo(hwNode &node, QList<DlsDevice::DDeviceInfo
     entry.deviceInfoLstMap.insert("Name", QString::fromStdString(node.getProduct()));
     entry.productName = QString::fromStdString(node.getProduct());
 
-    if (! node.getConfig("Vendor_ID").empty()) {
+    if (! node.getVendor_id().empty()) {
         entry.deviceBaseAttrisLst.append("Vendor_ID");
-        entry.deviceInfoLstMap.insert("Vendor_ID", QString::fromStdString(node.getConfig("Vendor_ID")));
-        entry.vendorID = QString::fromStdString(node.getConfig("Vendor_ID"));
+        entry.deviceInfoLstMap.insert("Vendor_ID", QString::fromStdString(node.getVendor_id()));
+        entry.vendorID = QString::fromStdString(node.getVendor_id());
     }
 
-    if (! node.getConfig("Product_ID").empty()) {
+    if (! node.getProduct_id().empty()) {
         entry.deviceBaseAttrisLst.append("Product_ID");
-        entry.deviceInfoLstMap.insert("Product_ID", QString::fromStdString(node.getConfig("Product_ID")));
-        entry.productID = QString::fromStdString(node.getConfig("Product_ID"));
+        entry.deviceInfoLstMap.insert("Product_ID", QString::fromStdString(node.getProduct_id()));
+        entry.productID = QString::fromStdString(node.getProduct_id());
     }
 
-    if (! node.getConfig("VID:PID").empty()) {
+    if (! node.getConfig("vid:pid").empty()) {
         entry.deviceBaseAttrisLst.append("VID:PID");
-        entry.deviceInfoLstMap.insert("VID:PID", QString::fromStdString(node.getConfig("VID:PID")));
+        entry.deviceInfoLstMap.insert("VID:PID", QString::fromStdString(node.getConfig("vid:pid")));
     }
 
     if (node.getModalias().length() > 53) {
@@ -100,15 +147,23 @@ void DNetDevicePrivate::addDeviceInfo(hwNode &node, QList<DlsDevice::DDeviceInfo
     }
 
     if (! node.getConfig("driver").empty()) {
-        entry.deviceBaseAttrisLst.append("Driver");
-        entry.deviceInfoLstMap.insert("Driver", QString::fromStdString(node.getConfig("driver")));
+        entry.deviceBaseAttrisLst.append("driver");
+        entry.deviceInfoLstMap.insert("driver", QString::fromStdString(node.getConfig("driver")));
     }
 
-    if (! node.getConfig("Revison").empty()) {
-        entry.deviceBaseAttrisLst.append("Revison");
-        entry.deviceInfoLstMap.insert("Revison", QString::fromStdString(node.getConfig("Revison")));
+    if (! node.getConfig("driverversion").empty()) {
+        entry.deviceBaseAttrisLst.append("driverversion");
+        entry.deviceInfoLstMap.insert("driverversion", QString::fromStdString(node.getConfig("driverversion")));
+    }
+    if (! node.getSerial().empty()) {
+        entry.deviceBaseAttrisLst.append("macAddress");
+        entry.deviceInfoLstMap.insert("macAddress", QString::fromStdString(node.getSerial()));
     }
 
+    if (! node.getConfig("proc_net_dev_data").empty()) {
+        entry.deviceBaseAttrisLst.append("proc_net_dev_data");
+        entry.deviceInfoLstMap.insert("proc_net_dev_data", QString::fromStdString(node.getConfig("proc_net_dev_data")));
+    }
 //------- ADD Children-------
     if ((hw::disk == node.getClass()) || (hw::storage == node.getClass()))
         infoLst.append(entry);
@@ -164,7 +219,7 @@ QString DNetDevice::macAddress(int index)
 {
     Q_D(DNetDevice);
     if (index < d->m_listDeviceInfo.count())  {
-        return  d->m_listDeviceInfo[index].deviceInfoLstMap.value("macaddress");
+        return  d->m_listDeviceInfo[index].deviceInfoLstMap.value("macAddress");
     } else
         return QString();
 }
@@ -198,17 +253,56 @@ QString DNetDevice::status(int index)
 
 DNetDevice::DInetAddr4 DNetDevice::inetAddr4(int index)
 {
-    return DInetAddr4();
+    Q_D(DNetDevice);
+    if (d->m_addrIpv4DB.contains(index)){
+        QList< INet4Addr > values = d->m_addrIpv4DB.values(index);
+        return *values.at(0);
+    }
+    else
+        return DInetAddr4();
 }
 
 DNetDevice::DInetAddr6 DNetDevice::inetAddr6(int index)
 {
+    Q_D(DNetDevice);
+    if (d->m_addrIpv6DB.contains(index)){
+        QList< INet6Addr > values = d->m_addrIpv6DB.values(index);
+        return *values.at(0);
+    }
+    else
     return DInetAddr6();
 }
 
 DNetDevice::DNetifInfo DNetDevice::netifInfo(int index)
 {
-    return DNetifInfo();
+    //net/core/net-procfs.c  net/core/dev.c
+    Q_D(DNetDevice);
+    if (index < d->m_listDeviceInfo.count())  {
+        struct DNetifInfo result =  DNetifInfo();
+
+        QString line =  d->m_listDeviceInfo[index].deviceInfoLstMap.value("proc_net_dev_data");
+        if (!line.isNull()) {
+            QStringList deviceInfo = line.split(" ", QString::SkipEmptyParts);
+            if (deviceInfo.size() > 16) { //1-17
+                result.rxBytes      =   deviceInfo[1].toULongLong();     // total bytes received
+                result.rxPackets    =   deviceInfo[2].toULongLong();   // total packets received
+                result.rxErrors     =   deviceInfo[3].toULongLong();    // bad packets received
+                result.rxDropped    =   deviceInfo[4].toULongLong();   // no space in linux buffers
+                result.rxFifo       =   deviceInfo[5].toULongLong();      // FIFO overruns
+                result.rxFrame      =   deviceInfo[6].toULongLong();     // frame alignment error
+                // 7  compressed  //  8 multicast
+                result.txBytes      =   deviceInfo[9].toULongLong();     // total bytes transmitted
+                result.txPackets    =   deviceInfo[10].toULongLong();   // total packets transmitted
+                result.txErrors     =   deviceInfo[11].toULongLong();    // packet transmit problems
+                result.txDropped    =   deviceInfo[12].toULongLong();   // no space available in linux
+                result.txFifo       =   deviceInfo[13].toULongLong();      // FIFO overruns
+                // 14 collisions
+                result.txCarrier    =   deviceInfo[15].toULongLong();   // loss of link pulse
+            }
+        }
+        return result;
+    } else
+        return DNetifInfo();
 }
 
 QString DNetDevice::portStatus(int index, int port)

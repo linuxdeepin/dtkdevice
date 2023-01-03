@@ -1,4 +1,4 @@
-#include "version.h"
+
 #include "hw.h"
 #include "sysfs.h"
 #include "osutils.h"
@@ -9,7 +9,6 @@
 #include <vector>
 #include <iostream>
 
-//
 
 /*
  * Standard SDIO Function Interfaces

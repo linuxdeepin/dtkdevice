@@ -1,5 +1,4 @@
 
-#include "version.h"
 #include "smp.h"
 #include <sys/types.h>
 #include <sys/stat.h>

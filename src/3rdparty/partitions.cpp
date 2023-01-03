@@ -14,7 +14,7 @@
 #define _LARGEFILE_SOURCE
 #define _FILE_OFFSET_BITS 64
 
-#include "version.h"
+
 #include "partitions.h"
 #include "blockio.h"
 #include "lvm.h"
@@ -32,7 +32,6 @@
 #include <stdint.h>
 #include <ctype.h>
 
-//
 
 #define LIFBLOCKSIZE 256
 

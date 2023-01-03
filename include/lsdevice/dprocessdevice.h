@@ -17,20 +17,20 @@ public:
     struct DProcessBaseInfo {
         QString          name;
         int              type;
-        QString          cmdline;
+        QString          cmdline;       //bool Process::readCmdline()
         QString          usrerName;
         quint32          mask;                 // mask
         pid_t            pid;                  // pid
         QByteArray       icon;
     };
 
-    struct DProcessMemoryInfo {
+    struct DProcessMemoryInfo {  ///bool Process::readStatm()
         quint64          vmsize;               // vm size in kB
         quint64          rss;                  // resident set size in kB
         quint64          shm;                  // resident shared size in kB
     };
 
-    struct DProcessIOInfo {
+    struct DProcessIOInfo {  ///void Process::readIO()
         quint64          readBytes;            // disk read bytes
         quint64          writeBytes;           // disk write bytes
         quint64          cancelledWriteBytes;  // cancelled write bytes
@@ -41,7 +41,7 @@ public:
         quint64 sentBytes;
     };
 
-    struct DProcessStatus {
+    struct DProcessStatus { ///bool Process::readStat()
         char             state;                // process state
         pid_t            ppid;                 // parent process
         gid_t            pgid;                 // process group id

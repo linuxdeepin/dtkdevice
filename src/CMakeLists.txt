@@ -14,9 +14,16 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 add_definitions(-DLIBDTKDEVICE_LIBRARY)
 
 # find_package
+find_package(PkgConfig REQUIRED)
 find_package(Qt5 REQUIRED COMPONENTS Core)
 find_package(Qt5 REQUIRED COMPONENTS DBus)
 
+
+pkg_search_module(LIB_NL3 REQUIRED libnl-3.0)
+pkg_search_module(LIB_NL3_ROUTE REQUIRED libnl-route-3.0)
+
+include_directories(${LIB_NL3_INCLUDE_DIRS})
+include_directories(${LIB_NL3_ROUTE_INCLUDE_DIRS})
 include(lsdevice/lsdevice.cmake)
 
 add_library(${LIB_NAME} SHARED
@@ -27,6 +34,8 @@ target_link_libraries(
     ${LIB_NAME} PUBLIC
     Qt5::Core
     Qt5::DBus
+    ${LIB_NL3_LIBRARIES}
+    ${LIB_NL3_ROUTE_LIBRARIES}
 )
 
 target_include_directories(${LIB_NAME} PUBLIC

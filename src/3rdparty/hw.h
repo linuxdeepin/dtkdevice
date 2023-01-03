@@ -13,9 +13,34 @@ using namespace std;
 {
   typedef enum
   {
-    sys_tem,    bridge,    memory,    processor,    address,    storage,    disk,    
-    tape,    bus,    network,    display,    input,    printer,    
-    multimedia,    communication,    power,    volume,    generic
+    sys_tem,
+    motherboard,
+    bios,
+    ddr,
+    memory,
+    processor,
+    cpu_cache,
+    address,
+    storage,
+    disk,
+    tape,
+    bus,  
+    bridge,
+    usb_hub,  //hub
+    controller,
+    network,
+    display,
+    input,
+    printer,
+    multimedia,
+    media_camera,
+    communication,
+    power,
+    volume,
+    keyboard,
+    mouse,
+    monitor,
+    generic
   } hwClass;
 
   typedef enum { none, iomem, ioport, mem, irq, dma }  hwResourceType;
@@ -135,6 +160,19 @@ class  hwNode
     string getSubProduct_name() const;            //获取设备子设备名
     void setSubProduct_name(const string & subproduct_name);
 
+
+    string getVendor_id() const;
+    void setVendor_id(const string & vendor);
+
+    string getProduct_id() const;
+    void setProduct_id(const string & product);
+
+    // string getSubVendor_id() const;
+    // void setSubVendor_id(const string & subvendor);
+
+    // string getSubProduct_id() const;
+    // void setSubProduct_id(const string & subproduct);
+
     string getVersion() const;              //获取设备版本相关信息
     void setVersion(const string & version);
 
@@ -192,7 +230,7 @@ class  hwNode
 
     void setConfig(const string & key, const string & value);
     void setConfig(const string & key, unsigned long long value);
-    string getConfig(const string & key) const;      //获取设备 相关key值 如 "VID:PID"  "driver"  
+    string getConfig(const string & key) const;      //获取设备 相关key值 如 "vid:pid"  "driver"  
     //cpu  "cpufreq" "cpufreq",
     //disk  "ReadSectors"  "WriteSectors"
     // 用法详见本文件末尾，或 print.cpp文件
@@ -209,6 +247,9 @@ class  hwNode
 
     string getBusInfo() const;
     void setBusInfo(const string &);
+
+    string getSysFS_Path() const;
+    void setSysFS_Path(const string &);
 
     string getPhysId() const;
     void setPhysId(long);
@@ -247,7 +288,7 @@ class  hwNode
 // getConfig("cpufreq")
 // setConfig("driver", shortname(drivername));
 //getConfig("cpufreq", cur);
-getConfig("VID:PID")
+getConfig("vid:pid")
 
 disk getConfig("ReadSectors",curRead);
 disk getConfig("WriteSectors",curWrite);

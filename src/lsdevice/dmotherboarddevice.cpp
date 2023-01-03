@@ -19,20 +19,25 @@ public:
         , m_hwNode("computer", hw::sys_tem)
     {
 
-        m_listDeviceInfo.clear();
+        m_listsystemInfo.clear();
         scan_system(m_hwNode);
-        addDeviceInfo(m_hwNode, m_listDeviceInfo);
+        addDeviceInfo(m_hwNode, m_listsystemInfo, hw::sys_tem);
+        addDeviceInfo(m_hwNode, m_listMotherboardInfo, hw::motherboard);
+        addDeviceInfo(m_hwNode, m_listbiosInfo, hw::bios);
     }
     hwNode                    m_hwNode ;
-    QList< DlsDevice::DDeviceInfo >      m_listDeviceInfo;
-    void addDeviceInfo(hwNode &node, QList< DlsDevice::DDeviceInfo >  &infoLst);
+
+    void addDeviceInfo(hwNode &node, QList< DlsDevice::DDeviceInfo >  &infoLst, hw::hwClass cls);
     Q_DECLARE_PUBLIC(DMotherboardDevice)
 
 private:
     DMotherboardDevice *q_ptr = nullptr;
+    QList< DlsDevice::DDeviceInfo >      m_listsystemInfo;
+    QList< DlsDevice::DDeviceInfo >      m_listMotherboardInfo;
+    QList< DlsDevice::DDeviceInfo >      m_listbiosInfo;
 };
 
-void DMotherboardDevicePrivate::addDeviceInfo(hwNode &node, QList<DlsDevice::DDeviceInfo> &infoLst)
+void DMotherboardDevicePrivate::addDeviceInfo(hwNode &node, QList< DlsDevice::DDeviceInfo > &infoLst, hw::hwClass cls)
 {
     struct DlsDevice::DDeviceInfo entry;
 
@@ -47,11 +52,19 @@ void DMotherboardDevicePrivate::addDeviceInfo(hwNode &node, QList<DlsDevice::DDe
     entry.deviceInfoLstMap.insert("Name", QString::fromStdString(node.getProduct()));
     entry.productName = QString::fromStdString(node.getProduct());
 
+    entry.deviceBaseAttrisLst.append("data");
+    entry.deviceInfoLstMap.insert("data", QString::fromStdString(node.getDate()));
+
+    if (! node.getConfig("chassis").empty()) {
+        entry.deviceBaseAttrisLst.append("chassis");
+        entry.deviceInfoLstMap.insert("chassis", QString::fromStdString(node.getConfig("chassis")));
+    }
+
 //--------------------------------ADD Children---------------------
-    if (hw::sys_tem == node.getClass())
+    if (cls == node.getClass())
         infoLst.append(entry);
     for (int i = 0; i < node.countChildren(); i++) {
-        addDeviceInfo(*node.getChild(i), infoLst);
+        addDeviceInfo(*node.getChild(i), infoLst, cls);
     }
 }
 
@@ -68,7 +81,8 @@ DMotherboardDevice::~DMotherboardDevice()
 QString DMotherboardDevice::vendor()
 {
     Q_D(DMotherboardDevice);
-//    return  d->m_listDeviceInfo[index].vendorName;
+    if (d->m_listMotherboardInfo.count() > 0)
+        return  d->m_listMotherboardInfo[0].vendorName;
 
     return QString();
 }
@@ -76,23 +90,33 @@ QString DMotherboardDevice::vendor()
 QString DMotherboardDevice::model()
 {
     Q_D(DMotherboardDevice);
-//    return  d->m_listDeviceInfo[index].productName;
+    if (d->m_listMotherboardInfo.count() > 0)
+        return  d->m_listMotherboardInfo[0].productName;
 
     return QString();
 }
 
 QString DMotherboardDevice::date()
 {
+    Q_D(DMotherboardDevice);
+    if (d->m_listbiosInfo.count() > 0)
+        return  d->m_listbiosInfo[0].deviceInfoLstMap.value("data");
     return QString();
 }
 
 QString DMotherboardDevice::biosInformation()
 {
+    Q_D(DMotherboardDevice);
+    if (d->m_listbiosInfo.count() > 0)
+        return  d->m_listbiosInfo[0].vendorName + d->m_listbiosInfo[0].productName;
     return QString();
 }
 
 QString DMotherboardDevice::chassisInformation()
 {
+    Q_D(DMotherboardDevice);
+    if (d->m_listsystemInfo.count() > 0)
+        return  d->m_listsystemInfo[0].deviceInfoLstMap.value("chassis");
     return QString();
 }
 
@@ -102,7 +126,7 @@ QString DMotherboardDevice::PhysicalMemoryArrayInformation()
 }
 
 QString DMotherboardDevice::temperature()
-{
+{ //to do
     return QString();
 }
 

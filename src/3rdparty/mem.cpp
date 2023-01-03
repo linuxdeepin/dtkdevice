@@ -16,7 +16,7 @@
  *
  */
 
-#include "version.h"
+
 #include "config.h"
 #include "sysfs.h"
 #include "mem.h"
@@ -143,7 +143,7 @@ static unsigned long long get_hotplug_size()
 
 static unsigned long long count_memorybanks_size(hwNode & n)
 {
-  hwNode *memory = n.getChild("core/memory");
+  hwNode *memory = n.getChild("motherboard/ddr");
 
   if (memory)
   {
@@ -165,7 +165,7 @@ static unsigned long long count_memorybanks_size(hwNode & n)
 
 static void claim_memory(hwNode & n)
 {
-  hwNode *core = n.getChild("core");
+  hwNode *core = n.getChild("motherboard");
 
   if (core)
   {
@@ -179,7 +179,7 @@ static void claim_memory(hwNode & n)
 
 bool scan_memory(hwNode & n)
 {
-  hwNode *memory = n.getChild("core/memory");
+  hwNode *memory = n.getChild("motherboard/ddr");
   unsigned long long logicalmem = 0;
   unsigned long long kcore = 0;
   unsigned long long hotplug_size = 0;
@@ -192,18 +192,18 @@ bool scan_memory(hwNode & n)
 
   if (!memory)
   {
-    hwNode *core = n.getChild("core");
+    hwNode *core = n.getChild("motherboard");
 
     if (!core)
     {
-      n.addChild(hwNode("core", hw::bus));
-      core = n.getChild("core");
+      n.addChild(hwNode("motherboard", hw::ddr));
+      core = n.getChild("motherboard");
     }
 
     if (core)
     {
-      core->addChild(hwNode("memory", hw::memory));
-      memory = core->getChild("memory");
+      core->addChild(hwNode("ddr", hw::ddr));
+      memory = core->getChild("ddr");
     }
   }
 
