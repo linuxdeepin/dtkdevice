@@ -6,7 +6,7 @@
 #define _LARGEFILE_SOURCE
 #define _FILE_OFFSET_BITS 64
 
-#include "version.h"
+
 #include "config.h"
 #include "options.h"
 #include "volumes.h"

@@ -4,4 +4,5 @@
 #include "hw.h"
 
 bool scan_disk(hwNode & n);
+bool scan_diskstorage(hwNode & n);
 #endif

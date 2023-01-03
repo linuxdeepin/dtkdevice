@@ -19,6 +19,12 @@ add_definitions(-DPREFIX="${CMAKE_PREFIX_PATH}")
 add_definitions(-DOS_VERSION_TEST_FILE="/tmp/etc/os-version")
 find_package(Qt5 REQUIRED COMPONENTS Core)
 find_package(Qt5 REQUIRED COMPONENTS DBus)
+find_package(PkgConfig REQUIRED)
+pkg_search_module(LIB_NL3 REQUIRED libnl-3.0)
+pkg_search_module(LIB_NL3_ROUTE REQUIRED libnl-route-3.0)
+
+include_directories(${LIB_NL3_INCLUDE_DIRS})
+include_directories(${LIB_NL3_ROUTE_INCLUDE_DIRS})
 
 #add_definitions(-DUSE_MOCK_INTERFACE)
 
@@ -63,6 +69,8 @@ target_link_libraries(${BIN_NAME} PRIVATE
     Qt5::DBus
     ${GLIB_LIBRARIES}
     ${GIOUNIX_LIBRARIES}
+    ${LIB_NL3_LIBRARIES}
+    ${LIB_NL3_ROUTE_LIBRARIES}
     -lpthread
     -lgcov
     -lgtest

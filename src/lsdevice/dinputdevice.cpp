@@ -40,10 +40,7 @@ void DInputDevicePrivate::addDeviceInfo(hwNode &node, QList<DlsDevice::DDeviceIn
     entry.deviceInfoLstMap.clear();
     entry.devClass = DlsDevice::DtkInput;
 
-    if (node.getBusInfo() != "") {
-        entry.deviceBaseAttrisLst.append("SysFs_PATH");
-        entry.deviceInfoLstMap["SysFs_PATH"] = QString::fromStdString(node.getBusInfo());
-    }
+    entry.sysFsPath = QString::fromStdString(node.getSysFS_Path());
 
     entry.deviceBaseAttrisLst.append("Description");
     entry.deviceInfoLstMap.insert("Description", QString::fromStdString(node.getDescription()));
@@ -59,21 +56,21 @@ void DInputDevicePrivate::addDeviceInfo(hwNode &node, QList<DlsDevice::DDeviceIn
     entry.deviceInfoLstMap.insert("Name", QString::fromStdString(node.getProduct()));
     entry.productName = QString::fromStdString(node.getProduct());
 
-    if (! node.getConfig("Vendor_ID").empty()) {
+    if (! node.getVendor_id().empty()) {
         entry.deviceBaseAttrisLst.append("Vendor_ID");
-        entry.deviceInfoLstMap.insert("Vendor_ID", QString::fromStdString(node.getConfig("Vendor_ID")));
-        entry.vendorID = QString::fromStdString(node.getConfig("Vendor_ID"));
+        entry.deviceInfoLstMap.insert("Vendor_ID", QString::fromStdString(node.getVendor_id()));
+        entry.vendorID = QString::fromStdString(node.getVendor_id());
     }
 
-    if (! node.getConfig("Product_ID").empty()) {
+    if (! node.getProduct_id().empty()) {
         entry.deviceBaseAttrisLst.append("Product_ID");
-        entry.deviceInfoLstMap.insert("Product_ID", QString::fromStdString(node.getConfig("Product_ID")));
-        entry.productID = QString::fromStdString(node.getConfig("Product_ID"));
+        entry.deviceInfoLstMap.insert("Product_ID", QString::fromStdString(node.getProduct_id()));
+        entry.productID = QString::fromStdString(node.getProduct_id());
     }
 
-    if (! node.getConfig("VID:PID").empty()) {
+    if (! node.getConfig("vid:pid").empty()) {
         entry.deviceBaseAttrisLst.append("VID:PID");
-        entry.deviceInfoLstMap.insert("VID:PID", QString::fromStdString(node.getConfig("VID:PID")));
+        entry.deviceInfoLstMap.insert("VID:PID", QString::fromStdString(node.getConfig("vid:pid")));
     }
 
     if (node.getModalias().length() > 53) {
@@ -83,11 +80,19 @@ void DInputDevicePrivate::addDeviceInfo(hwNode &node, QList<DlsDevice::DDeviceIn
         entry.deviceBaseAttrisLst.append("Modalias");
         entry.deviceInfoLstMap.insert("Modalias", QString::fromStdString(node.getModalias()));
     }
-    entry.deviceBaseAttrisLst.append("ClassName");
-    entry.deviceInfoLstMap.insert("ClassName", QString::fromStdString(node.getClassName()));
+
+    if (! node.getConfig("driver").empty()) {
+        entry.deviceBaseAttrisLst.append("driver");
+        entry.deviceInfoLstMap.insert("driver", QString::fromStdString(node.getConfig("driver")));
+    }
+
+    if (! node.getBusInfo().empty()) {
+        entry.deviceBaseAttrisLst.append("businfo");
+        entry.deviceInfoLstMap.insert("businfo", QString::fromStdString(node.getBusInfo()));
+    }
 
 //--------------------------------ADD Children---------------------
-    if (hw::input == node.getClass())
+    if (hw::input == node.getClass() || hw::mouse == node.getClass() || hw::keyboard == node.getClass())
         infoLst.append(entry);
     for (int i = 0; i < node.countChildren(); i++) {
         addDeviceInfo(*node.getChild(i), infoLst);
@@ -130,12 +135,20 @@ QString DInputDevice::model(int index)
 
 QString DInputDevice::interface(int index)
 {
-    return QString();
+    Q_D(DInputDevice);
+    if (index < d->m_listDeviceInfo.count())  {
+        return  d->m_listDeviceInfo[index].deviceInfoLstMap.value("businfo");
+    } else
+        return QString();
 }
 
 QString DInputDevice::driver(int index)
 {
-    return QString();
+    Q_D(DInputDevice);
+    if (index < d->m_listDeviceInfo.count())  {
+        return  d->m_listDeviceInfo[index].deviceInfoLstMap.value("driver");
+    } else
+        return QString();
 }
 
 DDEVICE_END_NAMESPACE

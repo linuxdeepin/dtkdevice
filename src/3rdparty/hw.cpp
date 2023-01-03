@@ -1,7 +1,7 @@
 #define _XOPEN_SOURCE
 #include "hw.h"
 #include "osutils.h"
-#include "version.h"
+
 #include "config.h"
 #include "options.h"
 #include "heuristics.h"
@@ -25,10 +25,10 @@ using namespace hw;
 
 struct hwNode_i {
     hwClass deviceclass;
-    string id, vendor, product, version, date, serial, slot, handle, description,
-           businfo, physid, dev, modalias, subvendor, subproduct;
-    string vendor_id, product_id, subvendor_id, subproduct_id, class_id;
-    string vendor_name, product_name, subvendor_name, subproduct_name, baseclass_name, subclass_name;
+    string id, physid, vendor, product, version, date, serial, slot, handle, description,
+           businfo,  dev, modalias, subvendor, subproduct, sysfs_path;
+    string vendor_id,  product_id,   subvendor_id,   subproduct_id,   class_id;
+    string vendor_name, product_name, subvendor_name, subproduct_name, class_name, subclass_name;
     bool enabled;
     bool claimed;
     unsigned long long start;
@@ -179,6 +179,14 @@ const char *hwNode::getClassName() const
         case processor:
             return "processor";
 
+        case cpu_cache:
+            return "cpu_cache";
+        case motherboard:
+            return "Motherboard";            
+        case bios:
+            return "bios";
+        case ddr:
+            return "ddr";
         case memory:
             return "memory";
 
@@ -203,6 +211,9 @@ const char *hwNode::getClassName() const
         case bus:
             return "bus";
 
+        case usb_hub:
+            return "usb_hub";
+
         case network:
             return "network";
 
@@ -220,6 +231,8 @@ const char *hwNode::getClassName() const
 
         case communication:
             return "communication";
+        case media_camera:
+            return "media_camera";
 
         case power:
             return "power";
@@ -227,11 +240,21 @@ const char *hwNode::getClassName() const
         case volume:
             return "volume";
 
+        case monitor:
+            return "monitor";
+
+        case keyboard:
+            return "keyboard";
+
+        case mouse:
+            return "mouse";
+
         default:
             return "generic";
         }
     } else
         return "generic";
+
 }
 
 
@@ -514,20 +537,33 @@ void hwNode::setSubProduct_name(const string &subproduct_name)
 }
 //--------
 
-// string hwNode::getVendor_id() const
-// {
-//   if (This)
-//     return This->vendor_id;
-//   else
-//     return "";
-// }
+string hwNode::getVendor_id() const
+{
+  if (This)
+    return This->vendor_id;
+  else
+    return "";
+}
 
+void hwNode::setVendor_id(const string &vendor_id)
+{
+    if (This)
+        This->vendor_id = strip(vendor_id);
+}
 
-// void hwNode::setVendor_id(const string & vendor_id)
-// {
-//   if (This)
-//     This->vendor_id = strip(vendor_id);
-// }
+string hwNode::getProduct_id() const
+{
+    if (This)
+        return This->product_id;
+    else
+        return "";
+}
+
+void hwNode::setProduct_id(const string &product_id)
+{
+    if (This)
+        This->product = strip(product_id);
+}
 
 // string hwNode::getSubVendor_id() const
 // {
@@ -543,23 +579,6 @@ void hwNode::setSubProduct_name(const string &subproduct_name)
 //   if (This)
 //     This->subvendor = strip(subvendor_id);
 // }
-
-
-// string hwNode::getProduct_id() const
-// {
-//   if (This)
-//     return This->product_id;
-//   else
-//     return "";
-// }
-
-
-// void hwNode::setProduct_id(const string & product_id)
-// {
-//   if (This)
-//     This->product = strip(product_id);
-// }
-
 
 // string hwNode::getSubProduct_id() const
 // {
@@ -1252,6 +1271,22 @@ void hwNode::setBusInfo(const string &businfo)
     }
 }
 
+string hwNode::getSysFS_Path() const
+{
+    if (This)
+        return This->sysfs_path;
+    else
+        return "";
+}
+
+void hwNode::setSysFS_Path(const string &sysfs_path)
+{
+    if (This)  {
+        This->sysfs_path = strip(sysfs_path);
+    }
+}
+
+
 
 string hwNode::getPhysId() const
 {
@@ -1508,7 +1543,7 @@ string hwNode::asString()
     if (summary == "")
         summary = getDescription();
 
-    if ((getClass() == hw::memory) || (getClass() == hw::disk) || (getClass() == hw::storage) || (getClass() == hw::volume)) {
+    if ((getClass() == hw::memory) || (getClass() == hw::cpu_cache) || (getClass() == hw::disk) || (getClass() == hw::storage) || (getClass() == hw::volume)) {
         unsigned long long size = 0;
         if (getClass() != hw::memory) {
             if (getCapacity())

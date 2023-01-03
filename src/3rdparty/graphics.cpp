@@ -1,4 +1,4 @@
-#include "version.h"
+
 #include "hw.h"
 #include "sysfs.h"
 #include "osutils.h"

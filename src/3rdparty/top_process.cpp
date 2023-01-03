@@ -1,6 +1,6 @@
-#include "version.h"
+
 #include "config.h"
-#include "abi.h"
+#include "hw.h"
 #include "osutils.h"
 #include <unistd.h>
 #include <stdlib.h>
@@ -10,42 +10,50 @@
 
 #define PROC_PATH "/proc"
 
-bool scan_top_process(hwNode & pid)
+bool scan_top_process(hwNode &nn)
 {
 
-  pushd(PROC_PATH);
-  {
-    int i,n,j;
-    struct dirent **namelist;
-    string pidpath ;
-    string value;
-
-    j = 0;
-    n = scandir(".", &namelist, selectdir, alphasort);   
-
-    for(i=0; i<n; i++)
+    pushd(PROC_PATH);
     {
-      if(matches(namelist[i]->d_name, "^[0-9]+$")) 
-      {
-        pidpath = string(namelist[i]->d_name);
-        value = get_string(pidpath+"/stat");
-        // if(!value.empty())     pid.setConfig("proc:"+pidpath,value+", \n");
-       j++;
-      }
+        int i, n, j;
+        struct dirent **namelist;
 
-      free(namelist[i]);
+//  hwNode disk("disk", hw::storage);
+        j = 0;
+        n = scandir(".", &namelist, selectdir, alphasort);
 
+        for (i = 0; i < n; i++) {
+            if (matches(namelist[i]->d_name, "^[0-9]+$")) {
+                string pidpath = string(namelist[i]->d_name);
+                string value = get_string(pidpath + "/stat");
+                if (value.empty())
+                    continue;
+                j++;
+                vector < string > vecstring;
+                splitlines(value, vecstring, ' ');
+                if (2 < vecstring.size()) {
+                    string pidname = vecstring[1];
+//      pidname = pidname.replace(pidname.find("("), 1, "");
+//      pidname = pidname.replace(pidname.find(")"), 1, "");
+
+                    hwNode  pid("pidtop" + pidpath, hw::sys_tem);
+                    // pid.setConfig("procValue","cat /proc/<pid>/stat");
+                    pid.setConfig("pidname", pidname);
+                    // pid.setDescription();
+                    pid.setProduct_name(pidname);
+                    pid.setVendor_name("SystemPIDShow");
+                    // nn.addChild(pid);
+                } else
+                    continue;
+            }
+
+            free(namelist[i]);
+        }
+        if (namelist)
+            free(namelist);
     }
-    pid.setConfig("proc top","cat /proc/<pid>/stat");
-    if(namelist)
-      free(namelist);
-    if(j > 0){
-      pid.setDescription("SystemPIDShow");
-      pid.setProduct_name("SystemPIDShow");
-      pid.setVendor_name("System");
-    }
-  }
-  popd();
-  //pid.describeCapability("vsyscall64", _("64-bit processes"));
-  return true;
+    popd();
+    //pid.describeCapability("vsyscall64", _("64-bit processes"));
+
+    return true;
 }

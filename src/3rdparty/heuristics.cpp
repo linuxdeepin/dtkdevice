@@ -4,7 +4,7 @@
  *
  */
 
-#include "version.h"
+
 #include "sysfs.h"
 #include "jedec.h"
 #include "osutils.h"
