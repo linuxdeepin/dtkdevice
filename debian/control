@@ -1,7 +1,7 @@
 Source: dtkdevice
 Section: libdevel
 Priority: optional
-Maintainer: Packages Builder <packages@deepin.com>
+Maintainer: Deepin Packages Builder <packages@deepin.com>
 Build-Depends:
  debhelper-compat (= 12),
  cmake,
@@ -14,7 +14,7 @@ Build-Depends:
  pkg-config
 Standards-Version: 4.5.0
 
-Package: libdtkdevice
+Package: libdtkdevice1
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
 Description: Deepin Tool Kit template library
@@ -25,7 +25,7 @@ Description: Deepin Tool Kit template library
 Package: libdtkdevice-dev
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}, 
- libdtkdevice( =${binary:Version})
+ libdtkdevice1( =${binary:Version})
 Description: Deepin Tool Kit template devel library
  DtkDevice is base devel library of Deepin Qt/C++ applications.
  .
@@ -33,6 +33,7 @@ Description: Deepin Tool Kit template devel library
 
 Package: libdtkdevice-doc
 Architecture: any
+Depends: ${misc:Depends}
 Description: Deepin Tool Kit Core (document)
  DtkDevice is base devel library of Deepin Qt/C++ applications.
  .

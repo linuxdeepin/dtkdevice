@@ -15,4 +15,4 @@ Description: Deepin Tool Kit dtkdevice header files
 Version: @CMAKE_PROJECT_VERSION@
 Libs: -L${libdir} -ldtkdevice
 Cflags: -I${includedir}
-Requires: dtkcore
+Requires: dtkcore Qt@QT_VERSION_MAJOR@Core Qt@QT_VERSION_MAJOR@DBus

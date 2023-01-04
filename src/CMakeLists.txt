@@ -1,56 +1,61 @@
-set(LIB_NAME dtkdevice)
-
-set(CMAKE_INCLUDE_CURRENT_DIR ON)
-set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
-
-set(CMAKE_AUTOUIC ON)
-set(CMAKE_AUTOMOC ON)
-set(CMAKE_AUTORCC ON)
-
-set(CMAKE_CXX_STANDARD 11)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
-
-add_definitions(-DLIBDTKDEVICE_LIBRARY)
-
-# find_package
-find_package(PkgConfig REQUIRED)
-find_package(Qt5 REQUIRED COMPONENTS Core)
-find_package(Qt5 REQUIRED COMPONENTS DBus)
-
-
-pkg_search_module(LIB_NL3 REQUIRED libnl-3.0)
-pkg_search_module(LIB_NL3_ROUTE REQUIRED libnl-route-3.0)
-
-include_directories(${LIB_NL3_INCLUDE_DIRS})
-include_directories(${LIB_NL3_ROUTE_INCLUDE_DIRS})
-include(lsdevice/lsdevice.cmake)
+# Collect headers and sources
+file(GLOB 3RDPARTY_HEADERS "${CMAKE_CURRENT_LIST_DIR}/3rdparty/*.h")
+file(GLOB 3RDPARTY_SOURCES "${CMAKE_CURRENT_LIST_DIR}/3rdparty/*.cpp")
+file(GLOB D_HEADERS "${PROJECT_SOURCE_DIR}/include/DDevice/*")
+file(GLOB_RECURSE PUBLIC_HEADERS "${PROJECT_SOURCE_DIR}/include/*.h")
+file(GLOB_RECURSE PRIVATE_HEADERS "${CMAKE_CURRENT_LIST_DIR}/lsdevice/*.h" "${CMAKE_CURRENT_LIST_DIR}/inputdevices/*.h")
+file(GLOB_RECURSE DEVICE_SOURCES "${CMAKE_CURRENT_LIST_DIR}/lsdevice/*.cpp" "${CMAKE_CURRENT_LIST_DIR}/inputdevices/*.cpp")
+list(APPEND PUBLIC_HEADERS ${D_HEADERS})
 
 add_library(${LIB_NAME} SHARED
-    ${LS_SRCS}
+    ${3RDPARTY_HEADERS}
+    ${3RDPARTY_SOURCES}
+    ${PUBLIC_HEADERS}
+    ${PRIVATE_HEADERS}
+    ${DEVICE_SOURCES}
 )
 
-target_link_libraries(
-    ${LIB_NAME} PUBLIC
-    Qt5::Core
-    Qt5::DBus
-    ${LIB_NL3_LIBRARIES}
-    ${LIB_NL3_ROUTE_LIBRARIES}
+target_link_libraries(${LIB_NAME}
+PUBLIC
+    Qt${QT_VERSION_MAJOR}::Core
+    Qt${QT_VERSION_MAJOR}::DBus
+    Dtk::Core
+PRIVATE
+    PkgConfig::LibNl3
+    PkgConfig::LibNl3Route
 )
 
-target_include_directories(${LIB_NAME} PUBLIC
-  $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/src/3rdparty>
-  $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/global>
-  $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/lsdevice>
-  $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/DtkDevice>
+target_compile_definitions(${LIB_NAME} PRIVATE "LIBDTKDEVICE_LIBRARY")
+
+target_include_directories(${LIB_NAME}
+PUBLIC
+    $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/global>
+    $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/lsdevice>
+    $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/inputdevices>
+    $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/DDevice>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/3rdparty>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/inputdevices>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/inputdevices/dbus>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/lsdevice>
+INTERFACE
+    $<INSTALL_INTERFACE:${INCLUDE_INSTALL_DIR}>
+)
+
+target_link_directories(${LIB_NAME} INTERFACE
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
+    $<INSTALL_INTERFACE:${LIBRARY_INSTALL_DIR}>
 )
 
 set_target_properties(${LIB_NAME} PROPERTIES
     VERSION ${CMAKE_PROJECT_VERSION}
     SOVERSION ${CMAKE_PROJECT_VERSION_MAJOR}
+    EXPORT_NAME Device
+    PUBLIC_HEADER "${PUBLIC_HEADERS}"
 )
 
-install(TARGETS ${LIB_NAME} DESTINATION ${LIBRARY_INSTALL_DIR})
-install(DIRECTORY ../include/DDevice/ DESTINATION "${INCLUDE_INSTALL_DIR}" FILES_MATCHING PATTERN "*")
-install(DIRECTORY ../include/lsdevice/ DESTINATION "${INCLUDE_INSTALL_DIR}" FILES_MATCHING PATTERN "*")
-install(DIRECTORY ../include/global/ DESTINATION "${INCLUDE_INSTALL_DIR}" FILES_MATCHING PATTERN "*")
+install(TARGETS ${LIB_NAME} EXPORT DtkDeviceTargets DESTINATION ${LIBRARY_INSTALL_DIR} PUBLIC_HEADER DESTINATION ${INCLUDE_INSTALL_DIR})
+install(EXPORT DtkDeviceTargets
+    FILE DtkDeviceTargets.cmake
+    NAMESPACE Dtk::
+    DESTINATION ${CMAKE_CONFIG_INSTALL_DIR}
+)

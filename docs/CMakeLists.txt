@@ -14,8 +14,7 @@ set (DOXYGEN_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/docs/)
 set (DOXYGEN_QHG_LOCATION "qhelpgenerator")
 set (DOXYGEN_QHP_NAMESPACE "org.deepin.dtk.device")
 set (DOXYGEN_QCH_FILE "dtkdevice.qch")
-set (DOXYGEN_QHP_VIRTUAL_FOLDER "dtkcore")
-
+set (DOXYGEN_QHP_VIRTUAL_FOLDER "dtkdevice")
 set (DOXYGEN_HTML_EXTRA_STYLESHEET "" CACHE STRING "Doxygen custom stylesheet for HTML output")
 set (DOXYGEN_TAGFILES "qtcore.tags=qthelp://doc.qt.io/qt-5/" CACHE STRING "Doxygen tag files")
 set (DOXYGEN_MACRO_EXPANSION "YES")
@@ -24,26 +23,9 @@ set (DOXYGEN_PREDEFINED
     "DDEVICE_BEGIN_NAMESPACE=namespace Dtk { namespace Device {"
     "DDEVICE_END_NAMESPACE=}}"
     "DDEVICE_USE_NAMESPACE=using namespace Dtk::Device;"
-    "Q_OS_LINUX=1"
 )
 
-if(BUILD_THEME)
-set (DOXYGEN_HTML_EXTRA_STYLESHEET "docs/doxygentheme/doxygen-awesome.css"
-                                "docs/doxygentheme/doxygen-awesome-sidebar-only.css"
-                                "docs/doxygentheme/doxygen-awesome-sidebar-only-darkmode-toggle.css"
-                                )
-set (DOXYGEN_HTML_EXTRA_FILES "docs/doxygentheme/doxygen-awesome-darkmode-toggle.js"
-                            "docs/doxygentheme/doxygen-awesome-fragment-copy-button.js"
-                            "docs/doxygentheme/doxygen-awesome-paragraph-link.js"
-                            "docs/doxygentheme/doxygen-awesome-interactive-toc.js"
-                            )
-set (DOXYGEN_GENERATE_TREEVIEW "YES")
-set (DOXYGEN_DISABLE_INDEX "NO")
-set (DOXYGEN_FULL_SIDEBAR "NO")
-set (DOXYGEN_HTML_HEADER "../doxygentheme/header.html")
-endif()
-
-doxygen_add_docs (doxygen
+doxygen_add_docs(doxygen
     ${PROJECT_SOURCE_DIR}/include
     ${PROJECT_SOURCE_DIR}/docs
     ALL
@@ -51,4 +33,4 @@ doxygen_add_docs (doxygen
     COMMENT "Generate documentation via Doxygen"
 )
 
-install (FILES ${CMAKE_CURRENT_BINARY_DIR}/html/dtkdevice.qch DESTINATION ${QCH_INSTALL_DESTINATION})
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/html/dtkdevice.qch DESTINATION ${QCH_INSTALL_DESTINATION})

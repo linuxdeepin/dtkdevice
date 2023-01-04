@@ -4,78 +4,47 @@
 
 set(BIN_NAME ut-dtkdevice)
 
-set(CMAKE_INCLUDE_CURRENT_DIR ON)
-set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
-
-set(CMAKE_AUTOMOC ON)
-set(CMAKE_AUTOUIC ON)
-set(CMAKE_AUTORCC ON)
-
-# dbus
-set(CMAKE_CXX_FLAGS "-fno-access-control -ldl")
-add_compile_options(-fsanitize=address)
-add_link_options(-fsanitize=address)
-add_definitions(-DPREFIX="${CMAKE_PREFIX_PATH}")
-add_definitions(-DOS_VERSION_TEST_FILE="/tmp/etc/os-version")
-find_package(Qt5 REQUIRED COMPONENTS Core)
-find_package(Qt5 REQUIRED COMPONENTS DBus)
-find_package(PkgConfig REQUIRED)
-pkg_search_module(LIB_NL3 REQUIRED libnl-3.0)
-pkg_search_module(LIB_NL3_ROUTE REQUIRED libnl-route-3.0)
-
-include_directories(${LIB_NL3_INCLUDE_DIRS})
-include_directories(${LIB_NL3_ROUTE_INCLUDE_DIRS})
-
-#add_definitions(-DUSE_MOCK_INTERFACE)
-
-# set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-access-control -fno-inline -Wno-pmf-conversions")
-
-file(GLOB_RECURSE INCLUDE_FILES
-    "../include/lsdevice/*.h"
-    "../include/global/*.h"
-    "../src/3rdparty/*.h"
+find_package(GTest REQUIRED)
+file(GLOB_RECURSE HEADERS "${PROJECT_SOURCE_DIR}/include/*.h")
+file(GLOB_RECURSE SOURCES
+    "${PROJECT_SOURCE_DIR}/src/*.h"
+    "${PROJECT_SOURCE_DIR}/src/*.cpp"
 )
-file(GLOB_RECURSE SRCS
-    "../src/*.h"
-    "../src/*.cpp"
-    "../src/3rdparty/*.cpp"
-    "../src/3rdparty/*.h"
-)
-file(GLOB_RECURSE TEST_FILES "./*.h" "./*.cpp")
-
-include_directories(
-    "../include/lsdevice"
-    "../include/global"
-    "../src/3rdparty"
-    "../src/dbus"
-)
+file(GLOB_RECURSE TEST_SOURCES "${CMAKE_CURRENT_LIST_DIR}/*.h" "${CMAKE_CURRENT_LIST_DIR}/*.cpp")
 
 add_executable(${BIN_NAME}
-    ${INCLUDE_FILES}
-    ${SRCS}
-    ${TEST_FILES}
-    ${DFAKE_INTERFACE_DBUS_XML}
+    ${HEADERS}
+    ${SOURCES}
+    ${TEST_SOURCES}
 )
 
-target_include_directories(${BIN_NAME} PUBLIC
-    Qt5::Core
-    Qt5::DBus
-    ${GLIB_INCLUDE_DIRS}
-    ${GIOUNIX_INCLUDE_DIRS}
+target_include_directories(${BIN_NAME} PRIVATE
+    "${PROJECT_SOURCE_DIR}/include/lsdevice"
+    "${PROJECT_SOURCE_DIR}/include/global"
+    "${PROJECT_SOURCE_DIR}/include/inputdevices"
+    "${PROJECT_SOURCE_DIR}/src/3rdparty"
+    "${PROJECT_SOURCE_DIR}/src/inputdevices"
+    "${PROJECT_SOURCE_DIR}/src/inputdevices/dbus"
+    "${PROJECT_SOURCE_DIR}/src/lsdevice"
+    "${CMAKE_CURRENT_LIST_DIR}/inputdevices/fakedbus"
 )
 
 target_link_libraries(${BIN_NAME} PRIVATE
-    Qt5::Core
-    Qt5::DBus
-    ${GLIB_LIBRARIES}
-    ${GIOUNIX_LIBRARIES}
-    ${LIB_NL3_LIBRARIES}
-    ${LIB_NL3_ROUTE_LIBRARIES}
-    -lpthread
-    -lgcov
-    -lgtest
+    Qt${QT_VERSION_MAJOR}::Core
+    Qt${QT_VERSION_MAJOR}::DBus
+    Dtk::Core
+    PkgConfig::LibNl3
+    PkgConfig::LibNl3Route
+    GTest::GTest
+    pthread
+    gcov
+    asan
 )
 
+target_compile_definitions(${BIN_NAME} PRIVATE USE_FAKE_INTERFACE)
+target_compile_options(${BIN_NAME} PRIVATE -fsanitize=address)
+target_link_options(${BIN_NAME} PRIVATE -fsanitize=address)
+target_compile_options(${BIN_NAME} PRIVATE -fno-access-control)
 if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
     target_compile_options(${BIN_NAME} PRIVATE -fprofile-instr-generate -ftest-coverage)
 endif()

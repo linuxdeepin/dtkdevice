@@ -1,10 +1,10 @@
 Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 Upstream-Name: dtkdevice
-Source: https://github.com/Groveer/dtk
+Source: https://github.com/linuxdeepin/dtkdevice
 
 Files: *
-Copyright: 2022 Deepin Technology Co., Ltd.
-License: LGPL-3+
+Copyright: 2022-2023 Deepin Technology Co., Ltd.
+License: LGPL-3.0-or-later
  This package is free software; you can redistribute it and/or modify
  it under the terms of the GNU Lesser General Public License as published by
  the Free Software Foundation; either version 3 of the License, or
