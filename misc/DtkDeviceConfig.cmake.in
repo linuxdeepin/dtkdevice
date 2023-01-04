@@ -1,16 +1,11 @@
 @PACKAGE_INIT@
-
-set_and_check(DtkDevice_INCLUDE_DIRS "@PACKAGE_INCLUDE_INSTALL_DIR@")
-set_and_check(DtkDevice_LIBRARY_DIRS "@PACKAGE_LIBRARY_INSTALL_DIR@")
-
 include(CMakeFindDependencyMacro)
-find_dependency(Dtk REQUIRED Core)
-find_library(DtkDevice_LIBRARIES dtkdevice ${DtkDevice_LIBRARY_DIRS})
-set(DtkDevice_LIBRARIES ${DtkDevice_LIBRARIES} ${DtkCore_LIBRARIES} )
-
-include_directories("${DtkDevice_INCLUDE_DIRS}")
-
+find_dependency(Qt@QT_VERSION_MAJOR@ COMPONENTS Core DBus)
+find_dependency(Dtk COMPONENTS Core)
+include(${CMAKE_CURRENT_LIST_DIR}/DtkDeviceTargets.cmake)
+get_target_property(DtkDevice_INCLUDE_DIRS Dtk::Device INTERFACE_INCLUDE_DIRECTORIES)
+get_target_property(DtkDevice_LIBRARY_DIRS Dtk::Device INTERFACE_LINK_DIRECTORIES)
+set(DtkDevice_LIBRARIES Dtk::Device)
 check_required_components(DtkDevice)
-
 # Keep deprecated variables for compatibility
 set(DTKDEVICE_INCLUDE_DIR ${DtkDevice_INCLUDE_DIRS})
