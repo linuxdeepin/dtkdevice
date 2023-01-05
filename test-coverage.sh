@@ -9,5 +9,5 @@ cmake --build build --target ut-dtkdevice -- -j $(nproc)
 ctest --test-dir build/tests -VV
 
 lcov -d build/tests -c -o build/coverage_all.info
-lcov --remove build/coverage_all.info "*/tests/*" "*/usr/include*" "*/moc*.cpp" --output-file build/coverage.info
+lcov --remove build/coverage_all.info "*/tests/*" "*/usr/include*" "*/moc*.cpp" "*/3rdparty/*" --output-file build/coverage.info
 genhtml -o build/coverage_html build/coverage.info
