@@ -7,6 +7,7 @@
 
 #include "dtkdevice_global.h"
 #include <DExpected>
+#include <DObject>
 #include <QObject>
 #include <QScopedPointer>
 
@@ -23,7 +24,7 @@ DDEVICE_BEGIN_NAMESPACE
 using DCORE_NAMESPACE::DExpected;
 
 class DInputDeviceManagerPrivate;
-class DInputDeviceManager : public QObject
+class LIBDTKDEVICESHARED_EXPORT DInputDeviceManager : public QObject, public DTK_CORE_NAMESPACE::DObject
 {
     Q_OBJECT
     Q_PROPERTY(DInputDeviceInfoList deviceInfos READ deviceInfos)
@@ -42,8 +43,8 @@ public Q_SLOTS:
     DExpected<DInputSettingPtr> setting();
 
 private:
-    QScopedPointer<DInputDeviceManagerPrivate> d_ptr;
-    Q_DECLARE_PRIVATE(DInputDeviceManager)
+    template <DeviceType deviceType> void handleDeviceChanged(const QString &deviceList);
+    D_DECLARE_PRIVATE(DInputDeviceManager)
 };
 
 DDEVICE_END_NAMESPACE

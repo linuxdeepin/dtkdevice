@@ -19,7 +19,7 @@ int main(int argc, char *argv[])
     DInputDeviceManager manager;
     qDebug() << manager.deviceInfos();
     QObject::connect(&manager, &DInputDeviceManager::deviceAdded, &app, [&](const DeviceInfo &info) {
-        qDebug() << "Device" << info << "removed.";
+        qDebug() << "Device" << info << "added.";
         qInfo() << "Devices:" << manager.deviceInfos();
     });
     QObject::connect(&manager, &DInputDeviceManager::deviceRemoved, &app, [&](const DeviceInfo &info) {

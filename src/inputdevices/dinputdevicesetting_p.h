@@ -5,15 +5,15 @@
 #ifndef DDEVICEETTING_P_H
 #define DDEVICEETTING_P_H
 #include "dinputdevicesetting.h"
+#include <DObjectPrivate>
 DDEVICE_BEGIN_NAMESPACE
 class InputDevicesInterface;
 class KeyboardInterface;
 class MouseInterface;
 class WacomInterface;
 
-class DInputDeviceSettingPrivate : public QObject
+class LIBDTKDEVICESHARED_EXPORT DInputDeviceSettingPrivate : public DTK_CORE_NAMESPACE::DObjectPrivate
 {
-    Q_OBJECT
 public:
     explicit DInputDeviceSettingPrivate(DInputDeviceSetting *q);
     ~DInputDeviceSettingPrivate() override;
@@ -23,8 +23,7 @@ private:
     KeyboardInterface *m_keyboardInter;
     MouseInterface *m_mouseInter;
     WacomInterface *m_wacomInter;
-    DInputDeviceSetting *q_ptr;
-    Q_DECLARE_PUBLIC(DInputDeviceSetting)
+    D_DECLARE_PUBLIC(DInputDeviceSetting)
 };
 DDEVICE_END_NAMESPACE
 #endif

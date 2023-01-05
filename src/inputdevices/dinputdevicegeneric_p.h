@@ -6,21 +6,19 @@
 #define DINPUTDEVICEGENERIC_P_H
 #include "dinputdevicegeneric.h"
 
-DDEVICE_BEGIN_NAMESPACE
+#include <DObjectPrivate>
 
-class DInputDeviceGenericPrivate : public QObject
+DDEVICE_BEGIN_NAMESPACE
+using DCORE_NAMESPACE::DObjectPrivate;
+class LIBDTKDEVICESHARED_EXPORT DInputDeviceGenericPrivate : public DObjectPrivate
 {
-    Q_OBJECT
 public:
     explicit DInputDeviceGenericPrivate(DInputDeviceGeneric *q);
 
 private:
-    quint32 m_id;
-    QString m_name;
-    DeviceType m_type;
+    DeviceInfo m_info;
     bool m_enabled;
-    DInputDeviceGeneric *q_ptr;
-    Q_DECLARE_PUBLIC(DInputDeviceGeneric)
+    D_DECLARE_PUBLIC(DInputDeviceGeneric)
 };
 DDEVICE_END_NAMESPACE
 

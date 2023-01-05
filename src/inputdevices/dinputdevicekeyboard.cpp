@@ -8,22 +8,14 @@
 DDEVICE_BEGIN_NAMESPACE
 
 DInputDeviceKeyboardPrivate::DInputDeviceKeyboardPrivate(DInputDeviceKeyboard *q)
-    : QObject(q)
-    , q_ptr(q)
+    : DInputDeviceGenericPrivate(q)
 {
 }
 
 DInputDeviceKeyboardPrivate::~DInputDeviceKeyboardPrivate() = default;
 
-DInputDeviceKeyboard::DInputDeviceKeyboard(QObject *parent)
-    : DInputDeviceGeneric(parent)
-    , d_ptr(new DInputDeviceKeyboardPrivate(this))
-{
-}
-
-DInputDeviceKeyboard::DInputDeviceKeyboard(const DeviceInfo &info, bool enabled)
-    : DInputDeviceGeneric(info, enabled)
-    , d_ptr(new DInputDeviceKeyboardPrivate(this))
+DInputDeviceKeyboard::DInputDeviceKeyboard(const DeviceInfo &info, bool enabled, QObject *parent)
+    : DInputDeviceGeneric(*new DInputDeviceKeyboardPrivate(this), info, enabled, parent)
 {
 }
 

@@ -11,7 +11,7 @@
 #include <QObject>
 DDEVICE_BEGIN_NAMESPACE
 using DCORE_NAMESPACE::DDBusInterface;
-class KeyboardInterface : public QObject
+class LIBDTKDEVICESHARED_EXPORT KeyboardInterface : public QObject
 {
     Q_OBJECT
 

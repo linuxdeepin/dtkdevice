@@ -18,8 +18,7 @@
 
 DDEVICE_BEGIN_NAMESPACE
 DInputDeviceManagerPrivate::DInputDeviceManagerPrivate(DInputDeviceManager *q)
-    : QObject(q)
-    , q_ptr(q)
+    : DObjectPrivate(q)
 {
 #ifdef USE_FAKE_INTERFACE
     const QString &Service = QStringLiteral("org.deepin.dtk.InputDevices");
@@ -38,12 +37,6 @@ DInputDeviceManagerPrivate::~DInputDeviceManagerPrivate()
     delete m_touchPadInter;
     delete m_trackPointInter;
     delete m_wacomInter;
-}
-
-void DInputDeviceManagerPrivate::initialize()
-{
-    initializeDeviceInfos();
-    initializeSignals();
 }
 
 void DInputDeviceManagerPrivate::initializeDeviceInfos()
@@ -115,30 +108,10 @@ void DInputDeviceManagerPrivate::initializeDeviceInfos()
     }
 }
 
-void DInputDeviceManagerPrivate::initializeSignals()
+template <DeviceType deviceType> void DInputDeviceManager::handleDeviceChanged(const QString &deviceList)
 {
-    // initialize signals with dbus interface
-    connect(m_mouseInter,
-            &MouseInterface::DeviceListChanged,
-            this,
-            &DInputDeviceManagerPrivate::handleDeviceChanged<DeviceType::Mouse>);
-    connect(m_touchPadInter,
-            &TouchPadInterface::DeviceListChanged,
-            this,
-            &DInputDeviceManagerPrivate::handleDeviceChanged<DeviceType::TouchPad>);
-    connect(m_trackPointInter,
-            &TrackPointInterface::DeviceListChanged,
-            this,
-            &DInputDeviceManagerPrivate::handleDeviceChanged<DeviceType::TrackPoint>);
-    connect(m_wacomInter,
-            &WacomInterface::DeviceListChanged,
-            this,
-            &DInputDeviceManagerPrivate::handleDeviceChanged<DeviceType::Tablet>);
-}
-
-template <DeviceType deviceType> void DInputDeviceManagerPrivate::handleDeviceChanged(const QString &deviceList)
-{
-    auto devices = m_idMap[deviceType];
+    D_D(DInputDeviceManager);
+    auto devices = d->m_idMap[deviceType];
     DeviceInfo info;
     info.type = deviceType;
     QJsonParseError parseErr;
@@ -153,30 +126,32 @@ template <DeviceType deviceType> void DInputDeviceManagerPrivate::handleDeviceCh
             if (devices.contains(info.id)) {
                 devices.removeAll(info.id);
             } else {
-                addDevice(info);
+                d->addDevice(info);
             }
         }
     }
     foreach (const auto device, devices) {
-        removeDeviceById(device);
+        d->removeDeviceById(device);
     }
 }
 
 void DInputDeviceManagerPrivate::addDevice(const DeviceInfo &info)
 {
+    D_Q(DInputDeviceManager);
     if (!m_idMap[info.type].contains(info.id)) {
         m_deviceInfos.append(info);
         m_idMap[info.type].append(info.id);
-        Q_EMIT this->deviceAdded(info);
+        Q_EMIT q->deviceAdded(info);
     }
 }
 
 void DInputDeviceManagerPrivate::removeDevice(const DeviceInfo &info)
 {
+    D_Q(DInputDeviceManager);
     if (m_idMap[info.type].contains(info.id)) {
         m_deviceInfos.removeAll(info);
         m_idMap[info.type].removeAll(info.id);
-        Q_EMIT this->deviceRemoved(info);
+        Q_EMIT q->deviceRemoved(info);
     }
 }
 
@@ -192,19 +167,29 @@ void DInputDeviceManagerPrivate::removeDeviceById(quint32 id)
 
 DInputDeviceManager::DInputDeviceManager(QObject *parent)
     : QObject(parent)
-    , d_ptr(new DInputDeviceManagerPrivate(this))
+    , DTK_CORE_NAMESPACE::DObject(*new DInputDeviceManagerPrivate(this))
 {
-    Q_D(DInputDeviceManager);
-    connect(d, &DInputDeviceManagerPrivate::deviceAdded, this, &DInputDeviceManager::deviceAdded);
-    connect(d, &DInputDeviceManagerPrivate::deviceRemoved, this, &DInputDeviceManager::deviceRemoved);
-    d->initialize();
+    D_D(DInputDeviceManager);
+    connect(
+        d->m_mouseInter, &MouseInterface::DeviceListChanged, this, &DInputDeviceManager::handleDeviceChanged<DeviceType::Mouse>);
+    connect(d->m_touchPadInter,
+            &TouchPadInterface::DeviceListChanged,
+            this,
+            &DInputDeviceManager::handleDeviceChanged<DeviceType::TouchPad>);
+    connect(d->m_trackPointInter,
+            &TrackPointInterface::DeviceListChanged,
+            this,
+            &DInputDeviceManager::handleDeviceChanged<DeviceType::TrackPoint>);
+    connect(
+        d->m_wacomInter, &WacomInterface::DeviceListChanged, this, &DInputDeviceManager::handleDeviceChanged<DeviceType::Tablet>);
+    d->initializeDeviceInfos();
 }
 
 DInputDeviceManager::~DInputDeviceManager() = default;
 
 QList<DeviceInfo> DInputDeviceManager::deviceInfos() const
 {
-    Q_D(const DInputDeviceManager);
+    D_DC(DInputDeviceManager);
     return d->m_deviceInfos;
 }
 

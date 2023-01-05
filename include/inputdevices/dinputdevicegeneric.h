@@ -8,16 +8,18 @@
 #include "dtkdevice_global.h"
 
 #include <DExpected>
+#include <DObject>
+
 #include <QObject>
-#include <QScopedPointer>
 #include <QSharedPointer>
 
 #include "dtkinputdevices_types.h"
 
 DDEVICE_BEGIN_NAMESPACE
 using DCORE_NAMESPACE::DExpected;
+using DCORE_NAMESPACE::DObject;
 class DInputDeviceGenericPrivate;
-class DInputDeviceGeneric : public QObject
+class LIBDTKDEVICESHARED_EXPORT DInputDeviceGeneric : public QObject, public DObject
 {
     Q_OBJECT
     Q_PROPERTY(quint32 id READ id CONSTANT)
@@ -41,8 +43,8 @@ public Q_SLOTS:
     virtual DExpected<void> reset();
 
 protected:
-    explicit DInputDeviceGeneric(QObject *parent = nullptr);
-    DInputDeviceGeneric(const DeviceInfo &info, bool enabled = true);
+    explicit DInputDeviceGeneric(const DeviceInfo &info = DeviceInfoInitializer, bool enabled = true, QObject *parent = nullptr);
+    DInputDeviceGeneric(DInputDeviceGenericPrivate &dd, const DeviceInfo &info, bool enabled, QObject *parent);
     virtual void setId(quint32 id);
     virtual void setName(const QString &name);
     virtual void setType(DeviceType type);
@@ -51,8 +53,7 @@ protected:
 
 private:
     friend class DInputDeviceManager;
-    QScopedPointer<DInputDeviceGenericPrivate> d_ptr;
-    Q_DECLARE_PRIVATE(DInputDeviceGeneric)
+    D_DECLARE_PRIVATE(DInputDeviceGeneric)
 };
 
 DDEVICE_END_NAMESPACE

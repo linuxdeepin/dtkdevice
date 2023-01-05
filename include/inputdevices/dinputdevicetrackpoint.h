@@ -8,11 +8,10 @@
 #include "dtkdevice_global.h"
 #include <DExpected>
 #include <QObject>
-#include <QScopedPointer>
 DDEVICE_BEGIN_NAMESPACE
 using DCORE_NAMESPACE::DExpected;
 class DInputDeviceTrackPointPrivate;
-class DInputDeviceTrackPoint : public DInputDevicePointer
+class LIBDTKDEVICESHARED_EXPORT DInputDeviceTrackPoint : public DInputDevicePointer
 {
     Q_OBJECT
     Q_PROPERTY(bool middleButtonEnabled READ middleButtonEnabled WRITE setMiddleButtonEnabled NOTIFY middleButtonEnabledChanged)
@@ -64,13 +63,11 @@ public Q_SLOTS:
     DExpected<void> reset() override;
 
 protected:
-    explicit DInputDeviceTrackPoint(QObject *parent = nullptr);
-    DInputDeviceTrackPoint(const DeviceInfo &info, bool enabled = true);
+    DInputDeviceTrackPoint(const DeviceInfo &info = DeviceInfoInitializer, bool enabled = true, QObject *parent = nullptr);
 
 private:
     friend class DInputDeviceManager;
-    QScopedPointer<DInputDeviceTrackPointPrivate> d_ptr;
-    Q_DECLARE_PRIVATE(DInputDeviceTrackPoint)
+    D_DECLARE_PRIVATE(DInputDeviceTrackPoint)
 };
 DDEVICE_END_NAMESPACE
 #endif  // DINPUTDEVICETRACKPOINT_H

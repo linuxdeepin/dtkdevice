@@ -9,6 +9,8 @@
 #include "dtkinputdevices_types.h"
 
 #include <DExpected>
+#include <DObject>
+
 #include <QObject>
 #include <QSharedPointer>
 
@@ -16,9 +18,10 @@ using DInputKeyAction = DTK_DEVICE_NAMESPACE::KeyAction;
 using DInputKey = DTK_DEVICE_NAMESPACE::Key;
 DDEVICE_BEGIN_NAMESPACE
 using DCORE_NAMESPACE::DExpected;
+using DCORE_NAMESPACE::DObject;
 
 class DInputDeviceSettingPrivate;
-class DInputDeviceSetting : public QObject
+class LIBDTKDEVICESHARED_EXPORT DInputDeviceSetting : public QObject, public DObject
 {
     Q_OBJECT
     Q_PROPERTY(bool disableTouchPadWhileMouse READ disableTouchPadWhileMouse WRITE setDisableTouchPadWhileMouse NOTIFY
@@ -84,8 +87,7 @@ public Q_SLOTS:
 private:
     explicit DInputDeviceSetting(QObject *parent = nullptr);
     friend class DInputDeviceManager;
-    QScopedPointer<DInputDeviceSettingPrivate> d_ptr;
-    Q_DECLARE_PRIVATE(DInputDeviceSetting)
+    D_DECLARE_PRIVATE(DInputDeviceSetting)
 };
 DDEVICE_END_NAMESPACE
 

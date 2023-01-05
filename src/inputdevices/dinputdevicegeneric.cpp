@@ -7,53 +7,53 @@
 #include "dtkinputdevices_types.h"
 
 DDEVICE_BEGIN_NAMESPACE
+
 using DCORE_NAMESPACE::DError;
 using DCORE_NAMESPACE::DUnexpected;
 DInputDeviceGenericPrivate::DInputDeviceGenericPrivate(DInputDeviceGeneric *q)
-    : m_id(0xffffffff)
-    , m_name("Generic device")
-    , m_type(DeviceType::Generic)
+    : DObjectPrivate(q)
+    , m_info(DeviceInfoInitializer)
     , m_enabled(true)
-    , q_ptr(q)
 {
 }
 
-DInputDeviceGeneric::DInputDeviceGeneric(QObject *parent)
+DInputDeviceGeneric::DInputDeviceGeneric(DInputDeviceGenericPrivate &dd, const DeviceInfo &info, bool enabled, QObject *parent)
     : QObject(parent)
-    , d_ptr(new DInputDeviceGenericPrivate(this))
+    , DObject(dd)
 {
+    D_D(DInputDeviceGeneric);
+    d->m_info = info;
+    d->m_enabled = enabled;
 }
 
-DInputDeviceGeneric::DInputDeviceGeneric(const DeviceInfo &info, bool enabled)
-    : DInputDeviceGeneric()
+DInputDeviceGeneric::DInputDeviceGeneric(const DeviceInfo &info, bool enabled, QObject *parent)
+    : DInputDeviceGeneric(*new DInputDeviceGenericPrivate(this), info, enabled, parent)
 {
-    setDeviceInfo(info);
-    setEnabled(enabled);
 }
 
 DInputDeviceGeneric::~DInputDeviceGeneric() = default;
 
 quint32 DInputDeviceGeneric::id() const
 {
-    Q_D(const DInputDeviceGeneric);
-    return d->m_id;
+    D_DC(DInputDeviceGeneric);
+    return d->m_info.id;
 }
 
 QString DInputDeviceGeneric::name() const
 {
-    Q_D(const DInputDeviceGeneric);
-    return d->m_name;
+    D_DC(DInputDeviceGeneric);
+    return d->m_info.name;
 }
 
 DeviceType DInputDeviceGeneric::type() const
 {
-    Q_D(const DInputDeviceGeneric);
-    return d->m_type;
+    D_DC(DInputDeviceGeneric);
+    return d->m_info.type;
 }
 
 bool DInputDeviceGeneric::enabled() const
 {
-    Q_D(const DInputDeviceGeneric);
+    D_DC(DInputDeviceGeneric);
     return d->m_enabled;
 }
 
@@ -64,33 +64,32 @@ DExpected<void> DInputDeviceGeneric::reset()
 
 void DInputDeviceGeneric::setDeviceInfo(const DeviceInfo &info)
 {
-    setId(info.id);
-    setName(info.name);
-    setType(info.type);
+    D_D(DInputDeviceGeneric);
+    d->m_info = info;
 }
 
 void DInputDeviceGeneric::setEnabled(bool enabled)
 {
-    Q_D(DInputDeviceGeneric);
+    D_D(DInputDeviceGeneric);
     d->m_enabled = enabled;
     Q_EMIT this->enabledChanged(enabled);
 }
 
 void DInputDeviceGeneric::setId(quint32 id)
 {
-    Q_D(DInputDeviceGeneric);
-    d->m_id = id;
+    D_D(DInputDeviceGeneric);
+    d->m_info.id = id;
 }
 
 void DInputDeviceGeneric::setName(const QString &name)
 {
-    Q_D(DInputDeviceGeneric);
-    d->m_name = name;
+    D_D(DInputDeviceGeneric);
+    d->m_info.name = name;
 }
 
 void DInputDeviceGeneric::setType(DeviceType type)
 {
-    Q_D(DInputDeviceGeneric);
-    d->m_type = type;
+    D_D(DInputDeviceGeneric);
+    d->m_info.type = type;
 }
 DDEVICE_END_NAMESPACE
