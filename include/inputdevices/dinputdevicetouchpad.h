@@ -9,7 +9,6 @@
 
 #include <DExpected>
 #include <QObject>
-#include <QScopedPointer>
 
 #include "dinputdevicepointer.h"
 
@@ -17,7 +16,7 @@ DDEVICE_BEGIN_NAMESPACE
 
 using DCORE_NAMESPACE::DExpected;
 class DInputDeviceTouchPadPrivate;
-class DInputDeviceTouchPad : public DInputDevicePointer
+class LIBDTKDEVICESHARED_EXPORT DInputDeviceTouchPad : public DInputDevicePointer
 {
     Q_OBJECT
     Q_PROPERTY(bool disableWhileTyping READ disableWhileTyping WRITE setDisableWhileTyping NOTIFY disableWhileTypingChanged)
@@ -36,6 +35,7 @@ public:
     void setTapToClick(bool tapToClick);
 
     bool enabled() const override;
+    void setEnabled(bool enabled) override;
     bool leftHanded() const override;
     ScrollMethod scrollMethod() const override;
     AccelerationProfile accelerationProfile() const override;
@@ -55,13 +55,11 @@ Q_SIGNALS:
     void tapToClickChanged(bool tapToClick);
 
 protected:
-    explicit DInputDeviceTouchPad(QObject *parent = nullptr);
-    DInputDeviceTouchPad(const DeviceInfo &info, bool enabled = true);
+    explicit DInputDeviceTouchPad(const DeviceInfo &info = DeviceInfoInitializer, bool enabled = true, QObject *parent = nullptr);
 
 private:
     friend class DInputDeviceManager;
-    QScopedPointer<DInputDeviceTouchPadPrivate> d_ptr;
-    Q_DECLARE_PRIVATE(DInputDeviceTouchPad)
+    D_DECLARE_PRIVATE(DInputDeviceTouchPad)
 };
 
 DDEVICE_END_NAMESPACE

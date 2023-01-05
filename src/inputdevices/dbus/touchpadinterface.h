@@ -12,7 +12,7 @@
 DDEVICE_BEGIN_NAMESPACE
 
 using DCORE_NAMESPACE::DDBusInterface;
-class TouchPadInterface : public QObject
+class LIBDTKDEVICESHARED_EXPORT TouchPadInterface : public QObject
 {
     Q_OBJECT
 

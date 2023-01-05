@@ -4,18 +4,17 @@
 
 #ifndef DINPUTDEVICEKEYBOARD_P_H
 #define DINPUTDEVICEKEYBOARD_P_H
+#include "dinputdevicegeneric_p.h"
 #include "dinputdevicekeyboard.h"
 DDEVICE_BEGIN_NAMESPACE
-class DInputDeviceKeyboardPrivate : public QObject
+class LIBDTKDEVICESHARED_EXPORT DInputDeviceKeyboardPrivate : public DInputDeviceGenericPrivate
 {
-    Q_OBJECT
 public:
     DInputDeviceKeyboardPrivate(DInputDeviceKeyboard *q);
     ~DInputDeviceKeyboardPrivate() override;
 
 private:
-    DInputDeviceKeyboard *q_ptr;
-    Q_DECLARE_PUBLIC(DInputDeviceKeyboard)
+    D_DECLARE_PUBLIC(DInputDeviceKeyboard)
 };
 DDEVICE_END_NAMESPACE
 

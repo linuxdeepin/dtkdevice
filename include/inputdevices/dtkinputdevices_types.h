@@ -22,6 +22,8 @@ struct DeviceInfo
     friend QDebug operator<<(QDebug debug, const DeviceInfo &info);
 };
 
+extern const DeviceInfo DeviceInfoInitializer;
+
 enum class AccelerationProfile { Flat, Adaptive, Na };
 
 enum class Key { KeyUp, KeyDown };
@@ -30,7 +32,7 @@ enum class KeyAction { LeftClick, MiddleClick, RightClick, PageUp, PageDown };
 
 enum class ScrollMethod { NoScroll, ScrollTwoFinger, ScrollEdge, ScrollOnButtonDown };
 
-class EnumWrapper : public QObject
+class LIBDTKDEVICESHARED_EXPORT EnumWrapper : public QObject
 {
     Q_OBJECT
 public:

@@ -17,7 +17,7 @@ DDEVICE_BEGIN_NAMESPACE
 
 using DCORE_NAMESPACE::DExpected;
 class DInputDeviceMousePrivate;
-class DInputDeviceMouse : public DInputDevicePointer
+class LIBDTKDEVICESHARED_EXPORT DInputDeviceMouse : public DInputDevicePointer
 {
     Q_OBJECT
     Q_PROPERTY(bool naturalScroll READ naturalScroll WRITE setNaturalScroll NOTIFY naturalScrollChanged)
@@ -49,13 +49,11 @@ public Q_SLOTS:
     DExpected<void> reset() override;
 
 protected:
-    explicit DInputDeviceMouse(QObject *parent = nullptr);
-    DInputDeviceMouse(const DeviceInfo &info, bool enabled = true);
+    explicit DInputDeviceMouse(const DeviceInfo &info = DeviceInfoInitializer, bool enabled = true, QObject *parent = nullptr);
 
 private:
     friend class DInputDeviceManager;
-    QScopedPointer<DInputDeviceMousePrivate> d_ptr;
-    Q_DECLARE_PRIVATE(DInputDeviceMouse)
+    D_DECLARE_PRIVATE(DInputDeviceMouse)
 };
 
 DDEVICE_END_NAMESPACE

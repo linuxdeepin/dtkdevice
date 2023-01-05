@@ -10,7 +10,7 @@
 #include <QObject>
 DDEVICE_BEGIN_NAMESPACE
 using DCORE_NAMESPACE::DDBusInterface;
-class InputDevicesInterface : public QObject
+class LIBDTKDEVICESHARED_EXPORT InputDevicesInterface : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(quint32 WheelSpeed READ WheelSpeed WRITE SetWheelSpeed NOTIFY WheelSpeedChanged)

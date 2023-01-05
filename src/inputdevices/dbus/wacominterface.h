@@ -11,7 +11,7 @@
 
 DDEVICE_BEGIN_NAMESPACE
 using DCORE_NAMESPACE::DDBusInterface;
-class WacomInterface : public QObject
+class LIBDTKDEVICESHARED_EXPORT WacomInterface : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(bool CursorMode READ CursorMode WRITE SetCursorMode NOTIFY CursorModeChanged)

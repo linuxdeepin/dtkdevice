@@ -13,7 +13,7 @@
 DDEVICE_BEGIN_NAMESPACE
 using DCORE_NAMESPACE::DDBusInterface;
 
-class TrackPointInterface : public QObject
+class LIBDTKDEVICESHARED_EXPORT TrackPointInterface : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(bool Exist READ Exist NOTIFY ExistChanged)

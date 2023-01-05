@@ -9,6 +9,7 @@
 #include <gtest/gtest.h>
 
 #include "dinputdevicekeyboard.h"
+#include "dinputdevicemanager_p.h"
 #include "dinputdevicemouse.h"
 #include "dinputdevicetablet.h"
 #include "dinputdevicetouchpad.h"
@@ -29,9 +30,11 @@ public:
         wacomService = new WacomService;
         mouseService = new MouseService;
         manager = new DInputDeviceManager;
+        d_ptr = dynamic_cast<DInputDeviceManagerPrivate *>(qGetPtrHelper(manager->d_d_ptr));
     }
     static void TearDownTestCase()
     {
+        d_ptr = nullptr;
         delete manager;
         delete mouseService;
         delete touchPadService;
@@ -44,22 +47,24 @@ public:
         mouseService->m_trackPointAdaptor->Reset();
         touchPadService->Reset();
         wacomService->Reset();
-        manager->d_ptr->initialize();
+        d_ptr->initializeDeviceInfos();
     }
     static DInputDeviceManager *manager;
     static MouseService *mouseService;
     static TouchPadService *touchPadService;
     static WacomService *wacomService;
+    static DInputDeviceManagerPrivate *d_ptr;
 };
 
 DInputDeviceManager *TestDInputDeviceManager::manager = nullptr;
 MouseService *TestDInputDeviceManager::mouseService = nullptr;
 TouchPadService *TestDInputDeviceManager::touchPadService = nullptr;
 WacomService *TestDInputDeviceManager::wacomService = nullptr;
+DInputDeviceManagerPrivate *TestDInputDeviceManager::d_ptr = nullptr;
 
 TEST_F(TestDInputDeviceManager, deviceInfos)
 {
-    ASSERT_THAT(manager->d_ptr->m_deviceInfos, testing::SizeIs(4));
+    ASSERT_THAT(d_ptr->m_deviceInfos, testing::SizeIs(4));
     auto infos = manager->deviceInfos();
     EXPECT_THAT(infos, testing::SizeIs(4));
     const auto &info = infos[0];

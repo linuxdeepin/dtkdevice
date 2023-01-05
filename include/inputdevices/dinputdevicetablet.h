@@ -7,12 +7,11 @@
 #include "dinputdevicepointer.h"
 #include "dtkdevice_global.h"
 #include <DExpected>
-#include <QScopedPointer>
 
 DDEVICE_BEGIN_NAMESPACE
 using DCORE_NAMESPACE::DExpected;
 class DInputDeviceTabletPrivate;
-class DInputDeviceTablet : public DInputDevicePointer
+class LIBDTKDEVICESHARED_EXPORT DInputDeviceTablet : public DInputDevicePointer
 {
     Q_OBJECT
     Q_PROPERTY(bool cursorMode READ cursorMode WRITE setCursorMode NOTIFY cursorModeChanged)
@@ -38,13 +37,11 @@ public Q_SLOTS:
     DExpected<void> reset() override;
 
 protected:
-    explicit DInputDeviceTablet(QObject *parent = nullptr);
-    DInputDeviceTablet(const DeviceInfo &info, bool enabled = true);
+    DInputDeviceTablet(const DeviceInfo &info = DeviceInfoInitializer, bool enabled = true, QObject *parent = nullptr);
 
 private:
     friend class DInputDeviceManager;
-    QScopedPointer<DInputDeviceTabletPrivate> d_ptr;
-    Q_DECLARE_PRIVATE(DInputDeviceTablet);
+    D_DECLARE_PRIVATE(DInputDeviceTablet);
 };
 DDEVICE_END_NAMESPACE
 #endif  // DINPUTDEVICETABLET_H

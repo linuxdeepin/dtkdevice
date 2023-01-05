@@ -6,20 +6,17 @@
 
 #include "dtkdevice_global.h"
 
-#include <QObject>
-
+#include "dinputdevicegeneric_p.h"
+#include "dinputdevicepointer.h"
 DDEVICE_BEGIN_NAMESPACE
 
-class DInputDevicePointer;
-class DInputDevicePointerPrivate : public QObject
+class LIBDTKDEVICESHARED_EXPORT DInputDevicePointerPrivate : public DInputDeviceGenericPrivate
 {
-    Q_OBJECT
 public:
-    explicit DInputDevicePointerPrivate(DInputDevicePointer *q = nullptr);
+    explicit DInputDevicePointerPrivate(DInputDevicePointer *q);
 
 private:
-    DInputDevicePointer *q_ptr;
-    Q_DECLARE_PUBLIC(DInputDevicePointer)
+    D_DECLARE_PUBLIC(DInputDevicePointer)
 };
 
 DDEVICE_END_NAMESPACE

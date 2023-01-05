@@ -7,6 +7,9 @@
 #include "dtkinputdevices_converters.h"
 #include <QDebug>
 DDEVICE_BEGIN_NAMESPACE
+
+const DeviceInfo DeviceInfoInitializer = {.id = 0xffffffff, .name = "Generic device", .type = DeviceType::Generic};
+
 bool operator==(const DeviceInfo &lhs, const DeviceInfo &rhs)
 {
     return lhs.id == rhs.id && lhs.name == rhs.name && lhs.type == rhs.type;

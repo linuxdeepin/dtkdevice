@@ -11,7 +11,7 @@
 #include <QObject>
 DDEVICE_BEGIN_NAMESPACE
 using DCORE_NAMESPACE::DDBusInterface;
-class MouseInterface : public QObject
+class LIBDTKDEVICESHARED_EXPORT MouseInterface : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(

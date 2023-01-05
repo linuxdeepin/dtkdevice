@@ -8,7 +8,7 @@
 #include "dtkdevice_global.h"
 DDEVICE_BEGIN_NAMESPACE
 class DInputDeviceKeyboardPrivate;
-class DInputDeviceKeyboard : public DInputDeviceGeneric
+class LIBDTKDEVICESHARED_EXPORT DInputDeviceKeyboard : public DInputDeviceGeneric
 {
     Q_OBJECT
 
@@ -19,13 +19,11 @@ public Q_SLOTS:
     DExpected<void> reset() override;
 
 protected:
-    explicit DInputDeviceKeyboard(QObject *parent = nullptr);
-    DInputDeviceKeyboard(const DeviceInfo &info, bool enabled = true);
+    DInputDeviceKeyboard(const DeviceInfo &info = DeviceInfoInitializer, bool enabled = true, QObject *parent = nullptr);
 
 private:
     friend class DInputDeviceManager;
-    QScopedPointer<DInputDeviceKeyboardPrivate> d_ptr;
-    Q_DECLARE_PRIVATE(DInputDeviceKeyboard)
+    D_DECLARE_PRIVATE(DInputDeviceKeyboard)
 };
 
 DDEVICE_END_NAMESPACE

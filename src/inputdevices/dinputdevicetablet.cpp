@@ -2,14 +2,12 @@
 //
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
-#include "dinputdevicetablet.h"
 #include "dinputdevicetablet_p.h"
 DDEVICE_BEGIN_NAMESPACE
 using DCORE_NAMESPACE::DError;
 using DCORE_NAMESPACE::DUnexpected;
 DInputDeviceTabletPrivate::DInputDeviceTabletPrivate(DInputDeviceTablet *q)
-    : QObject(q)
-    , q_ptr(q)
+    : DInputDevicePointerPrivate(q)
 {
 #ifdef USE_FAKE_INTERFACE
     const QString &Service = QStringLiteral("org.deepin.dtk.InputDevices");
@@ -24,25 +22,18 @@ DInputDeviceTabletPrivate::~DInputDeviceTabletPrivate()
     delete m_wacomInter;
 }
 
-DInputDeviceTablet::DInputDeviceTablet(QObject *parent)
-    : DInputDevicePointer(parent)
-    , d_ptr(new DInputDeviceTabletPrivate(this))
-{
-    Q_D(DInputDeviceTablet);
-    connect(d->m_wacomInter, &WacomInterface::CursorModeChanged, this, &DInputDeviceTablet::cursorModeChanged);
-}
-
 DInputDeviceTablet::~DInputDeviceTablet() = default;
 
-DInputDeviceTablet::DInputDeviceTablet(const DeviceInfo &info, bool enabled)
-    : DInputDevicePointer(info, enabled)
-    , d_ptr(new DInputDeviceTabletPrivate(this))
+DInputDeviceTablet::DInputDeviceTablet(const DeviceInfo &info, bool enabled, QObject *parent)
+    : DInputDevicePointer(*new DInputDeviceTabletPrivate(this), info, enabled, parent)
 {
+    D_D(DInputDeviceTablet);
+    connect(d->m_wacomInter, &WacomInterface::CursorModeChanged, this, &DInputDeviceTablet::cursorModeChanged);
 }
 
 DExpected<void> DInputDeviceTablet::reset()
 {
-    Q_D(DInputDeviceTablet);
+    D_D(DInputDeviceTablet);
     auto result = d->m_wacomInter->Reset();
     result.waitForFinished();
     if (!result.isValid()) {
@@ -54,25 +45,25 @@ DExpected<void> DInputDeviceTablet::reset()
 
 bool DInputDeviceTablet::cursorMode() const
 {
-    Q_D(const DInputDeviceTablet);
+    D_DC(DInputDeviceTablet);
     return d->m_wacomInter->CursorMode();
 }
 
 void DInputDeviceTablet::setCursorMode(bool cursorMode)
 {
-    Q_D(DInputDeviceTablet);
+    D_D(DInputDeviceTablet);
     d->m_wacomInter->SetCursorMode(cursorMode);
 }
 
 bool DInputDeviceTablet::leftHanded() const
 {
-    Q_D(const DInputDeviceTablet);
+    D_DC(DInputDeviceTablet);
     return d->m_wacomInter->LeftHanded();
 }
 
 void DInputDeviceTablet::setLeftHanded(bool leftHanded)
 {
-    Q_D(DInputDeviceTablet);
+    D_D(DInputDeviceTablet);
     d->m_wacomInter->SetLeftHanded(leftHanded);
 }
 

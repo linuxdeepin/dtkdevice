@@ -9,7 +9,6 @@
 
 #include <DExpected>
 #include <QObject>
-#include <QScopedPointer>
 
 #include "dinputdevicegeneric.h"
 #include "dtkinputdevices_types.h"
@@ -17,7 +16,7 @@
 DDEVICE_BEGIN_NAMESPACE
 
 class DInputDevicePointerPrivate;
-class DInputDevicePointer : public DInputDeviceGeneric
+class LIBDTKDEVICESHARED_EXPORT DInputDevicePointer : public DInputDeviceGeneric
 {
     Q_OBJECT
     Q_PROPERTY(bool leftHanded READ leftHanded WRITE setLeftHanded NOTIFY leftHandedChanged)
@@ -46,12 +45,11 @@ Q_SIGNALS:
     void accelerationSpeedChanged(double speed);
 
 protected:
-    explicit DInputDevicePointer(QObject *parent = nullptr);
-    DInputDevicePointer(const DeviceInfo &info, bool enabled = true);
+    explicit DInputDevicePointer(const DeviceInfo &info = DeviceInfoInitializer, bool enabled = true, QObject *parent = nullptr);
+    DInputDevicePointer(DInputDevicePointerPrivate &dd, const DeviceInfo &info, bool enabled = true, QObject *parent = nullptr);
 
 private:
-    QScopedPointer<DInputDevicePointerPrivate> d_ptr;
-    Q_DECLARE_PRIVATE(DInputDevicePointer)
+    D_DECLARE_PRIVATE(DInputDevicePointer)
 };
 
 DDEVICE_END_NAMESPACE

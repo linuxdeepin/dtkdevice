@@ -13,8 +13,7 @@ using DCORE_NAMESPACE::DExpected;
 using DCORE_NAMESPACE::DUnexpected;
 
 DInputDeviceTouchPadPrivate::DInputDeviceTouchPadPrivate(DInputDeviceTouchPad *q)
-    : QObject(q)
-    , q_ptr(q)
+    : DInputDevicePointerPrivate(q)
 {
 #ifdef USE_FAKE_INTERFACE
     const QString &Service = QStringLiteral("org.deepin.dtk.InputDevices");
@@ -22,9 +21,6 @@ DInputDeviceTouchPadPrivate::DInputDeviceTouchPadPrivate(DInputDeviceTouchPad *q
     const QString &Service = QStringLiteral("com.deepin.daemon.InputDevices");
 #endif
     m_touchPadInter = new TouchPadInterface(Service);
-    connect(m_touchPadInter, &TouchPadInterface::DisableIfTypingChanged, q, &DInputDeviceTouchPad::disableWhileTypingChanged);
-    connect(m_touchPadInter, &TouchPadInterface::NaturalScrollChanged, q, &DInputDeviceTouchPad::naturalScrollChanged);
-    connect(m_touchPadInter, &TouchPadInterface::TapClickChanged, q, &DInputDeviceTouchPad::tapToClickChanged);
 }
 
 DInputDeviceTouchPadPrivate::~DInputDeviceTouchPadPrivate()
@@ -32,41 +28,40 @@ DInputDeviceTouchPadPrivate::~DInputDeviceTouchPadPrivate()
     delete m_touchPadInter;
 }
 
-DInputDeviceTouchPad::DInputDeviceTouchPad(QObject *parent)
-    : DInputDevicePointer(parent)
-    , d_ptr(new DInputDeviceTouchPadPrivate(this))
+DInputDeviceTouchPad::DInputDeviceTouchPad(const DeviceInfo &info, bool enabled, QObject *parent)
+    : DInputDevicePointer(*new DInputDeviceTouchPadPrivate(this), info, enabled, parent)
 {
-}
-
-DInputDeviceTouchPad::DInputDeviceTouchPad(const DeviceInfo &info, bool enabled)
-    : DInputDevicePointer(info, enabled)
-    , d_ptr(new DInputDeviceTouchPadPrivate(this))
-{
+    D_D(DInputDeviceTouchPad);
+    connect(
+        d->m_touchPadInter, &TouchPadInterface::DisableIfTypingChanged, this, &DInputDeviceTouchPad::disableWhileTypingChanged);
+    connect(d->m_touchPadInter, &TouchPadInterface::NaturalScrollChanged, this, &DInputDeviceTouchPad::naturalScrollChanged);
+    connect(d->m_touchPadInter, &TouchPadInterface::TapClickChanged, this, &DInputDeviceTouchPad::tapToClickChanged);
+    this->setEnabled(this->enabled());
 }
 
 DInputDeviceTouchPad::~DInputDeviceTouchPad() = default;
 
 bool DInputDeviceTouchPad::disableWhileTyping() const
 {
-    Q_D(const DInputDeviceTouchPad);
+    D_DC(DInputDeviceTouchPad);
     return d->m_touchPadInter->DisableIfTyping();
 }
 
 bool DInputDeviceTouchPad::naturalScroll() const
 {
-    Q_D(const DInputDeviceTouchPad);
+    D_DC(DInputDeviceTouchPad);
     return d->m_touchPadInter->NaturalScroll();
 }
 
 bool DInputDeviceTouchPad::tapToClick() const
 {
-    Q_D(const DInputDeviceTouchPad);
+    D_DC(DInputDeviceTouchPad);
     return d->m_touchPadInter->TapClick();
 }
 
 DExpected<void> DInputDeviceTouchPad::reset()
 {
-    Q_D(DInputDeviceTouchPad);
+    D_D(DInputDeviceTouchPad);
     auto result = d->m_touchPadInter->Reset();
     result.waitForFinished();
     if (!result.isValid()) {
@@ -78,51 +73,56 @@ DExpected<void> DInputDeviceTouchPad::reset()
 
 bool DInputDeviceTouchPad::enabled() const
 {
-    Q_D(const DInputDeviceTouchPad);
+    D_DC(DInputDeviceTouchPad);
     return d->m_touchPadInter->TPadEnable();
+}
+
+void DInputDeviceTouchPad::setEnabled(bool enabled)
+{
+    this->enable(enabled);
 }
 
 DExpected<void> DInputDeviceTouchPad::enable(bool enabled)
 {
-    DInputDeviceGeneric::setEnabled(enabled);
-    Q_D(DInputDeviceTouchPad);
+    D_D(DInputDeviceTouchPad);
     d->m_touchPadInter->SetTPadEnable(enabled);
+    DInputDeviceGeneric::setEnabled(enabled);
     return {};
 }
 
 void DInputDeviceTouchPad::setDisableWhileTyping(bool disabled)
 {
-    Q_D(DInputDeviceTouchPad);
+    D_D(DInputDeviceTouchPad);
     d->m_touchPadInter->SetDisableIfTyping(disabled);
 }
 
 void DInputDeviceTouchPad::setNaturalScroll(bool naturalScroll)
 {
-    Q_D(DInputDeviceTouchPad);
+    D_D(DInputDeviceTouchPad);
     d->m_touchPadInter->SetNaturalScroll(naturalScroll);
 }
 
 void DInputDeviceTouchPad::setTapToClick(bool tapToClick)
 {
-    Q_D(DInputDeviceTouchPad);
+    D_D(DInputDeviceTouchPad);
     d->m_touchPadInter->SetTapClick(tapToClick);
 }
 
 bool DInputDeviceTouchPad::leftHanded() const
 {
-    Q_D(const DInputDeviceTouchPad);
+    D_DC(DInputDeviceTouchPad);
     return d->m_touchPadInter->LeftHanded();
 }
 
 void DInputDeviceTouchPad::setLeftHanded(bool leftHanded)
 {
-    Q_D(DInputDeviceTouchPad);
+    D_D(DInputDeviceTouchPad);
     d->m_touchPadInter->SetLeftHanded(leftHanded);
 }
 
 ScrollMethod DInputDeviceTouchPad::scrollMethod() const
 {
-    Q_D(const DInputDeviceTouchPad);
+    D_DC(DInputDeviceTouchPad);
     if (d->m_touchPadInter->EdgeScroll()) {
         return ScrollMethod::ScrollEdge;
     } else if (d->m_touchPadInter->VertScroll()) {
@@ -134,7 +134,7 @@ ScrollMethod DInputDeviceTouchPad::scrollMethod() const
 
 void DInputDeviceTouchPad::setScrollMethod(ScrollMethod method)
 {
-    Q_D(DInputDeviceTouchPad);
+    D_D(DInputDeviceTouchPad);
     switch (method) {
         case ScrollMethod::ScrollEdge:
             d->m_touchPadInter->SetEdgeScroll(true);
