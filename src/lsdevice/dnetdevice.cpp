@@ -13,9 +13,12 @@
 #include <QMultiMap>
 #include <QMap>
 #include <QDebug>
+#include <QProcess>
 
 DDEVICE_BEGIN_NAMESPACE
+/*
 
+*/
 
 // using INetAddr = std::shared_ptr<struct inet_addr_t>;
 
@@ -33,6 +36,8 @@ public:
         m_listDeviceInfo.clear();
         scan_system(m_hwNode);
         addDeviceInfo(m_hwNode, m_listDeviceInfo);
+        updateAddr();
+        updateInfo();
     }
     hwNode                    m_hwNode ;
     QList< DlsDevice::DDeviceInfo >      m_listDeviceInfo;
@@ -40,8 +45,12 @@ public:
     Q_DECLARE_PUBLIC(DNetDevice)
 
 protected:
-    void update_addr();
-    // void update_netif_info();
+    void updateAddr();
+
+    void updateInfo();
+
+    QMultiMap < int, int > m_portNumberMap;
+    QMap < int, QString >    m_portStatus;
 
 private:
     DNetDevice *q_ptr = nullptr;
@@ -50,7 +59,35 @@ private:
     QMultiMap< int, INet6Addr > m_addrIpv6DB;
 };
 
-void DNetDevicePrivate::update_addr()
+void DNetDevicePrivate::updateInfo()
+{
+    QProcess process;
+    process.start("netstat", QStringList() << "-p");
+    process.waitForFinished(-1);
+    QString cacheinfo = process.readAllStandardOutput();
+    QStringList items = cacheinfo.split("\n", Qt::SkipEmptyParts);
+    process.close();
+
+    for (int i = 0; i < items.count(); ++i) {
+        if (!items.contains("[ ]")) {
+            continue;
+        } else {
+            QStringList words = items[i].split("  ", Qt::SkipEmptyParts);
+            QRegExp reg("([0-9]{1,})/(\\s\\S*)");
+            if (words.size() == 8 && reg.exactMatch(words[6]))  {                
+                int  pid = reg.cap(1).toInt();
+                QString  ProgramName = reg.cap(2);
+                QString state = words[4];
+                int INode = words[5].toInt();
+
+                m_portNumberMap.insert(pid,  INode);  //pid  , 端口信息
+                m_portStatus.insert(INode,  state);
+            }
+        }
+    }
+}
+
+void DNetDevicePrivate::updateAddr()
 {
     AddrIterator iter = m_netlink->addrIterator();
     m_addrIpv4DB.clear();
@@ -254,23 +291,21 @@ QString DNetDevice::status(int index)
 DNetDevice::DInetAddr4 DNetDevice::inetAddr4(int index)
 {
     Q_D(DNetDevice);
-    if (d->m_addrIpv4DB.contains(index)){
+    if (d->m_addrIpv4DB.contains(index)) {
         QList< INet4Addr > values = d->m_addrIpv4DB.values(index);
         return *values.at(0);
-    }
-    else
+    } else
         return DInetAddr4();
 }
 
 DNetDevice::DInetAddr6 DNetDevice::inetAddr6(int index)
 {
     Q_D(DNetDevice);
-    if (d->m_addrIpv6DB.contains(index)){
+    if (d->m_addrIpv6DB.contains(index)) {
         QList< INet6Addr > values = d->m_addrIpv6DB.values(index);
         return *values.at(0);
-    }
-    else
-    return DInetAddr6();
+    } else
+        return DInetAddr6();
 }
 
 DNetDevice::DNetifInfo DNetDevice::netifInfo(int index)
@@ -282,7 +317,7 @@ DNetDevice::DNetifInfo DNetDevice::netifInfo(int index)
 
         QString line =  d->m_listDeviceInfo[index].deviceInfoLstMap.value("proc_net_dev_data");
         if (!line.isNull()) {
-            QStringList deviceInfo = line.split(" ", QString::SkipEmptyParts);
+            QStringList deviceInfo = line.split(" ", Qt::SkipEmptyParts);
             if (deviceInfo.size() > 16) { //1-17
                 result.rxBytes      =   deviceInfo[1].toULongLong();     // total bytes received
                 result.rxPackets    =   deviceInfo[2].toULongLong();   // total packets received
@@ -307,13 +342,22 @@ DNetDevice::DNetifInfo DNetDevice::netifInfo(int index)
 
 QString DNetDevice::portStatus(int index, int port)
 {
+    Q_D(DNetDevice);
+    if (index < d->m_listDeviceInfo.count())
+        if (d->m_portStatus.contains(port)) {
+            return d->m_portStatus.value(port);
+        }
     return QString();
 }
 
 QList<int> DNetDevice::applicationPorts(int pid)
 {
+    Q_D(DNetDevice);
+    if (d->m_portNumberMap.contains(pid)) {
+        QList< int > values = d->m_portNumberMap.values(pid);
+        return values;
+    }
     return QList<int>();
 }
-
 
 DDEVICE_END_NAMESPACE
