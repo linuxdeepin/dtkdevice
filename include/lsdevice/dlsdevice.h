@@ -73,18 +73,14 @@ public:
     ~DlsDevice();
 
     QList< DDeviceInfo >  devicesInfosAll();
-
     QStringList  deviceAttris(DevClass etype);
     QList< DDeviceInfo > deviceInfo(DevClass etype);
     QList< DDeviceInfo >  deviceInfo(DevClass etype, const int idex);
-
     int devicesCount() ;
     int devicesCount(DevClass devclass);
     double updateSystemCpuUsage();
     QMap<QString, int> CpuStat();
     double getCpuUsage();
-
-
     QList< DDeviceInfo >  deviceCPU();
     QList< DDeviceInfo >  deviceStorage();
     QList< DDeviceInfo >  deviceGPU();

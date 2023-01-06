@@ -22,7 +22,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <unistd.h>
-
+#include <string.h>
 #include <dirent.h>
 
 #define MAX_NAME_LEN 128

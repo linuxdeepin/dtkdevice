@@ -4,10 +4,7 @@
 #include "dprocessdevice.h"
 #include "common.h"
 #include "osutils.h"
-// #include "scan.h"
-// #include "hw.h"
-// #include "processinfo.h"
-
+#include "packet.h"
 #include <QMap>
 #include <QList>
 #include <QDebug>
@@ -36,6 +33,7 @@ using namespace common;
 using namespace common::error;
 using namespace common::alloc;
 using namespace common::init;
+using namespace core::system;
 
 
 DDEVICE_BEGIN_NAMESPACE
@@ -50,6 +48,21 @@ struct processInfo {
     DProcessDevice::DProcessNetworkInfo networkInfo;  //void NetInfo::resdNetInfo()
     DProcessDevice::DProcessStatus ProcessStatus;
 };
+
+/**
+ * @brief Network interface socket io stat structure
+ */
+struct sock_io_stat_t {
+    ino_t ino; // socket inode
+    qulonglong rx_bytes; // received bytes
+    qulonglong rx_packets; // received packets
+    qulonglong tx_bytes; // sent bytes
+    qulonglong tx_packets; // sent packets
+};
+// socket io stat typedef
+using SockIOStat = QSharedPointer<struct sock_io_stat_t>;
+using PacketPayload      = QSharedPointer<struct packet_payload_t>;
+using PacketPayloadQueue = QQueue<PacketPayload>;
 
 class DProcessDevicePrivate
 {
@@ -104,6 +117,8 @@ public:
     bool  readStatm(pid_t pid);
     bool  readIO(pid_t pid);
     bool  readCmdline(pid_t pid);
+    void  readSockInodes(pid_t pid);
+    void handleNetData(pid_t pid);
 
     QList<pid_t> m_allPids;
 
@@ -115,6 +130,27 @@ public:
     QMap< pid_t, DProcessDevice::DProcessNetworkInfo > m_networkInfoMap;  //void NetInfo::resdNetInfo()
     QMap< pid_t, DProcessDevice::DProcessStatus > m_ProcessStatusMap;
 
+    /**
+     * @brief Get socket io stat data with specified inode (thread safe accessor)
+     * @param ino Socket inode
+     * @param stat Socket io stat data
+     * @return Return true if stat data found in stat cache, otherwise return false
+     */
+    inline bool getSockIOStatByInode(ino_t ino, SockIOStat &stat)
+    {
+        bool ok = false;
+
+        // check stat data existence
+        if (m_sockIOStatMap.contains(ino)) {
+            stat = m_sockIOStatMap[ino];
+            // remove stat data from cache
+            m_sockIOStatMap.remove(ino);
+            ok = true;
+        }
+
+        return ok;
+    }
+
 private:
     DProcessDevice *q_ptr = nullptr;
 
@@ -125,6 +161,13 @@ private:
     DProcessDevice::DProcessIOInfo m_ioInfo;
     DProcessDevice::DProcessNetworkInfo m_networkInfo;  //void NetInfo::resdNetInfo()
     DProcessDevice::DProcessStatus m_ProcessStatus;
+    QList<ino_t> m_sockInodesLst;
+    PacketPayloadQueue  m_localPendingPackets   {}; // local cache
+    // pending packet queue
+    PacketPayloadQueue  m_pendingPackets        {};
+
+    // socket inode to io stat mapping
+    QMap<ino_t, SockIOStat> m_sockIOStatMap     {};
 };
 
 
@@ -162,10 +205,103 @@ bool  DProcessDevicePrivate::groupName(gid_t gid)
     return !ok;
 }
 
+void DProcessDevicePrivate::handleNetData(pid_t pid)
+{
+    readSockInodes(pid);
+
+    // append pending queue packets to local queue, so we dont lock the mutex for too long
+    m_localPendingPackets.append(m_pendingPackets);
+    m_pendingPackets.clear();
+    // process payload queue
+    while (!m_localPendingPackets.isEmpty()) {
+        auto payload = m_localPendingPackets.dequeue();
+
+        // sum up sock io stat by inode
+        auto ino = payload->ino;
+        if (m_sockIOStatMap.contains(ino)) {
+            // sum up sock io stat if already exists with same inode stat
+            auto &hist = m_sockIOStatMap[ino];
+            if (payload->direction == kInboundPacket) {
+                hist->rx_bytes += payload->payload;
+                hist->rx_packets++;
+            } else if (payload->direction == kOutboundPacket) {
+                hist->tx_bytes += (payload->payload * 2);
+                hist->tx_packets++;
+            }
+        } else {
+            // add new sock io stat if sock ino no exists in cache before
+            auto stat = QSharedPointer<struct sock_io_stat_t>::create();
+            stat->ino = payload->ino;
+            if (payload->direction == kInboundPacket) {
+                stat->rx_bytes = payload->payload;
+                stat->rx_packets++;
+            } else if (payload->direction == kOutboundPacket) {
+                stat->tx_bytes = payload->payload;
+                stat->tx_packets++;
+            }
+            m_sockIOStatMap[stat->ino] = stat;
+        }
+    }
+
+}
+
+// read /proc/[pid]/fd
+void DProcessDevicePrivate::readSockInodes(pid_t pid)
+{
+    struct dirent *dp;
+    char path[128], fdp[256 + 32];
+    struct stat sbuf;
+
+    sprintf(path, PROC_FD_PATH, pid);
+
+    errno = 0;
+    // open /proc/[pid]/fd dir
+    uDir dir(opendir(path));
+    if (!dir) {
+        print_errno(errno, QString("open %1 failed").arg(path));
+        return;
+    }
+
+    // enumerate each entry
+    while ((dp = readdir(dir.get()))) {
+        // only if entry name starts with a digit
+        if (isdigit(dp->d_name[0])) {
+            // open /proc/[pid]/fd/[fd]
+            sprintf(fdp, PROC_FD_NAME_PATH, pid, dp->d_name);
+            memset(&sbuf, 0, sizeof(struct stat));
+            if (!stat(fdp, &sbuf)) {
+                // get inode if it's a socket descriptor
+                if (S_ISSOCK(sbuf.st_mode)) {
+                    m_sockInodesLst << sbuf.st_ino;
+                }
+            } // ::if(stat)
+        } // ::if(isdigit)
+    } // ::while(readdir)
+    if (errno) {
+        print_errno(errno, QString("read %1 failed").arg(path));
+    }
+
+    qulonglong sum_recv = 0;
+    qulonglong sum_send = 0;
+
+    for (int i = 0; i < m_sockInodesLst.size(); ++i) {
+        SockIOStat sockIOStat;
+        bool result = getSockIOStatByInode(m_sockInodesLst[i], sockIOStat);
+        if (result) {
+            sum_recv += sockIOStat->rx_bytes;
+            sum_send += sockIOStat->tx_bytes;
+        }
+    }
+
+    DProcessDevice::DProcessNetworkInfo   NetworkInfo;
+    NetworkInfo.recvBytes = sum_recv;
+    NetworkInfo.sentBytes = sum_send;
+    m_networkInfoMap.insert(pid, NetworkInfo);
+}
+
 // read /proc/[pid]/stat
 bool DProcessDevicePrivate::readStat(pid_t pid)
 {
-
     bool ok {true};
     char path[256];
     QByteArray buf;
@@ -182,7 +318,6 @@ bool DProcessDevicePrivate::readStat(pid_t pid)
         print_errno(errno, QString("open %1 failed").arg(path));
         return !ok;
     }
-
     // read data
     sz = read(fd, buf.data(), 1024);
     close(fd);
@@ -284,7 +419,6 @@ bool DProcessDevicePrivate::readStatus(pid_t pid)
     }
     return ok;
 }
-
 
 //------------readCmdline()
 bool DProcessDevicePrivate::readCmdline(pid_t pid)
@@ -423,8 +557,6 @@ bool DProcessDevicePrivate::readStatm(pid_t pid)
     }
     return ok;
 }
-
-
 
 // read /proc/[pid]/environ
 bool DProcessDevicePrivate::readEnviron(pid_t pid)
