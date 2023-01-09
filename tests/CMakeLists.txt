@@ -27,6 +27,8 @@ target_include_directories(${BIN_NAME} PRIVATE
     "${PROJECT_SOURCE_DIR}/src/inputdevices/dbus"
     "${PROJECT_SOURCE_DIR}/src/lsdevice"
     "${CMAKE_CURRENT_LIST_DIR}/inputdevices/fakedbus"
+    "${CMAKE_CURRENT_LIST_DIR}/3rdparty/cpp-stub"
+    "${CMAKE_CURRENT_LIST_DIR}/3rdparty/stub-ext"
 )
 
 target_link_libraries(${BIN_NAME} PRIVATE
