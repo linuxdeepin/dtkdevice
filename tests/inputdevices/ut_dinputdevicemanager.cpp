@@ -64,6 +64,7 @@ DInputDeviceManagerPrivate *TestDInputDeviceManager::d_ptr = nullptr;
 
 TEST_F(TestDInputDeviceManager, deviceInfos)
 {
+    ASSERT_NE(nullptr, d_ptr);
     ASSERT_THAT(d_ptr->m_deviceInfos, testing::SizeIs(4));
     auto infos = manager->deviceInfos();
     EXPECT_THAT(infos, testing::SizeIs(4));
