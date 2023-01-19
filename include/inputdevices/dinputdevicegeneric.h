@@ -45,11 +45,11 @@ public Q_SLOTS:
 protected:
     explicit DInputDeviceGeneric(const DeviceInfo &info = DeviceInfoInitializer, bool enabled = true, QObject *parent = nullptr);
     DInputDeviceGeneric(DInputDeviceGenericPrivate &dd, const DeviceInfo &info, bool enabled, QObject *parent);
-    virtual void setId(quint32 id);
-    virtual void setName(const QString &name);
-    virtual void setType(DeviceType type);
-    virtual void setEnabled(bool enabled);
-    virtual void setDeviceInfo(const DeviceInfo &info);
+    void setId(quint32 id);
+    void setName(const QString &name);
+    void setType(DeviceType type);
+    void setEnabled(bool enabled);
+    void setDeviceInfo(const DeviceInfo &info);
 
 private:
     friend class DInputDeviceManager;
