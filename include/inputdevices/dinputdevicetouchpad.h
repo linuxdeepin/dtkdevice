@@ -35,7 +35,6 @@ public:
     void setTapToClick(bool tapToClick);
 
     bool enabled() const override;
-    void setEnabled(bool enabled) override;
     bool leftHanded() const override;
     ScrollMethod scrollMethod() const override;
     AccelerationProfile accelerationProfile() const override;

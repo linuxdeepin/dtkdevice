@@ -77,11 +77,6 @@ bool DInputDeviceTouchPad::enabled() const
     return d->m_touchPadInter->TPadEnable();
 }
 
-void DInputDeviceTouchPad::setEnabled(bool enabled)
-{
-    this->enable(enabled);
-}
-
 DExpected<void> DInputDeviceTouchPad::enable(bool enabled)
 {
     D_D(DInputDeviceTouchPad);
