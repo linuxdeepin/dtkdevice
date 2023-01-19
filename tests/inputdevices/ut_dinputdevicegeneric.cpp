@@ -30,24 +30,28 @@ DInputDeviceGenericPrivate *TestDInputDeviceGeneric::d_ptr = nullptr;
 
 TEST_F(TestDInputDeviceGeneric, id)
 {
+    ASSERT_NE(nullptr, d_ptr);
     d_ptr->m_info.id = 10;
     EXPECT_EQ(10, device->id());
 }
 
 TEST_F(TestDInputDeviceGeneric, name)
 {
+    ASSERT_NE(nullptr, d_ptr);
     d_ptr->m_info.name = "Test";
     EXPECT_EQ("Test", device->name());
 }
 
 TEST_F(TestDInputDeviceGeneric, type)
 {
+    ASSERT_NE(nullptr, d_ptr);
     d_ptr->m_info.type = DeviceType::Mouse;
     EXPECT_EQ(DeviceType::Mouse, device->type());
 }
 
 TEST_F(TestDInputDeviceGeneric, enabled)
 {
+    ASSERT_NE(nullptr, d_ptr);
     d_ptr->m_enabled = true;
     EXPECT_EQ(true, device->enabled());
     d_ptr->m_enabled = false;
@@ -66,6 +70,7 @@ TEST_F(TestDInputDeviceGeneric, setDeviceInfo)
 {
     DeviceInfo info{100, "test", DeviceType::Keyboard};
     device->setDeviceInfo(info);
+    ASSERT_NE(nullptr, d_ptr);
     EXPECT_EQ(100, d_ptr->m_info.id);
     EXPECT_EQ("test", d_ptr->m_info.name);
     EXPECT_EQ(DeviceType::Keyboard, d_ptr->m_info.type);
@@ -73,6 +78,7 @@ TEST_F(TestDInputDeviceGeneric, setDeviceInfo)
 
 TEST_F(TestDInputDeviceGeneric, setEnabled)
 {
+    ASSERT_NE(nullptr, d_ptr);
     d_ptr->m_enabled = false;
     device->setEnabled(true);
     EXPECT_EQ(true, d_ptr->m_enabled);
@@ -80,6 +86,7 @@ TEST_F(TestDInputDeviceGeneric, setEnabled)
 
 TEST_F(TestDInputDeviceGeneric, setId)
 {
+    ASSERT_NE(nullptr, d_ptr);
     d_ptr->m_info.id = 0;
     device->setId(12345);
     EXPECT_EQ(12345, d_ptr->m_info.id);
@@ -87,6 +94,7 @@ TEST_F(TestDInputDeviceGeneric, setId)
 
 TEST_F(TestDInputDeviceGeneric, setName)
 {
+    ASSERT_NE(nullptr, d_ptr);
     d_ptr->m_info.name = "";
     device->setName("Test");
     EXPECT_EQ("Test", d_ptr->m_info.name);
@@ -94,6 +102,7 @@ TEST_F(TestDInputDeviceGeneric, setName)
 
 TEST_F(TestDInputDeviceGeneric, setType)
 {
+    ASSERT_NE(nullptr, d_ptr);
     d_ptr->m_info.type = DeviceType::Generic;
     device->setType(DeviceType::Mouse);
     EXPECT_EQ(DeviceType::Mouse, d_ptr->m_info.type);
