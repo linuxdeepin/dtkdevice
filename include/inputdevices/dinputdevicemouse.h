@@ -9,7 +9,6 @@
 
 #include <DExpected>
 #include <QObject>
-#include <QScopedPointer>
 
 #include "dinputdevicepointer.h"
 

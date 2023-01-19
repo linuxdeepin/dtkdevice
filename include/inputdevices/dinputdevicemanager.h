@@ -9,7 +9,6 @@
 #include <DExpected>
 #include <DObject>
 #include <QObject>
-#include <QScopedPointer>
 
 #include "dtkinputdevices_types.h"
 
@@ -22,9 +21,9 @@ using DInputSettingPtr = QSharedPointer<DTK_DEVICE_NAMESPACE::DInputDeviceSettin
 using DInputDeviceInfoList = QList<DTK_DEVICE_NAMESPACE::DeviceInfo>;
 DDEVICE_BEGIN_NAMESPACE
 using DCORE_NAMESPACE::DExpected;
-
+using DCORE_NAMESPACE::DObject;
 class DInputDeviceManagerPrivate;
-class LIBDTKDEVICESHARED_EXPORT DInputDeviceManager : public QObject, public DTK_CORE_NAMESPACE::DObject
+class LIBDTKDEVICESHARED_EXPORT DInputDeviceManager : public QObject, public DObject
 {
     Q_OBJECT
     Q_PROPERTY(DInputDeviceInfoList deviceInfos READ deviceInfos)
