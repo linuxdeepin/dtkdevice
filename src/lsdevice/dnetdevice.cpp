@@ -25,6 +25,12 @@ DDEVICE_BEGIN_NAMESPACE
 using INet4Addr = std::shared_ptr<  DNetDevice::DInetAddr4 >;
 using INet6Addr = std::shared_ptr<  DNetDevice::DInetAddr6 >;
 
+#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
+        auto behavior = Qt::SkipEmptyParts;
+#else
+        auto behavior = QString::SkipEmptyParts;
+#endif
+
 class DNetDevicePrivate
 {
 public:
@@ -65,14 +71,14 @@ void DNetDevicePrivate::updateInfo()
     process.start("netstat", QStringList() << "-p");
     process.waitForFinished(-1);
     QString cacheinfo = process.readAllStandardOutput();
-    QStringList items = cacheinfo.split("\n", Qt::SkipEmptyParts);
+    QStringList items = cacheinfo.split("\n", behavior);
     process.close();
 
     for (int i = 0; i < items.count(); ++i) {
         if (!items.contains("[ ]")) {
             continue;
         } else {
-            QStringList words = items[i].split("  ", Qt::SkipEmptyParts);
+            QStringList words = items[i].split("  ", behavior);  //make sure  double space
             QRegExp reg("([0-9]{1,})/(\\s\\S*)");
             if (words.size() == 8 && reg.exactMatch(words[6]))  {                
                 int  pid = reg.cap(1).toInt();
@@ -317,7 +323,7 @@ DNetDevice::DNetifInfo DNetDevice::netifInfo(int index)
 
         QString line =  d->m_listDeviceInfo[index].deviceInfoLstMap.value("proc_net_dev_data");
         if (!line.isNull()) {
-            QStringList deviceInfo = line.split(" ", Qt::SkipEmptyParts);
+            QStringList deviceInfo = line.split(" ", behavior);
             if (deviceInfo.size() > 16) { //1-17
                 result.rxBytes      =   deviceInfo[1].toULongLong();     // total bytes received
                 result.rxPackets    =   deviceInfo[2].toULongLong();   // total packets received
