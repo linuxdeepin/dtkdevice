@@ -12,7 +12,7 @@
 #include <errno.h>
 #include <unistd.h>
 #include <dirent.h>
-#include <memory.h>
+#include <memory>
 
 #define PROC_PATH_MEM "/proc/meminfo"
 
