@@ -46,8 +46,8 @@ class DMemoryDevicePrivate
 {
 public:
     explicit DMemoryDevicePrivate(DMemoryDevice *parent)
-        : q_ptr(parent)
-        , m_hwNode("computer", hw::sys_tem)
+        : m_hwNode("computer", hw::sys_tem)
+        , q_ptr(parent)
     {
         m_listDeviceInfo.clear();
         scan_system(m_hwNode);
@@ -84,21 +84,21 @@ private:
 
 void DMemoryDevicePrivate::addMemInfo()
 {
-    unsigned long long mem_total_kb; // MemTotal
-    unsigned long long mem_free_kb; // MemFree
-    unsigned long long mem_avail_kb; // MemAvailable
-    unsigned long long buffers_kb; // Buffers
-    unsigned long long cached_kb; // Cached
-    unsigned long long active_kb; // Active
-    unsigned long long inactive_kb; // Inactive
+    unsigned long long mem_total_kb = 0; // MemTotal
+    unsigned long long mem_free_kb = 0; // MemFree
+    unsigned long long mem_avail_kb = 0; // MemAvailable
+    unsigned long long buffers_kb = 0; // Buffers
+    unsigned long long cached_kb = 0; // Cached
+    unsigned long long active_kb = 0; // Active
+    unsigned long long inactive_kb = 0; // Inactive
 
-    unsigned long long swap_total_kb; // SwapTotal
-    unsigned long long swap_free_kb; // SwapFree
-    unsigned long long swap_cached_kb; // SwapCached
-    unsigned long long shmem_kb; // Shared
-    unsigned long long slab_kb; // Slab
-    unsigned long long dirty_kb; // Dirty
-    unsigned long long mapped_kb; // Mapped
+    unsigned long long swap_total_kb = 0; // SwapTotal
+    unsigned long long swap_free_kb = 0; // SwapFree
+    unsigned long long swap_cached_kb = 0; // SwapCached
+    unsigned long long shmem_kb = 0; // Shared
+    unsigned long long slab_kb = 0; // Slab
+    unsigned long long dirty_kb = 0; // Dirty
+    unsigned long long mapped_kb = 0; // Mapped
 
     FILE *fp;
     uFile ufp;
@@ -107,49 +107,48 @@ void DMemoryDevicePrivate::addMemInfo()
 
     if ((fp = fopen(PROC_PATH_MEM, "r"))) {
         ufp.reset(fp);
-
-        int nr = 0;
-
         while (fgets(line.data(), BUFLEN, fp)) {
             QString meminfo = line;
 
             QStringList meminfos = meminfo.split(' ', D_SPLIT_BEHAVIOR);
             if (meminfo.startsWith("MemTotal:") && 3 == meminfos.count())
-                mem_total_kb = meminfos.value(1).toInt();
+                mem_total_kb = meminfos.value(1).toULongLong();
             else if (meminfo.startsWith("MemFree:") && 3 == meminfos.count())
-                mem_free_kb = meminfos.value(1).toInt();
+                mem_free_kb = meminfos.value(1).toULongLong();
             else if (meminfo.startsWith("MemAvailable:") && 3 == meminfos.count())
-                mem_avail_kb = meminfos.value(1).toInt();
+                mem_avail_kb = meminfos.value(1).toULongLong();
             else if (meminfo.startsWith("Buffers:") && 3 == meminfos.count())
-                buffers_kb = meminfos.value(1).toInt();
+                buffers_kb = meminfos.value(1).toULongLong();
             else if (meminfo.startsWith("Cached:") && 3 == meminfos.count())
-                cached_kb = meminfos.value(1).toInt();
+                cached_kb = meminfos.value(1).toULongLong();
             else if (meminfo.startsWith("SwapCached:") && 3 == meminfos.count())
-                swap_cached_kb = meminfos.value(1).toInt();
+                swap_cached_kb = meminfos.value(1).toULongLong();
             else if (meminfo.startsWith("Active:") && 3 == meminfos.count())
-                active_kb = meminfos.value(1).toInt();
+                active_kb = meminfos.value(1).toULongLong();
             else if (meminfo.startsWith("Inactive:") && 3 == meminfos.count())
-                inactive_kb = meminfos.value(1).toInt();
+                inactive_kb = meminfos.value(1).toULongLong();
 
             else if (meminfo.startsWith("SwapTotal:") && 3 == meminfos.count())
-                swap_total_kb = meminfos.value(1).toInt();
+                swap_total_kb = meminfos.value(1).toULongLong();
             else if (meminfo.startsWith("SwapFree:") && 3 == meminfos.count())
-                swap_free_kb = meminfos.value(1).toInt();
+                swap_free_kb = meminfos.value(1).toULongLong();
             else if (meminfo.startsWith("Dirty:") && 3 == meminfos.count())
-                dirty_kb = meminfos.value(1).toInt();
+                dirty_kb = meminfos.value(1).toULongLong();
             else if (meminfo.startsWith("Shmem:") && 3 == meminfos.count())
-                shmem_kb = meminfos.value(1).toInt();
+                shmem_kb = meminfos.value(1).toULongLong();
 
             else if (meminfo.startsWith("Slab:") && 3 == meminfos.count())
-                slab_kb = meminfos.value(1).toInt();
+                slab_kb = meminfos.value(1).toULongLong();
             else if (meminfo.startsWith("Mapped:") && 3 == meminfos.count())
-                mapped_kb = meminfos.value(1).toInt();
+                mapped_kb = meminfos.value(1).toULongLong();
         } // ::while(fgets)
 
         if (ferror(fp)) {
             print_errno(errno, QString("read %1 failed").arg(PROC_PATH_MEM));
         }
     }
+    Q_UNUSED(mem_total_kb);
+    Q_UNUSED(mem_free_kb);
     m_swapSize    = QString::number(swap_total_kb);
     m_available   = QString::number(mem_avail_kb);
     m_buffers     = QString::number(buffers_kb);
@@ -208,7 +207,7 @@ void DMemoryDevicePrivate::addDeviceInfo(hwNode &node, QList<DlsDevice::DDeviceI
     if (hw::ddr == node.getClass())
         infoLst.append(entry);
     for (int i = 0; i < node.countChildren(); i++) {
-        addDeviceInfo(*node.getChild(i), infoLst);
+        addDeviceInfo(*node.getChild(uint(i)), infoLst);
     }
 }
 
@@ -225,7 +224,7 @@ DMemoryDevice::~DMemoryDevice()
 int DMemoryDevice::count()
 {
     Q_D(DMemoryDevice);
-    return  d->m_listDeviceInfo.count();
+    return int(d->m_listDeviceInfo.count());
 }
 
 QString DMemoryDevice::vendor(int index)
@@ -246,12 +245,12 @@ QString DMemoryDevice::model(int index)
         return QString();
 }
 
-QString DMemoryDevice::totalWidth(int index)
+QString DMemoryDevice::totalWidth(int /*index*/)
 {
     return QString();
 }
 
-QString DMemoryDevice::dataWidth(int index)
+QString DMemoryDevice::dataWidth(int /*index*/)
 {
     return QString();
 }
