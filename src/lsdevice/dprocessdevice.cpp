@@ -83,7 +83,6 @@ public:
             processInfo info;
             info.pid = pid;
             info.baseInfo.pid = pid;
-            DProcessDevice::DProcessStatus tmpStatus;
 
             if (bStat || bStatus) {
                 info.ProcessStatus = m_ProcessStatus;

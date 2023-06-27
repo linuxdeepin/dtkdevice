@@ -30,9 +30,9 @@ class DNetDevicePrivate
 {
 public:
     explicit DNetDevicePrivate(DNetDevice *parent)
-        : q_ptr(parent)
+        : m_hwNode("computer", hw::sys_tem)
+        , q_ptr(parent)
         , m_netlink(new Netlink())
-        , m_hwNode("computer", hw::sys_tem)
     {
         m_listDeviceInfo.clear();
         scan_system(m_hwNode);

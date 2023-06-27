@@ -15,8 +15,8 @@ class DMotherboardDevicePrivate
 {
 public:
     explicit DMotherboardDevicePrivate(DMotherboardDevice *parent)
-        : q_ptr(parent)
-        , m_hwNode("computer", hw::sys_tem)
+        : m_hwNode("computer", hw::sys_tem)
+        , q_ptr(parent)
     {
 
         m_listsystemInfo.clear();
