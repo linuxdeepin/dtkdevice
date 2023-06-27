@@ -69,7 +69,7 @@ double DlsDevicePrivate::updateSystemCpuUsage()
         QByteArray lineData = file.readLine();
         file.close();
 
-        QStringList cpuStatus =  QString(lineData).split(" ", QString::SkipEmptyParts);
+        QStringList cpuStatus =  QString(lineData).split(" ", D_SPLIT_BEHAVIOR);
 
         if (cpuStatus.size() < 11) {
             return cpuUsage;
