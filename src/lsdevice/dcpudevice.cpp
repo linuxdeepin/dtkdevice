@@ -12,6 +12,7 @@
 #include <QFileInfo>
 #include <QDir>
 #include <QDebug>
+#include <QRegularExpression>
 
 #include <sys/time.h>
 #include <unistd.h>
@@ -138,10 +139,10 @@ void DCpuDevicePrivate::addDeviceInfo(QList<cpuInfoLst> &infoLst,  QList < cpuBa
         QString cpuinfo  = file.readLine();
         file.close();
 
-        QStringList processors = cpuinfo.split("\n\n", QString::SkipEmptyParts);
+        QStringList processors = cpuinfo.split("\n\n", D_SPLIT_BEHAVIOR);
         for (int i = 0; i < processors.count(); ++i) {
             struct cpuInfoLst info;
-            QStringList list = processors[i].split("\n", QString::SkipEmptyParts);
+            QStringList list = processors[i].split("\n", D_SPLIT_BEHAVIOR);
             for (QString text : list) {
                 if (text.startsWith("processor")) {
                     info.processorID = (text.split(":").value(1).toInt());
@@ -244,7 +245,7 @@ void DCpuDevicePrivate::addDeviceInfo(QList<cpuInfoLst> &infoLst,  QList < cpuBa
                         // 样例数据 ： cpu  7048360 4246 3733400 801045435 846386 0 929664 0 0 0
                         //         |user|nice|sys|idle|iowait|hardqirq|softirq|steal|guest|guest_nice|
                         // 分割行数据
-                        QStringList cpuStatus =  QString(lineData).split(" ", QString::SkipEmptyParts);
+                        QStringList cpuStatus =  QString(lineData).split(" ", D_SPLIT_BEHAVIOR);
 
                         // CPU状态应包含10个数据片段，有效数据 1-10，位置0不使用
                         if(cpuStatus.size() >= 11) {
@@ -287,16 +288,16 @@ void DCpuDevicePrivate::addDeviceInfo(QList<cpuInfoLst> &infoLst,  QList < cpuBa
                 QString lines = file.readLine();
                 file.close();
 
-                QStringList lineData = lines.split("\n", QString::SkipEmptyParts);
+                QStringList lineData = lines.split("\n", D_SPLIT_BEHAVIOR);
                 for (int i = 0; i < lineData.count(); ++i) {
                     // 样例数据 ： cpu  7048360 4246 3733400 801045435 846386 0 929664 0 0 0
                     //         |user|nice|sys|idle|iowait|hardqirq|softirq|steal|guest|guest_nice|
                     // 分割行数据
-                    QStringList cpuStatus =  lineData[i].split(" ", QString::SkipEmptyParts);
+                    QStringList cpuStatus =  lineData[i].split(" ", D_SPLIT_BEHAVIOR);
 
                     // CPU状态应包含10个数据片段，有效数据 1-10，位置0不使用
-                    QRegExp reg = QRegExp("cpu[0-9]{1,2}"); 
-                    if((cpuStatus.size() >= 11) && reg.exactMatch( cpuStatus.at(0))) {                
+                    QRegularExpression reg = QRegularExpression("cpu[0-9]{1,2}");
+                    if((cpuStatus.size() >= 11) && reg.match(cpuStatus.at(0)).hasMatch()) {
                         infoLst[nn].stat.user = cpuStatus.at(1).toInt();      
                         infoLst[nn].stat.nice = cpuStatus.at(2).toInt();
                         infoLst[nn].stat.sys = cpuStatus.at(3).toInt();

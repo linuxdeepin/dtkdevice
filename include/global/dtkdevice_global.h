@@ -3,7 +3,7 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 #ifndef DTKDEVICE_GLOBAL_H
 #define DTKDEVICE_GLOBAL_H
-
+#include <qnamespace.h>
 #include <QtCore/qglobal.h>
 
 #define DTK_NAMESPACE Dtk
@@ -26,6 +26,12 @@
 #else
 #  define LIBDTKDEVICESHARED_EXPORT Q_DECL_IMPORT
 #endif
+#endif
+
+#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
+    #define D_SPLIT_BEHAVIOR Qt::SkipEmptyParts
+#else
+    #define D_SPLIT_BEHAVIOR QString::SkipEmptyParts
 #endif
 
 #endif

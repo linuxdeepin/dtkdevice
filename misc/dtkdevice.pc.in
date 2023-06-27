@@ -10,9 +10,9 @@ exec_prefix=${prefix}
 libdir=${prefix}/@LIBRARY_INSTALL_DIR@
 includedir=${prefix}/@INCLUDE_INSTALL_DIR@
 
-Name: dtkdevice
+Name: dtk@DTK_VERSION_MAJOR@device
 Description: Deepin Tool Kit dtkdevice header files
 Version: @CMAKE_PROJECT_VERSION@
-Libs: -L${libdir} -ldtkdevice
+Libs: -L${libdir} -ldtk@DTK_VERSION_MAJOR@device
 Cflags: -I${includedir}
-Requires: dtkcore Qt@QT_VERSION_MAJOR@Core Qt@QT_VERSION_MAJOR@DBus
+Requires: dtk@DTK_VERSION_MAJOR@core Qt@QT_VERSION_MAJOR@Core Qt@QT_VERSION_MAJOR@DBus

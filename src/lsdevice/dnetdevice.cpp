@@ -14,6 +14,7 @@
 #include <QMap>
 #include <QDebug>
 #include <QProcess>
+#include <QRegularExpression>
 
 DDEVICE_BEGIN_NAMESPACE
 /*
@@ -24,12 +25,6 @@ DDEVICE_BEGIN_NAMESPACE
 
 using INet4Addr = std::shared_ptr<  DNetDevice::DInetAddr4 >;
 using INet6Addr = std::shared_ptr<  DNetDevice::DInetAddr6 >;
-
-#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
-        auto behavior = Qt::SkipEmptyParts;
-#else
-        auto behavior = QString::SkipEmptyParts;
-#endif
 
 class DNetDevicePrivate
 {
@@ -71,18 +66,22 @@ void DNetDevicePrivate::updateInfo()
     process.start("netstat", QStringList() << "-p");
     process.waitForFinished(-1);
     QString cacheinfo = process.readAllStandardOutput();
-    QStringList items = cacheinfo.split("\n", behavior);
+    QStringList items = cacheinfo.split("\n", D_SPLIT_BEHAVIOR);
     process.close();
 
     for (int i = 0; i < items.count(); ++i) {
         if (!items.contains("[ ]")) {
             continue;
         } else {
-            QStringList words = items[i].split("  ", behavior);  //make sure  double space
-            QRegExp reg("([0-9]{1,})/(\\s\\S*)");
-            if (words.size() == 8 && reg.exactMatch(words[6]))  {                
-                int  pid = reg.cap(1).toInt();
-                QString  ProgramName = reg.cap(2);
+            QStringList words = items[i].split("  ", D_SPLIT_BEHAVIOR);  //make sure  double space
+            if (words.size() < 8)
+                continue;
+
+            QRegularExpression reg("([0-9]{1,})/(\\s\\S*)");
+            auto match = reg.match(words[6]);
+            if (match.hasMatch())  {
+                int  pid = match.captured(1).toInt();
+                QString  ProgramName = match.captured(2);
                 QString state = words[4];
                 int INode = words[5].toInt();
 
@@ -323,7 +322,7 @@ DNetDevice::DNetifInfo DNetDevice::netifInfo(int index)
 
         QString line =  d->m_listDeviceInfo[index].deviceInfoLstMap.value("proc_net_dev_data");
         if (!line.isNull()) {
-            QStringList deviceInfo = line.split(" ", behavior);
+            QStringList deviceInfo = line.split(" ", D_SPLIT_BEHAVIOR);
             if (deviceInfo.size() > 16) { //1-17
                 result.rxBytes      =   deviceInfo[1].toULongLong();     // total bytes received
                 result.rxPackets    =   deviceInfo[2].toULongLong();   // total packets received

@@ -34,7 +34,7 @@ target_include_directories(${BIN_NAME} PRIVATE
 target_link_libraries(${BIN_NAME} PRIVATE
     Qt${QT_VERSION_MAJOR}::Core
     Qt${QT_VERSION_MAJOR}::DBus
-    Dtk::Core
+    Dtk${DTK_VERSION_MAJOR}::Core
     PkgConfig::LibNl3
     PkgConfig::LibNl3Route
     GTest::GTest

@@ -113,7 +113,7 @@ void DMemoryDevicePrivate::addMemInfo()
         while (fgets(line.data(), BUFLEN, fp)) {
             QString meminfo = line;
 
-            QStringList meminfos = meminfo.split(' ', QString::SkipEmptyParts);
+            QStringList meminfos = meminfo.split(' ', D_SPLIT_BEHAVIOR);
             if (meminfo.startsWith("MemTotal:") && 3 == meminfos.count())
                 mem_total_kb = meminfos.value(1).toInt();
             else if (meminfo.startsWith("MemFree:") && 3 == meminfos.count())

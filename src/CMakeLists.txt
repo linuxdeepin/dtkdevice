@@ -19,7 +19,7 @@ target_link_libraries(${LIB_NAME}
 PUBLIC
     Qt${QT_VERSION_MAJOR}::Core
     Qt${QT_VERSION_MAJOR}::DBus
-    Dtk::Core
+    Dtk${DTK_VERSION_MAJOR}::Core
 PRIVATE
     PkgConfig::LibNl3
     PkgConfig::LibNl3Route
@@ -55,7 +55,7 @@ set_target_properties(${LIB_NAME} PROPERTIES
 
 install(TARGETS ${LIB_NAME} EXPORT DtkDeviceTargets DESTINATION ${LIBRARY_INSTALL_DIR} PUBLIC_HEADER DESTINATION ${INCLUDE_INSTALL_DIR})
 install(EXPORT DtkDeviceTargets
-    FILE DtkDeviceTargets.cmake
-    NAMESPACE Dtk::
+    FILE Dtk${DTK_VERSION_MAJOR}DeviceTargets.cmake
+    NAMESPACE Dtk${DTK_VERSION_MAJOR}::
     DESTINATION ${CMAKE_CONFIG_INSTALL_DIR}
 )
