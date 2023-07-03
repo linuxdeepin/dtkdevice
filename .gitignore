@@ -39,3 +39,6 @@ lupdate.sh
 
 # ctest
 Testing/
+
+# Ignore Doxygen theme files
+docs/doxygen-theme/
