@@ -1,3 +1,13 @@
+dtkdevice (6.0.0) unstable; urgency=medium
+
+  * feat: support dtk6device build
+  * chore: reduce compilation warnings
+  * chore: add rules to .gitignore
+  * fix: Update CMakeLists and package names for Qt6
+  * fix: Add missing dependencies
+
+ -- renbin <renbin@uniontech.com>  Tue, 14 Jan 2025 19:43:06 +0800
+
 dtkdevice (1.0.4) unstable; urgency=medium
 
   * Release 1.0.4
