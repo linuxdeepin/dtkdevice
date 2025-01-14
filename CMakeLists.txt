@@ -10,15 +10,19 @@ project(DtkDevice
     LANGUAGES CXX C
 )
 
-set(ENABLE_Qt6 CACHE BOOL OFF)
-if (ENABLE_Qt6)
+set(ENABLE_Qt6 ON CACHE BOOL "Enable Qt6")
+find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Core)
+if (ENABLE_Qt6 AND Qt6_FOUND)
     set(DTK_VERSION_MAJOR 6)
     set(QT_VERSION_MAJOR 6)
+    set(BUILD_WITH_QT6 TRUE)
     set(BUILD_EXAMPLES OFF CACHE BOOL "Build examples")
 else()
     set(QT_VERSION_MAJOR 5)
     set(BUILD_EXAMPLES ON CACHE BOOL "Build examples")
 endif()
+
+message(STATUS "--- Current Qt version is ${QT_VERSION_MAJOR}")
 
 set(LIB_NAME dtk${DTK_VERSION_MAJOR}device)
 
@@ -103,5 +107,5 @@ configure_file(misc/dtkdevice.pc.in ${LIB_NAME}.pc @ONLY)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${LIB_NAME}.pc DESTINATION ${PKGCONFIG_INSTALL_DIR})
 
 set(DTK_MODULE dtkdevice)
-configure_file(misc/qt_lib_dtkdevice.pri.in qt_lib_dtkdevice.pri @ONLY)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/qt_lib_dtkdevice.pri DESTINATION ${MKSPECS_INSTALL_DIR})
+configure_file(misc/qt_lib_dtkdevice.pri.in qt_lib_${LIB_NAME}.pri @ONLY)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/qt_lib_${LIB_NAME}.pri DESTINATION ${MKSPECS_INSTALL_DIR})
